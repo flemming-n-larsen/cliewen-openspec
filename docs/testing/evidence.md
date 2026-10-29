@@ -3,7 +3,7 @@ type: testing
 ---
 # Evidence alpha contract
 
-The first slice supports `init`, `ac next`, `check` and `recover`, and installs cliewen-delivery. It has been tested against OpenSpec 1.15.0 on Windows; GitHub Actions also exercises Linux. This is not the complete first release: discovery/all, update/uninstall, existing-registry adapters, automated documentation/Mermaid checks and independent review tooling remain planned.
+The first slice supports `init`, `ac next`, `check` and `recover`, and installs cliewen-delivery. It has been tested against OpenSpec 1.15.0 on Windows and Linux. This is not the complete first release: discovery/all, update/uninstall, existing-registry adapters, automated documentation/Mermaid checks and independent review tooling remain planned.
 
 Initialize OpenSpec first. Install this package from a locally built tarball. Run `cliewen-openspec init --default` to explicitly select delivery; omit `--default` to preserve the existing schema. `--root PATH` supports an explicit target, and `init --dry-run` makes no changes.
 
