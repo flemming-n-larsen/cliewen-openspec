@@ -2,7 +2,7 @@
 
 Durable decisions, living documentation, and evidence for OpenSpec.
 
-**Under development.** This repo contains the plan and practice mapping. The CLI, schemas and evidence adapters are planned, not yet available for installation.
+**Alpha implementation.** The first working slice installs `cliewen-delivery`, allocates acceptance IDs and checks real test evidence through OpenSpec archiving. No npm release is published yet.
 
 ## Planned collection
 
@@ -10,18 +10,57 @@ Durable decisions, living documentation, and evidence for OpenSpec.
 - **cliewen-discovery** — investigation, alternatives and decision handoff.
 - **cliewen-all** — combined discovery and delivery.
 
-All share documentation, Decision Records, Mermaid, optional plans and evidence. Evidence is enabled by default. Existing ticket systems and test tools remain authoritative for their own data.
+The shared design covers documentation, Decision Records, Mermaid, optional plans and evidence. Evidence is enabled by default. `cliewen-discovery` and `cliewen-all` remain planned. This alpha supplies documentation/DR guidance; structural metadata and Mermaid validators remain planned.
+
+## Try the alpha locally
+
+Requires Node.js 20.19 or newer and Git. The integration test uses OpenSpec 1.15.0. Windows and Linux CI exercise Node 22 and 24.
+
+In this repository:
+
+```sh
+npm ci
+npm test
+npm pack
+```
+
+In a separate project, initialize OpenSpec and install the resulting tarball:
+
+```sh
+npm install --save-dev @fission-ai/openspec@1.15.0
+npx --no-install openspec init
+npm install --save-dev /path/to/cliewen-openspec-0.1.0-alpha.1.tgz
+npx --no-install cliewen-openspec init --default
+npx --no-install openspec new change add-export --schema cliewen-delivery
+npx --no-install cliewen-openspec ac next EXPORT
+```
+
+`--default` explicitly selects delivery for future changes. Omit it to preserve the existing schema. `init --dry-run` previews writes. Use the generated ID in scenario headings and test titles; commit the ID registry along with specs.
+
+After implementation, commit the project inputs and collect evidence from Node tests:
+
+```sh
+node node_modules/cliewen-openspec/adapters/node-test.mjs test/export.test.mjs
+npx --no-install cliewen-openspec check --change add-export --json
+```
+
+After reviewing the assertions and evidence, archive with OpenSpec. Commit the archived state, regenerate evidence and check permanent specs. See [the evidence guide](docs/testing/evidence.md) for outcomes, pending/manual verification and current limitations.
+
+`npm test` includes an end-to-end example which installs the packed tarball in a temporary repository, creates a real OpenSpec change, runs tagged tests, verifies failure cases, archives the change and checks that the AC ID survives. It cleans up its temporary repository afterward.
 
 ## Project documents
 
 - [Implementation plan](plan.md)
 - [Practice mapping](docs/cliewen-mapping.md)
+- [Alpha architecture](docs/architecture/README.md)
 - [Website](https://flemming-n-larsen.github.io/cliewen-openspec/)
 - [Credits](CREDITS.md)
 
-No npm release exists yet. Intended commands are `cliewen-openspec init`, `update`, `check`, and `uninstall` after OpenSpec initialization. These are planned interfaces, not installation instructions.
+Implemented commands: `init`, `ac next`, `check` and `recover`. `update` and `uninstall` remain planned; use this alpha only in a repository where you can review the installed files. Tests never establish assertion quality automatically.
 
-Next milestone: installation → AC identity → test reference → execution evidence → review → archive.
+## Development checks
+
+`npm test` builds TypeScript and runs unit and packed-installation integration tests. GitHub Actions runs the same suite on Windows and Linux with Node 22 and 24. These checks cover the alpha implementation; documentation semantic accuracy and assertion sufficiency still require review.
 
 ## License
 

@@ -1,0 +1,23 @@
+{
+  "name": "cliewen-openspec",
+  "version": "0.1.0-alpha.1",
+  "description": "OpenSpec workflows with durable decisions and behavioral evidence",
+  "type": "module",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/flemming-n-larsen/cliewen-openspec.git" },
+  "homepage": "https://flemming-n-larsen.github.io/cliewen-openspec/",
+  "engines": { "node": ">=20.19.0" },
+  "bin": { "cliewen-openspec": "dist/cli.js" },
+  "files": ["dist", "adapters", "README.md", "LICENSE", "docs/testing/evidence.md"],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test test/*.test.mjs",
+    "prepack": "npm run build"
+  },
+  "dependencies": { "yaml": "2.9.1" },
+  "devDependencies": {
+    "@fission-ai/openspec": "1.15.0",
+    "@types/node": "26.6.6",
+    "typescript": "7.0.2"
+  }
+}

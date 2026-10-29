@@ -2,6 +2,8 @@
 
 Status: under development. This replaces the earlier configuration-only design.
 
+Implemented alpha: delivery bundle, `init`, persistent AC allocation, `check`, transaction recovery and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. See [current evidence contract and limits](docs/testing/evidence.md). Discovery/all, updates/removal, additional integrations and structural document validators remain future work.
+
 ## Product and schemas
 
 Deliver a small OpenSpec schema collection with a shared base, compatible with Intent Engineering. All facilities ship in the first release; implementation stages are internal milestones.
