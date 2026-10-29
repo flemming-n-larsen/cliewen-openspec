@@ -11,8 +11,10 @@ const features = ['documentation', 'decisions', 'mermaid', 'planning', 'review',
 export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string } };
 export type Finding = { code: string; severity: 'error' | 'warning' | 'info'; message: string };
 export function local(root: string, relative: string): string {
-  if (!relative || path.isAbsolute(relative) || relative.split(/[\\/]/).includes('..')) throw Error(`Unsafe repository path: ${relative}`);
+  if (!relative || path.isAbsolute(relative) || path.win32.parse(relative).root || relative.split(/[\\/]/).includes('..')) throw Error(`Unsafe repository path: ${relative}`);
   const target = path.resolve(root, relative);
+  const within = path.relative(path.resolve(root), target);
+  if (path.isAbsolute(within) || within === '..' || within.startsWith(`..${path.sep}`)) throw Error(`Unsafe repository path: ${relative}`);
   let cursor = root;
   for (const part of path.relative(root, target).split(path.sep)) {
     cursor = path.join(cursor, part);
@@ -20,7 +22,9 @@ export function local(root: string, relative: string): string {
   }
   return target;
 }
-const hash = (s: string) => createHash('sha256').update(s).digest('hex');
+// Owned Markdown/YAML may acquire CRLF when Git checks them out on Windows.
+const normalize = (s: string) => s.replace(/\r\n/g, '\n');
+const hash = (s: string) => createHash('sha256').update(normalize(s)).digest('hex');
 const read = (p: string) => fs.readFileSync(p, 'utf8');
 export function defaults(): Config {
   return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' } };
@@ -84,7 +88,7 @@ export function init(root: string, dryRun: boolean, makeDefault: boolean) {
   const files = deliveryFiles(); const writes: Record<string, string> = {};
   for (const [p, content] of Object.entries(files)) {
     const dest = local(root, p);
-    if (fs.existsSync(dest) && read(dest) !== content) throw Error(`Conflict: ${p}; no files written.`);
+    if (fs.existsSync(dest) && normalize(read(dest)) !== normalize(content)) throw Error(`Conflict: ${p}; no files written.`);
     if (fs.existsSync(dest) && !previous?.files[p]) throw Error(`Unowned schema file already exists: ${p}`);
     if (!fs.existsSync(dest)) writes[p] = content;
   }

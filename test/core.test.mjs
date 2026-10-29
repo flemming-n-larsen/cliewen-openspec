@@ -3,10 +3,42 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { init, check, nextId, recover } from '../dist/core.js';
+import { init, check, nextId, recover, local } from '../dist/core.js';
 function fixture(t) { const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cliewen-')); t.after(() => fs.rmSync(root, { recursive: true, force: true })); for (const p of ['openspec/specs','openspec/changes']) fs.mkdirSync(path.join(root,p), {recursive:true}); return root; }
+test('repository paths reject drive-relative, absolute and escaping paths', t => {
+  const root = fixture(t);
+  for (const unsafe of ['D:outside.txt', 'C:outside.txt', 'C:\\outside.txt', '\\\\server\\share\\file', '/outside', '../outside', 'docs/../../outside']) {
+    assert.throws(() => local(root, unsafe), /Unsafe repository path/, unsafe);
+  }
+  assert.equal(local(root, 'docs/decisions/record.md'), path.join(root, 'docs/decisions/record.md'));
+  init(root, false, false);
+  fs.writeFileSync(path.join(root, '.cliewen-openspec/config.yaml'), 'docsRoot: D:outside\n');
+  assert.throws(() => init(root, false, false), /Unsafe repository path/);
+  fs.writeFileSync(path.join(root, '.cliewen-openspec/transaction.json'), JSON.stringify({files: {'D:outside.txt': 'bad'}}));
+  assert.throws(() => recover(root), /Unsafe repository path/);
+});
+test('clean CRLF Git checkout preserves installation checks and idempotence', t => {
+  const root = fixture(t);
+  init(root, false, false);
+  fs.writeFileSync(path.join(root, '.cliewen-openspec/config.yaml'), 'features:\n  evidence: false\n');
+  const git = (...args) => execFileSync('git', ['-C', root, ...args], {encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']}).trim();
+  git('init'); git('config', 'core.autocrlf', 'true'); git('add', '.');
+  git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-m', 'Fixture');
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, '.cliewen-openspec/manifest.json'), 'utf8'));
+  for (const file of Object.keys(manifest.files)) {
+    fs.unlinkSync(path.join(root, file)); git('checkout', '--', file);
+    assert.ok(fs.readFileSync(path.join(root, file), 'utf8').includes('\r\n'));
+  }
+  assert.equal(git('status', '--porcelain'), '');
+  assert.ok(!check(root).some(f => f.severity === 'error'));
+  assert.deepEqual(init(root, false, false), []);
+  const owned = Object.keys(manifest.files)[0];
+  fs.appendFileSync(path.join(root, owned), 'actual modification\r\n');
+  assert.ok(check(root).some(f => f.code === 'owned-file-modified'));
+  assert.throws(() => init(root, false, false), /Conflict/);
+});
 test('init preserves user config, is idempotent and previews without writes', t => {
   const root = fixture(t), cfg = path.join(root,'openspec/config.yaml');
   fs.writeFileSync(cfg,'# user comment\nschema: custom\ncontext: keep me\n');
