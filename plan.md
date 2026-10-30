@@ -28,7 +28,7 @@ Decision Records use `type: decision`, optional `category` and required `status`
 
 For new projects, name new decision files `NNN-short-title.md`, starting with `001`. Use at least three digits and let the sequence grow without truncation. Existing projects retain their naming conventions and ID authority. Never rename, move, or renumber existing document files to normalize names, titles, categories, or padding: external links may depend on their exact paths. Update content and metadata in place.
 
-Mermaid is the default diagram format, embedded beside explanatory prose. Maintain diagrams with text; validate syntax with a pinned parser and render-test shipped examples. Other formats remain available where appropriate.
+Mermaid is the default diagram format when a diagram clarifies the explanation, embedded beside explanatory prose. Prefer ASCII or plain text for file and directory trees and simple sketches, and allow it where Mermaid rendering is unavailable. Maintain one authoritative diagram representation with a short explanation. Validate syntax with a pinned parser and render-test shipped examples; consumer-project diagram validation remains planned. See [the diagram decision](docs/decisions/011-mermaid-and-plain-text-diagrams.md).
 
 Plans are optional. Ticket systems may own priorities, milestones and status. Each fact has one authoritative home. Repo plans add independent content and links, not duplicate task backlogs.
 
