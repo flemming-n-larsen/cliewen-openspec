@@ -90,6 +90,8 @@ Build and check the site in pull-request CI before deployment, including local l
 
 ## Acceptance
 
+The [CSV BOM trial starter](docs/testing/csv-bom-trial/README.md) prepares an isolated baseline, records package/source inputs, and supplies a prompt and review criteria. It supports manual fresh-context trials and replay from a Git bundle. Provider runners, automatic trace capture, repeated profile comparisons, and Harbor integration remain planned.
+
 Add reproducible agent trials alongside deterministic package tests. Use fixed representative profiles for Claude Code, Codex CLI, and OpenCode, and isolated CSV scenario variants for flexible per-task testing, TDD, and end-of-change testing. Trial Harbor with OpenCode Zen/pay-as-you-go before committing to the runner or a subscription. Record model/provider/settings, outcomes, execution traces, cost, and duration; distinguish planning quality from implementation behavior. This suite is planned; see [the evaluation decision](docs/decisions/009-agent-evaluation-profiles-and-initial-provider.md).
 
 Test Windows/Linux installation, repeat init, dry runs, existing config/custom schemas, conflicts, rollback, interrupted transactions, update ordering and uninstall preservation. Install packed tarballs in separate repos.

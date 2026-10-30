@@ -6,6 +6,8 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- A fresh-context CSV BOM trial starter with an isolated six-scenario baseline, packed-package hash, Git bundle, reference prompt, and review criteria. Run `npm run trial:prepare` from a source checkout to prepare a trial.
+
 - Configurable test types with Unit, Integration, and E2E defaults. The Node adapter exports explicit test-type tags, and evidence checks reject missing, unknown, or mismatched scenario/result types. Existing reports without types must be regenerated from explicitly tagged tests.
 
 - A VitePress user guide on GitHub Pages with local search, a light/dark appearance switch, and embedded Mermaid. It covers the first delivery change, defaults, supported configuration fields, CLI commands, evidence troubleshooting, and existing-project conventions. The build checks local links, anchors, configuration defaults, and Mermaid syntax; browser checks cover search, appearance, rendering, and navigation. A packed-installation test replays the guide's CSV consumer commands through archive and refreshed evidence.
