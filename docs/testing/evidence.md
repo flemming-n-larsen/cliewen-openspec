@@ -7,7 +7,9 @@ The first slice supports `init`, `ac next`, `check` and `recover`, and installs 
 
 Initialize OpenSpec first. Install this package from a locally built tarball. Run `cliewen-openspec init --default` to explicitly select delivery; omit `--default` to preserve the existing schema. `--root PATH` supports an explicit target, and `init --dry-run` makes no changes.
 
-Allocate IDs using `cliewen-openspec ac next EXPORT`. Keep the committed `.cliewen-openspec/ac-registry.json`; numbers are never reclaimed. This initial allocator supports sequential work; parallel branches must resolve collisions. Do not use it alongside another allocator until an adapter exists.
+Register a capability-to-prefix mapping, then allocate IDs using `cliewen-openspec ac next --capability export`. Keep the committed `.cliewen-openspec/ac-registry.json`; numbers are never reclaimed. This initial allocator supports sequential work; parallel branches must resolve collisions. Do not use it alongside another allocator until an adapter exists.
+
+`ac.capabilities` maps each OpenSpec capability to its prefix. `ac.padding` controls minimum digit width (default 3). Use `ac rename-prefix CAPABILITY PREFIX` to change an established prefix while retaining its sequence and historical references. See [configuration](../configuration.md) for prefix selection and the default per-task testing workflow.
 
 After implementing and committing the project inputs, run the reference adapter with explicit Node test paths:
 

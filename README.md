@@ -32,10 +32,26 @@ npx --no-install openspec init
 npm install --save-dev /path/to/cliewen-openspec-0.1.0-alpha.1.tgz
 npx --no-install cliewen-openspec init --default
 npx --no-install openspec new change add-export --schema cliewen-delivery
-npx --no-install cliewen-openspec ac next EXPORT
+```
+
+Register the capability in `.cliewen-openspec/config.yaml`:
+
+```yaml
+ac:
+  padding: 3
+  capabilities:
+    export: EXPORT
+```
+
+Then allocate its first ID:
+
+```sh
+npx --no-install cliewen-openspec ac next --capability export
 ```
 
 `--default` explicitly selects delivery for future changes. Omit it to preserve the existing schema. `init --dry-run` previews writes. Use the generated ID in scenario headings and test titles; commit the ID registry along with specs.
+
+Configure capability-specific AC prefixes and number padding, and choose test placement in `.cliewen-openspec/config.yaml`. Testing each implementation task before moving on is the default. Use `ac rename-prefix` to change an established prefix without resetting its sequence. See [project configuration](docs/configuration.md) for examples and prefix selection.
 
 After implementation, commit the project inputs and collect evidence from Node tests:
 
@@ -50,13 +66,15 @@ After reviewing the assertions and evidence, archive with OpenSpec. Commit the a
 
 ## Project documents
 
+- [Project configuration](docs/configuration.md)
+- [Pilot reference prompt](docs/testing/pilot-prompt.md)
 - [Implementation plan](plan.md)
 - [Practice mapping](docs/cliewen-mapping.md)
 - [Alpha architecture](docs/architecture/README.md)
 - [Website](https://flemming-n-larsen.github.io/cliewen-openspec/)
 - [Credits](CREDITS.md)
 
-Implemented commands: `init`, `ac next`, `check` and `recover`. `update` and `uninstall` remain planned; use this alpha only in a repository where you can review the installed files. Tests never establish assertion quality automatically.
+Implemented commands: `init`, `ac next`, `ac rename-prefix`, `check` and `recover`. `update` and `uninstall` remain planned; use this alpha only in a repository where you can review the installed files. Tests never establish assertion quality automatically.
 
 ## Development checks
 

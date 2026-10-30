@@ -4,11 +4,13 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parse, parseDocument, stringify } from 'yaml';
 import { deliveryFiles } from './delivery.js';
+import { validateRegistry } from './ac.js';
+export { nextId, renamePrefix, capabilityForPrefix } from './ac.js';
 
 export const version = '0.1.0-alpha.1';
 const state = '.cliewen-openspec';
 const features = ['documentation', 'decisions', 'mermaid', 'planning', 'review', 'evidence'];
-export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string } };
+export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string }; ac: { capabilities: Record<string, string>; padding: number }; testing: { placement: 'per-task' | 'end-of-change' } };
 export type Finding = { code: string; severity: 'error' | 'warning' | 'info'; message: string };
 export function local(root: string, relative: string): string {
   if (!relative || path.isAbsolute(relative) || path.win32.parse(relative).root || relative.split(/[\\/]/).includes('..')) throw Error(`Unsafe repository path: ${relative}`);
@@ -27,7 +29,7 @@ const normalize = (s: string) => s.replace(/\r\n/g, '\n');
 const hash = (s: string) => createHash('sha256').update(normalize(s)).digest('hex');
 const read = (p: string) => fs.readFileSync(p, 'utf8');
 export function defaults(): Config {
-  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' } };
+  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' }, ac: { capabilities: {}, padding: 3 }, testing: { placement: 'per-task' } };
 }
 function keys(o: unknown, allowed: string[], label: string): asserts o is Record<string, any> {
   if (!o || typeof o !== 'object' || Array.isArray(o)) throw Error(`${label} must be an object`);
@@ -35,8 +37,32 @@ function keys(o: unknown, allowed: string[], label: string): asserts o is Record
 }
 export function config(root: string): Config {
   const p = local(root, `${state}/config.yaml`);
-  const raw = parse(read(p)); keys(raw, ['docsRoot', 'features', 'evidence'], 'config');
+  const raw = parse(read(p)); keys(raw, ['docsRoot', 'features', 'evidence', 'ac', 'testing'], 'config');
   const c = defaults();
+  if (raw.ac !== undefined) {
+    keys(raw.ac, ['capabilities', 'padding'], 'ac');
+    if (raw.ac.capabilities !== undefined) {
+      if (!raw.ac.capabilities || typeof raw.ac.capabilities !== 'object' || Array.isArray(raw.ac.capabilities)) throw Error('ac.capabilities must be a capability-to-prefix mapping');
+      const prefixes = new Set<string>();
+      for (const [name, prefix] of Object.entries(raw.ac.capabilities)) {
+        if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name) || typeof prefix !== 'string' || !/^[A-Z][A-Z0-9]*$/.test(prefix)) throw Error('AC mappings require kebab-case capabilities and uppercase letter/digit prefixes');
+        if (prefixes.has(prefix)) throw Error(`AC prefix already assigned: ${prefix}`);
+        prefixes.add(prefix);
+      }
+      c.ac.capabilities = raw.ac.capabilities;
+    }
+    if (raw.ac.padding !== undefined) {
+      if (!Number.isInteger(raw.ac.padding) || raw.ac.padding < 1 || raw.ac.padding > 12) throw Error('ac.padding must be an integer from 1 to 12');
+      c.ac.padding = raw.ac.padding;
+    }
+  }
+  if (raw.testing !== undefined) {
+    keys(raw.testing, ['placement'], 'testing');
+    if (raw.testing.placement !== undefined) {
+      if (!['per-task', 'end-of-change'].includes(raw.testing.placement)) throw Error('testing.placement must be per-task or end-of-change');
+      c.testing.placement = raw.testing.placement;
+    }
+  }
   if (raw.docsRoot !== undefined) { if (typeof raw.docsRoot !== 'string') throw Error('docsRoot must be a string'); c.docsRoot = raw.docsRoot; }
   if (raw.features !== undefined) {
     keys(raw.features, features, 'features');
@@ -111,7 +137,7 @@ export function init(root: string, dryRun: boolean, makeDefault: boolean) {
   if (!fs.existsSync(mp) || read(mp) !== manifest) writes[`${state}/manifest.json`] = manifest;
   return transaction(root, writes, dryRun);
 }
-function markdowns(dir: string): string[] {
+export function markdowns(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? markdowns(path.join(dir, e.name)) : e.isFile() && e.name.endsWith('.md') ? [path.join(dir, e.name)] : []);
 }
@@ -127,25 +153,12 @@ export function scenarios(root: string, change?: string): { id: string; title: s
       if (fence) continue;
       if (/^## /.test(line)) removed = /^## REMOVED Requirements/.test(line);
       if (!removed && /^#### Scenario:/.test(line)) {
-        const m = line.match(/\[([A-Z][A-Z0-9]*-\d{3,})\]\s*$/);
+        const m = line.match(/\[([A-Z][A-Z0-9]*-\d+)\]\s*$/);
         out.push({ id: m?.[1] ?? '', title: line, file: path.relative(root, file) });
       }
     }
   }
   return out;
-}
-export function nextId(root: string, prefix: string): string {
-  if (!/^[A-Z][A-Z0-9]*$/.test(prefix)) throw Error('Prefix must contain uppercase letters/digits and start with a letter');
-  config(root); recover(root);
-  const p = `${state}/ac-registry.json`; const dest = local(root, p);
-  const registry: Record<string, number> = fs.existsSync(dest) ? JSON.parse(read(dest)) : {};
-  if (!registry || typeof registry !== 'object' || Array.isArray(registry) || Object.values(registry).some(n => !Number.isSafeInteger(n) || n < 0)) throw Error('Invalid AC registry');
-  let max = registry[prefix] ?? 0;
-  for (const file of markdowns(local(root, 'openspec'))) for (const m of read(file).matchAll(new RegExp('\\[' + prefix + '-(\\d+)\\]', 'g'))) max = Math.max(max, Number(m[1]));
-  if (!Number.isSafeInteger(max + 1)) throw Error('AC sequence exhausted');
-  registry[prefix] = max + 1;
-  transaction(root, { [p]: JSON.stringify(registry, null, 2) + '\n' });
-  return `${prefix}-${String(max + 1).padStart(3, '0')}`;
 }
 export function git(root: string, args: string[]): string { return execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(); }
 export function check(root: string, change?: string, failPending = false): Finding[] {
@@ -158,6 +171,7 @@ export function check(root: string, change?: string, failPending = false): Findi
     const m: Manifest = JSON.parse(read(mp));
     for (const [p, h] of Object.entries(m.files)) if (!fs.existsSync(local(root, p)) || hash(read(local(root, p))) !== h) add('owned-file-modified', p);
   }
+  try { validateRegistry(root, c); } catch (e) { add('invalid-ac-registry', e instanceof Error ? e.message : String(e)); }
   if (!c.features.evidence) { add('evidence-disabled', 'Evidence was explicitly disabled', 'info'); return findings; }
   const specs = scenarios(root, change); const ids = new Set<string>();
   for (const s of specs) { if (!s.id) add('missing-ac-id', `${s.file}: ${s.title}`); else if (ids.has(s.id)) add('duplicate-ac-id', s.id); else ids.add(s.id); }

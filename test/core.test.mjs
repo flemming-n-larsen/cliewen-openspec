@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { init, check, nextId, recover, local } from '../dist/core.js';
+import { init, check, nextId, recover, local, config } from '../dist/core.js';
 function fixture(t) { const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cliewen-')); t.after(() => fs.rmSync(root, { recursive: true, force: true })); for (const p of ['openspec/specs','openspec/changes']) fs.mkdirSync(path.join(root,p), {recursive:true}); return root; }
 test('repository paths reject drive-relative, absolute and escaping paths', t => {
   const root = fixture(t);
@@ -52,8 +52,22 @@ test('conflicting schemas stop all writes', t => {
   assert.throws(()=>init(root,false,false),/Conflict/); assert.equal(fs.existsSync(path.join(root,'.cliewen-openspec')),false);
 });
 test('registry never reuses a retired highest ID and seeds from existing specs', t=>{
-  const root=fixture(t); init(root,false,false); const spec=path.join(root,'openspec/specs/example.md'); fs.writeFileSync(spec,'#### Scenario: Old [EX-009]\n');
-  assert.equal(nextId(root,'EX'),'EX-010'); fs.unlinkSync(spec); assert.equal(nextId(root,'EX'),'EX-011');
+  const root=fixture(t); init(root,false,false); fs.writeFileSync(path.join(root,'.cliewen-openspec/config.yaml'),'ac:\n  capabilities:\n    example: EX\n'); const spec=path.join(root,'openspec/specs/example.md'); fs.writeFileSync(spec,'#### Scenario: Old [EX-009]\n');
+  assert.equal(nextId(root,'example'),'EX-010'); fs.unlinkSync(spec); assert.equal(nextId(root,'example'),'EX-011');
+});
+test('AC configuration validates capability mappings and test placement', t => {
+  const root = fixture(t); init(root, false, false);
+  const cfg = path.join(root, '.cliewen-openspec/config.yaml');
+  fs.writeFileSync(cfg, 'ac:\n  capabilities:\n    csv-export: EXP\n  padding: 1\ntesting:\n  placement: end-of-change\n');
+  assert.equal(nextId(root, 'csv-export'), 'EXP-1');
+  assert.equal(config(root).testing.placement, 'end-of-change');
+  fs.writeFileSync(cfg, 'ac:\n  capabilities:\n    csv-export: EXP\n  padding: 4\n');
+  assert.equal(nextId(root, 'csv-export'), 'EXP-0002');
+  assert.equal(config(root).testing.placement, 'per-task');
+  for (const invalid of ['ac:\n  prefix: EXP\n', 'ac:\n  capabilities:\n    csv-export: exp\n', 'ac:\n  capabilities:\n    csv-export: EXP\n    other: EXP\n', 'ac:\n  padding: 0\n', 'ac:\n  padding: 2.5\n', 'ac:\n  padding: 13\n', 'testing:\n  placement: later\n']) {
+    fs.writeFileSync(cfg, invalid);
+    assert.throws(() => config(root));
+  }
 });
 test('missing evidence fails; explicit disable works without reinstall',t=>{
   const root=fixture(t); init(root,false,false); assert.ok(check(root).some(f=>f.code==='evidence-not-configured'));

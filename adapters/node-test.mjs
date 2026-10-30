@@ -21,7 +21,7 @@ try {
   process.stdout.write(run.stdout ?? ''); process.stderr.write(run.stderr ?? '');
   const results = [];
   for (const line of (run.stdout ?? '').split(/\r?\n/)) {
-    const m = line.match(/^\s*(not ok|ok) \d+ - (.*\[([A-Z][A-Z0-9]*-\d{3,})\].*)$/);
+    const m = line.match(/^\s*(not ok|ok) \d+ - (.*\[([A-Z][A-Z0-9]*-\d+)\].*)$/);
     if (m) results.push({ scenario: m[3], test: m[2], outcome: /#\s*(SKIP|TODO)/i.test(m[2]) ? 'skipped' : m[1] === 'ok' ? 'passed' : 'failed' });
   }
   if (git('rev-parse', 'HEAD') !== revision || git('status', '--porcelain', '--untracked-files=all')) throw Error('Test execution changed repository inputs; evidence cannot be attributed to the original revision.');
