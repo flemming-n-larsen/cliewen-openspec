@@ -10,6 +10,8 @@ Durable decisions, living documentation, and evidence for OpenSpec.
 - **cliewen-discovery** — investigation, alternatives and decision handoff.
 - **cliewen-all** — combined discovery and delivery.
 
+`cliewen-base` names the internal shared foundation used to build these bundles. It is not a separately selectable schema. Discovery remains the workflow for investigation and decision-making.
+
 The shared design covers documentation, Decision Records, Mermaid, optional plans and evidence. Evidence is enabled by default. `cliewen-discovery` and `cliewen-all` remain planned. This alpha supplies documentation/DR guidance; structural metadata and Mermaid validators remain planned.
 
 ## Try the alpha locally
@@ -66,6 +68,7 @@ After reviewing the assertions and evidence, archive with OpenSpec. Commit the a
 
 ## Project documents
 
+- [Changelog](CHANGELOG.md)
 - [Project configuration](docs/configuration.md)
 - [Pilot reference prompt](docs/testing/pilot-prompt.md)
 - [Implementation plan](plan.md)

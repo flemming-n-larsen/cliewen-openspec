@@ -1,0 +1,32 @@
+---
+type: decision
+category: architecture
+status: accepted
+---
+# Distinguish the shared base from selectable workflows
+
+## Context
+
+The user asked whether `cliewen-discovery` should instead be named `cliewen-base`. The user accepted the distinction below in the project conversation. This clarifies the naming in [the shared-base decision](001-shared-base-and-schemas.md); it does not replace that decision.
+
+## Considered options
+
+- Rename discovery to base.
+- Offer base as an additional minimal schema.
+- Name the internal foundation base and retain the workflow names.
+
+## Decision
+
+Use `cliewen-base` for the internal shared foundation. It supplies common definitions, templates, documentation conventions, Decision Records, AC identities, evidence, and configuration to the generated standalone bundles.
+
+Retain the selectable schema names:
+
+- `cliewen-discovery`: investigation, alternatives, experiments, and decision handoff; may end without implementation.
+- `cliewen-delivery`: implementation and verification of an understood change.
+- `cliewen-all`: combined discovery and delivery with overlapping steps consolidated.
+
+## Consequences
+
+Do not publish or describe `cliewen-base` as a separately selectable OpenSpec schema. Bundles remain standalone because OpenSpec does not compose them at runtime. A future minimal selectable workflow would require a separate product decision.
+
+This names the planned shared foundation; it does not imply a separate base package or module has already been implemented. Delivery is the only implemented schema in the current alpha.

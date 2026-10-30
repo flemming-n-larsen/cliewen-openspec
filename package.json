@@ -8,7 +8,7 @@
   "homepage": "https://flemming-n-larsen.github.io/cliewen-openspec/",
   "engines": { "node": ">=20.19.0" },
   "bin": { "cliewen-openspec": "dist/cli.js" },
-  "files": ["dist", "adapters", "README.md", "LICENSE", "docs/configuration.md", "docs/testing/evidence.md", "docs/testing/pilot-prompt.md"],
+  "files": ["dist", "adapters", "README.md", "CHANGELOG.md", "LICENSE", "docs/configuration.md", "docs/testing/evidence.md", "docs/testing/pilot-prompt.md"],
   "scripts": {
     "build": "tsc",
     "test": "npm run build && node --test test/*.test.mjs",

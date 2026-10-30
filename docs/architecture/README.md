@@ -24,4 +24,4 @@ The evidence report is generated output, ignored by Git. The adapter checks clea
 
 Archive changes the tree and produces a new candidate revision. Re-run tests after committing the archived state before reporting permanent-spec evidence as current. No post-implementation report is an apply prerequisite.
 
-See [evidence conventions](../testing/evidence.md) and [the shared-base decision](../decisions/0001-shared-base-and-schemas.md).
+See [evidence conventions](../testing/evidence.md) and [the shared-base decision](../decisions/001-shared-base-and-schemas.md).

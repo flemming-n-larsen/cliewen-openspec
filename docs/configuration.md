@@ -68,6 +68,12 @@ Both modes retain final regression testing and revision-bound evidence collectio
 
 This setting is agent guidance supplied by the installed schema and task template. The CLI does not parse tasks to enforce test ordering, and configuration changes do not rewrite existing task lists. Ask the agent to revise an existing plan when changing this setting.
 
+## Decision filenames
+
+New projects use `NNN-short-title.md`, such as `001-use-a-shared-base.md`, for new Decision Records. The sequence starts at 1, padded to a minimum of three digits for filename sorting. Numbers above 999 grow naturally. This is a naming convention in the schema guidance, not a configurable setting or an implemented decision allocator.
+
+Existing filenames and paths are stable public addresses: never rename, move, or renumber documents to normalize naming, titles, categories, or padding. External systems such as GitHub may link to them. Edit content and metadata in place, even when a title or category changes. Existing projects retain conventions such as `ADR-059-title.md` and `PDR-074-title.md`; read their allocation rules and use their existing ID authority rather than starting a competing counter. These conventions are not yet configurable in the alpha. The project owner explicitly authorized normalizing this repository's first two decision filenames to three digits; that local exception does not authorize renaming documents in other projects.
+
 ## Existing alpha installations
 
 The updated schema and templates are installed by a fresh `init`. This alpha does not implement `update`; adding settings to an older installation alone does not replace its schema instructions. Use a fresh pilot to evaluate the updated workflow. Preserve any existing pilot's artifacts and results.
