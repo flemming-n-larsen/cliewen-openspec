@@ -11,6 +11,7 @@ ac:
   capabilities: {}
 testing:
   placement: per-task
+  approach: flexible
 ```
 
 ## Acceptance criterion IDs
@@ -67,6 +68,28 @@ The earlier experimental `ac.prefix` setting is no longer supported. Replace it 
 Both modes retain final regression testing and revision-bound evidence collection. Per-task test runs provide immediate feedback; the evidence adapter records results for the final committed inputs. Disabling evidence does not disable ordinary task-level testing.
 
 This setting is agent guidance supplied by the installed schema and task template. The CLI does not parse tasks to enforce test ordering, and configuration changes do not rewrite existing task lists. Ask the agent to revise an existing plan when changing this setting.
+
+## Test-driven development
+
+Test placement and test-driven development (TDD) are separate choices. Enable TDD with:
+
+```yaml
+testing:
+  placement: per-task
+  approach: tdd
+```
+
+`approach: flexible` is the default and permits tests before or after implementation within the selected placement. Existing config files that omit `approach` keep this behavior. `approach: tdd` requires `placement: per-task`; contradictory settings are rejected.
+
+With TDD, each implementation task contains one red-green-refactor cycle:
+
+1. Write a focused test before implementing the behavior. Run it and observe failure for the intended missing behavior. Setup, import, and syntax errors do not establish this red phase.
+2. Implement the minimum behavior needed for the test to pass and run it again.
+3. Refactor with relevant tests remaining green, then continue to the next task.
+
+For example: "Add quotation-mark escaping: write and run the tagged test first and confirm the expected failure; implement escaping until the test passes; refactor and rerun the relevant tests." Record commands and observed red/green outcomes in task completion notes. If a new test already passes against existing code, report that honestly rather than claiming an observed red phase. Documentation-only work uses appropriate validation checks.
+
+This controls execution planning in `tasks.md` and the apply instructions, not OpenSpec's spec artifact format. Final regression and committed-revision evidence collection remain unchanged. The CLI does not verify historical test ordering, and a final passing report does not prove TDD was followed. The new instructions require an updated installed schema; changing config alone does not update an older alpha installation.
 
 ## Decision filenames
 

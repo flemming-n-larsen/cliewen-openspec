@@ -69,6 +69,25 @@ test('AC configuration validates capability mappings and test placement', t => {
     assert.throws(() => config(root));
   }
 });
+test('testing approach defaults remain compatible and conflicting TDD placement is rejected', t => {
+  const root = fixture(t); init(root, false, false);
+  const cfg = path.join(root, '.cliewen-openspec/config.yaml');
+  assert.equal(config(root).testing.approach, 'flexible');
+  fs.writeFileSync(cfg, 'testing:\n  approach: tdd\n');
+  assert.deepEqual(config(root).testing, {placement: 'per-task', approach: 'tdd'});
+  fs.writeFileSync(cfg, 'testing:\n  placement: end-of-change\n');
+  assert.deepEqual(config(root).testing, {placement: 'end-of-change', approach: 'flexible'});
+  fs.writeFileSync(cfg, 'testing:\n  placement: end-of-change\n  approach: tdd\n');
+  assert.throws(() => config(root), /tdd requires.*per-task/);
+  const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
+  const result = spawnSync(process.execPath, [cli, 'check', '--root', root, '--json'], {encoding: 'utf8'});
+  assert.equal(result.status, 2);
+  assert.match(JSON.parse(result.stdout).error, /tdd requires/);
+  for (const approach of ['unknown', 'true', '[]', 'null']) {
+    fs.writeFileSync(cfg, `testing:\n  approach: ${approach}\n`);
+    assert.throws(() => config(root), /approach must be/);
+  }
+});
 test('missing evidence fails; explicit disable works without reinstall',t=>{
   const root=fixture(t); init(root,false,false); assert.ok(check(root).some(f=>f.code==='evidence-not-configured'));
   fs.writeFileSync(path.join(root,'.cliewen-openspec/config.yaml'),'features:\n  evidence: false\n'); assert.ok(!check(root).some(f=>f.severity==='error'));

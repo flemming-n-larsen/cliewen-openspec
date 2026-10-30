@@ -6,6 +6,7 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- Optional TDD guidance in task planning and implementation through `testing.approach: tdd`. The default is `flexible`; TDD requires per-task testing and instructs agents to observe the expected test failure before implementation, reach green, and refactor.
 - The `cliewen-delivery` schema with proposal, specs, design, and tasks artifacts.
 - Shared guidance for living documentation, Decision Records, embedded Mermaid diagrams, optional planning, review, and behavioral evidence.
 - Project configuration with feature flags, a configurable documentation root, and evidence report location.

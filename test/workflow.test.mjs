@@ -44,8 +44,17 @@ test('packed installation → OpenSpec change → real test evidence → archive
   write('export.mjs',"export const csv = value => 'value\\n' + value + '\\n';\n");
   write('test/export.test.mjs',"import {test} from 'node:test'; import assert from 'node:assert/strict'; import {csv} from '../export.mjs'; test('exports a row [EXPORT-1]',()=>assert.equal(csv('hello'),'value\\nhello\\n'));\n");
   ospec('validate','export-data','--type','change','--strict');
+  const tasksPath=path.join(root,'openspec/changes/export-data/tasks.md');
+  const completedTasks=fs.readFileSync(tasksPath,'utf8');
+  fs.writeFileSync(tasksPath,completedTasks.replace('[x]','[ ]'));
   const instructions=JSON.parse(ospec('instructions','apply','--change','export-data','--json'));
   assert.notEqual(instructions.state,'blocked');
+  assert.match(instructions.instruction, /red-green-refactor/);
+  const taskInstructions=JSON.parse(ospec('instructions','tasks','--change','export-data','--json'));
+  assert.match(taskInstructions.instruction, /testing.approach/);
+  assert.match(taskInstructions.instruction, /observe failure for the intended missing behavior/);
+  assert.match(taskInstructions.template, /red-green-refactor/);
+  fs.writeFileSync(tasksPath,completedTasks);
   run('git',['init','-b','main']); run('git',['config','user.name','Fixture']); run('git',['config','user.email','fixture@example.invalid']);
   const commit=()=>{run('git',['add','.']);run('git',['commit','-m','Fixture revision']);}; commit();
   assert.ok(JSON.parse(cl(['check','--change','export-data','--json'],1)).findings.some(f=>f.code==='evidence-not-configured'));

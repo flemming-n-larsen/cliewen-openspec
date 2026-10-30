@@ -10,7 +10,7 @@ export { nextId, renamePrefix, capabilityForPrefix } from './ac.js';
 export const version = '0.1.0-alpha.1';
 const state = '.cliewen-openspec';
 const features = ['documentation', 'decisions', 'mermaid', 'planning', 'review', 'evidence'];
-export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string }; ac: { capabilities: Record<string, string>; padding: number }; testing: { placement: 'per-task' | 'end-of-change' } };
+export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string }; ac: { capabilities: Record<string, string>; padding: number }; testing: { placement: 'per-task' | 'end-of-change'; approach: 'flexible' | 'tdd' } };
 export type Finding = { code: string; severity: 'error' | 'warning' | 'info'; message: string };
 export function local(root: string, relative: string): string {
   if (!relative || path.isAbsolute(relative) || path.win32.parse(relative).root || relative.split(/[\\/]/).includes('..')) throw Error(`Unsafe repository path: ${relative}`);
@@ -29,7 +29,7 @@ const normalize = (s: string) => s.replace(/\r\n/g, '\n');
 const hash = (s: string) => createHash('sha256').update(normalize(s)).digest('hex');
 const read = (p: string) => fs.readFileSync(p, 'utf8');
 export function defaults(): Config {
-  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' }, ac: { capabilities: {}, padding: 3 }, testing: { placement: 'per-task' } };
+  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' }, ac: { capabilities: {}, padding: 3 }, testing: { placement: 'per-task', approach: 'flexible' } };
 }
 function keys(o: unknown, allowed: string[], label: string): asserts o is Record<string, any> {
   if (!o || typeof o !== 'object' || Array.isArray(o)) throw Error(`${label} must be an object`);
@@ -57,12 +57,17 @@ export function config(root: string): Config {
     }
   }
   if (raw.testing !== undefined) {
-    keys(raw.testing, ['placement'], 'testing');
+    keys(raw.testing, ['placement', 'approach'], 'testing');
     if (raw.testing.placement !== undefined) {
       if (!['per-task', 'end-of-change'].includes(raw.testing.placement)) throw Error('testing.placement must be per-task or end-of-change');
       c.testing.placement = raw.testing.placement;
     }
+    if (raw.testing.approach !== undefined) {
+      if (!['flexible', 'tdd'].includes(raw.testing.approach)) throw Error('testing.approach must be flexible or tdd');
+      c.testing.approach = raw.testing.approach;
+    }
   }
+  if (c.testing.approach === 'tdd' && c.testing.placement !== 'per-task') throw Error('testing.approach tdd requires testing.placement per-task');
   if (raw.docsRoot !== undefined) { if (typeof raw.docsRoot !== 'string') throw Error('docsRoot must be a string'); c.docsRoot = raw.docsRoot; }
   if (raw.features !== undefined) {
     keys(raw.features, features, 'features');

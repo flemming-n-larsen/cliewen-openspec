@@ -55,6 +55,8 @@ npx --no-install cliewen-openspec ac next --capability export
 
 Configure capability-specific AC prefixes and number padding, and choose test placement in `.cliewen-openspec/config.yaml`. Testing each implementation task before moving on is the default. Use `ac rename-prefix` to change an established prefix without resetting its sequence. See [project configuration](docs/configuration.md) for examples and prefix selection.
 
+Optionally set `testing.approach: tdd` with `testing.placement: per-task` to plan red-green-refactor within every implementation task. The default `flexible` approach allows tests before or after code within the selected placement.
+
 After implementation, commit the project inputs and collect evidence from Node tests:
 
 ```sh
@@ -68,6 +70,7 @@ After reviewing the assertions and evidence, archive with OpenSpec. Commit the a
 
 ## Project documents
 
+- [Decisions](docs/decisions/README.md)
 - [Changelog](CHANGELOG.md)
 - [Project configuration](docs/configuration.md)
 - [Pilot reference prompt](docs/testing/pilot-prompt.md)
