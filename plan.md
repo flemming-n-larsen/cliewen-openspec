@@ -2,7 +2,7 @@
 
 Status: under development. This replaces the earlier configuration-only design.
 
-Implemented alpha: delivery bundle, `init`, persistent AC allocation, `check`, transaction recovery and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. See [current evidence contract and limits](docs/testing/evidence.md). Discovery/all, updates/removal, additional integrations and structural document validators remain future work.
+Implemented alpha: delivery bundle, `init`, capability-owned AC allocation and prefix changes, `check`, transaction recovery, configurable per-task testing with optional TDD, and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. The local CSV pilot also exercised five observed red-to-green cycles and an already-passing boundary case; automated multi-agent evaluation remains planned. See [current evidence contract and limits](docs/testing/evidence.md). Discovery/all, updates/removal, configurable test types, additional integrations, and structural document validators remain future work. GitHub Pages currently hosts a landing page; the navigable user documentation described below remains to be built.
 
 ## Product and schemas
 
@@ -60,14 +60,37 @@ Updates replace only unmodified owned content; local modifications conflict unle
 
 ## Delivery milestones
 
-1. Publish this plan, mapping, README, MIT license and development-status Pages site at `flemming-n-larsen/cliewen-openspec`.
-2. Exercise installation → delivery change → AC identity → test reference → execution evidence → review → archive. Integrate docs and DR maintenance early.
-3. Complete shared definitions, discovery/all schemas, installer safety, optional planning/review and reusable CI before the first complete release.
-4. Publish npm through a separate release action after a tarball passes installation tests.
+1. Establish the public repository, plan, mapping, README, MIT license, and Pages landing page. Initial bootstrap complete.
+2. Exercise installation → delivery change → AC identity → test reference → execution evidence → review → archive. The deterministic workflow test is implemented and the local CSV/TDD pilot has run; automated agent-profile regressions remain pending.
+3. Start the user documentation site now, alongside alpha development: publish a navigable GitHub Pages guide for installation, the first delivery change, configuration, and evidence troubleshooting. Do not wait for discovery/all or an npm release.
+4. Complete shared definitions, discovery/all schemas, installer safety, optional planning/review, reusable CI, and agent evaluation. Extend and verify the user guides with each shipped capability.
+5. Publish npm through a separate release action after a tarball passes installation tests and a fresh user can complete the documented quick start against that exact package.
 
 Project CI supplies test outcomes. Reusable checks validate OpenSpec and evidence against the same clean candidate revision. Required CI checks are explicit opt-in.
 
+## User documentation and GitHub Pages
+
+Publish the user documentation on the existing GitHub Pages site. Documentation is a product deliverable maintained during implementation, not a final release task. Repository Markdown remains the authoritative content source; render or reuse it rather than maintaining separate copies of the same guidance. Keep existing document paths stable. Select the documentation build tool during the initial site milestone; no framework choice has been made yet. See [the documentation decision](docs/decisions/010-publish-user-documentation-early.md).
+
+The first site increment must provide clear navigation and a working alpha path covering prerequisites, local tarball installation, OpenSpec initialization, what `init --default` changes, starting a change, and a small CSV example. Explain which actions the CLI performs and which artifacts the coding agent authors. Include the reference prompt, review boundaries, commands, expected outcomes, and what to do when a step fails.
+
+Grow the site to cover:
+
+- Concepts and schema selection: the shared base, delivery, discovery, all, and the single-schema-per-change model.
+- Configuration reference: defaults, allowed values, examples, feature opt-outs, capability prefixes, padding, test placement, and TDD. Mark test-type configuration and other unimplemented settings explicitly as planned.
+- End-to-end guides: specs and AC IDs, task-level verification, assertion review, evidence collection, revision freshness, and archive followed by regenerated evidence.
+- Durable documentation: Decision Records, frontmatter, embedded Mermaid, optional plans, external tickets, and existing-project conventions and authorities.
+- Coding-agent setup and tested compatibility for Claude Code, Codex CLI, and OpenCode. Distinguish intended support from verified integrations and list the tested package/tool versions.
+- CLI reference, report formats, troubleshooting, known limitations, upgrade guidance when implemented, and release notes.
+- Separate contributor material for deterministic tests, agent evaluation profiles, Harbor trials, costs, and result interpretation, without making that infrastructure a prerequisite for using the schemas.
+
+All content uses US English and shows implemented, experimental, and planned functionality accurately. Navigation must work on mobile and with a keyboard. Provide readable code blocks, copyable commands, and a path to configuration, troubleshooting, and release notes from the getting-started guide. Add search when the content volume warrants it. Mermaid rendering and accessible explanatory text are part of the documentation build requirement.
+
+Build and check the site in pull-request CI before deployment, including local links and anchors and supported Mermaid examples. Exercise documented commands against the packed alpha in a clean fixture, including the current lack of an npm release, and check the published site's paths after deployment. A fresh user must be able to complete the quick start without reading this conversation. An implementation is not complete until affected instructions, configuration reference, examples, and limitations are updated.
+
 ## Acceptance
+
+Add reproducible agent trials alongside deterministic package tests. Use fixed representative profiles for Claude Code, Codex CLI, and OpenCode, and isolated CSV scenario variants for flexible per-task testing, TDD, and end-of-change testing. Trial Harbor with OpenCode Zen/pay-as-you-go before committing to the runner or a subscription. Record model/provider/settings, outcomes, execution traces, cost, and duration; distinguish planning quality from implementation behavior. This suite is planned; see [the evaluation decision](docs/decisions/009-agent-evaluation-profiles-and-initial-provider.md).
 
 Test Windows/Linux installation, repeat init, dry runs, existing config/custom schemas, conflicts, rollback, interrupted transactions, update ordering and uninstall preservation. Install packed tarballs in separate repos.
 
