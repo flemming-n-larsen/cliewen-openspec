@@ -4,6 +4,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parse, parseDocument, stringify } from 'yaml';
 import { deliveryFiles } from './delivery.js';
+import { discoveryFiles } from './discovery.js';
 import { validateRegistry } from './ac.js';
 export { nextId, renamePrefix, capabilityForPrefix } from './ac.js';
 
@@ -130,7 +131,7 @@ export function init(root: string, dryRun: boolean, makeDefault: boolean) {
   const mp = local(root, `${state}/manifest.json`);
   const previous: Manifest | undefined = fs.existsSync(mp) ? JSON.parse(read(mp)) : undefined;
   if (previous && previous.version !== version) throw Error('Upgrade migration is not implemented in this alpha.');
-  const files = deliveryFiles(); const writes: Record<string, string> = {};
+  const files = {...deliveryFiles(), ...discoveryFiles()}; const writes: Record<string, string> = {};
   for (const [p, content] of Object.entries(files)) {
     const dest = local(root, p);
     if (fs.existsSync(dest) && normalize(read(dest)) !== normalize(content)) throw Error(`Conflict: ${p}; no files written.`);
@@ -197,6 +198,13 @@ export function check(root: string, change?: string, failPending = false): Findi
   }
   try { validateRegistry(root, c); } catch (e) { add('invalid-ac-registry', e instanceof Error ? e.message : String(e)); }
   if (!c.features.evidence) { add('evidence-disabled', 'Evidence was explicitly disabled', 'info'); return findings; }
+  if (change && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(change)) {
+    const metadata = local(root, `openspec/changes/${change}/.openspec.yaml`);
+    if (fs.existsSync(metadata) && parse(read(metadata))?.schema === 'cliewen-discovery') {
+      add('discovery-review-required', 'Installation and registry checks only: review investigation sources, experiment outcomes, uncertainty, and the decision. Discovery findings do not prove product behavior.', 'info');
+      return findings;
+    }
+  }
   const specs = scenarios(root, change); const ids = new Set<string>();
   for (const s of specs) { if (!s.id) add('missing-ac-id', `${s.file}: ${s.title}`); else if (ids.has(s.id)) add('duplicate-ac-id', s.id); else ids.add(s.id); }
   for (const s of specs) {
@@ -207,6 +215,12 @@ export function check(root: string, change?: string, failPending = false): Findi
   if (!fs.existsSync(reportPath)) { add('evidence-not-configured', `No report at ${c.evidence.report}`); return findings; }
   const report = JSON.parse(read(reportPath));
   if (!report || report.version !== 1 || typeof report.revision !== 'string' || !/^[a-f0-9]{40,64}$/.test(report.revision) || !Array.isArray(report.results)) throw Error('Invalid evidence report: expected version 1, full revision and results');
+  if (report.scope !== undefined) {
+    keys(report.scope, ['change'], 'evidence scope');
+    if (typeof report.scope.change !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(report.scope.change)) throw Error('Invalid evidence scope: expected a kebab-case change name');
+    if (report.scope.change !== change) add('evidence-scope-mismatch', `Report is scoped to ${report.scope.change}; check ${change ? `requests ${change}` : 'requests permanent specs'}`);
+    if (report.execution === undefined) throw Error('Scoped evidence requires the complete test runner exit code');
+  }
   if (report.execution !== undefined && (!report.execution || !Number.isInteger(report.execution.exitCode))) throw Error('Invalid evidence execution result');
   if (report.execution?.exitCode !== undefined && report.execution.exitCode !== 0) add('runner-failed', `Test runner exited ${report.execution.exitCode}`);
   try {

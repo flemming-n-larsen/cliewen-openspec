@@ -15,7 +15,7 @@ Existing documents do not need an immediate frontmatter migration. Use type meta
 
 ## Coding agents
 
-OpenSpec installs agent integrations. Cliewen installs a schema that those integrations can read. Initialize OpenSpec for your chosen agent and then install Cliewen:
+OpenSpec installs agent integrations. Cliewen installs schemas that those integrations can read. Initialize OpenSpec for your chosen agent and then install Cliewen:
 
 ```sh
 npx --no-install openspec init

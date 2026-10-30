@@ -29,4 +29,4 @@ Retain the selectable schema names:
 
 Do not publish or describe `cliewen-base` as a separately selectable OpenSpec schema. Bundles remain standalone because OpenSpec does not compose them at runtime. A future minimal selectable workflow would require a separate product decision.
 
-This names the planned shared foundation; it does not imply a separate base package or module has already been implemented. Delivery is the only implemented schema in the current alpha.
+The current alpha shares source-loading and writing guidance across delivery and discovery. The shared base is internal, not a separate package or selectable schema. The combined all workflow remains planned.

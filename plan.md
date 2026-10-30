@@ -2,7 +2,7 @@
 
 Status: under development. This replaces the earlier configuration-only design.
 
-Implemented alpha: delivery bundle, `init`, capability-owned AC allocation and prefix changes, `check`, transaction recovery, configurable per-task testing with optional TDD, and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. The local CSV pilot also exercised five observed red-to-green cycles and an already-passing boundary case; automated multi-agent evaluation remains planned. See [current evidence contract and limits](docs/testing/evidence.md). Discovery/all, updates/removal, additional integrations, and structural project-document validators remain future work. The source now includes a navigable documentation site and a deterministic replay of its CSV guide; the Pages workflow builds and checks that site before deploying pushed main commits.
+Implemented alpha: delivery and discovery bundles, `init`, capability-owned AC allocation and prefix changes, `check`, transaction recovery, configurable per-task testing with optional TDD, and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. The local CSV pilot also exercised five observed red-to-green cycles and an already-passing boundary case; automated multi-agent evaluation remains planned. See [current evidence contract and limits](docs/testing/evidence.md). The combined all workflow, updates/removal, additional integrations, and structural project-document validators remain future work. The source now includes a navigable documentation site and a deterministic replay of its CSV guide; the Pages workflow builds and checks that site before deploying pushed main commits.
 
 ## Product and schemas
 
@@ -48,6 +48,8 @@ Repository adapters export framework-neutral JSON containing scenario/test ident
 
 Collect execution evidence during apply and check it before archive. Post-implementation evidence cannot be an existence prerequisite for starting implementation. Discovery findings do not prove unimplemented product behavior. Optional independent review uses fresh context and records findings; no mandatory agent platform or automatic merge policy.
 
+The Node adapter supports `--change NAME`: run all supplied tests, retain only the selected delta's scenario results, and preserve the full runner exit code. Reports declare the selected change; check rejects mismatched scope. Collection without the flag retains all mapped results for compatibility. Scoped reports require a runner exit code. See [the collection contract](docs/testing/evidence.md#collect-evidence-for-one-change).
+
 ## Installer and distribution
 
 Implement a TypeScript npm package with `init`, `update`, `check`, `uninstall`, dry-run support and readable/JSON diagnostics. Require initialized OpenSpec; do not install or upgrade it automatically. Use public CLI/configuration, never internal imports. Validate released-version compatibility before claiming support; original research used 1.14.1.
@@ -63,7 +65,7 @@ Updates replace only unmodified owned content; local modifications conflict unle
 1. Establish the public repository, plan, mapping, README, MIT license, and Pages landing page. Initial bootstrap complete.
 2. Exercise installation → delivery change → AC identity → test reference → execution evidence → review → archive. The deterministic workflow test is implemented and the local CSV/TDD pilot has run; automated agent-profile regressions remain pending.
 3. Publish and maintain the user documentation site alongside alpha development. The initial guide, configuration/CLI references, CSV replay, and site checks are implemented in source; deployment follows a push to main. Do not wait for discovery/all or an npm release. A real fresh-user walkthrough remains useful alongside deterministic and browser checks.
-4. Complete shared definitions, discovery/all schemas, installer safety, optional planning/review, reusable CI, and agent evaluation. Extend and verify the user guides with each shipped capability.
+4. Complete the combined all schema, installer safety, optional planning/review, reusable CI, and agent evaluation. Extend and verify the user guides with each shipped capability.
 5. Publish npm through a separate release action after a tarball passes installation tests and a fresh user can complete the documented quick start against that exact package.
 
 Project CI supplies test outcomes. Reusable checks validate OpenSpec and evidence against the same clean candidate revision. Required CI checks are explicit opt-in.
@@ -77,7 +79,7 @@ The first site increment must provide clear navigation and a working alpha path 
 Grow the site to cover:
 
 - Concepts and schema selection: the shared base, delivery, discovery, all, and the single-schema-per-change model.
-- Configuration reference: defaults, allowed values, examples, feature opt-outs, capability prefixes, padding, test placement, and TDD. Mark test-type configuration and other unimplemented settings explicitly as planned.
+- Configuration reference: defaults, allowed values, examples, feature opt-outs, capability prefixes, padding, test placement, and TDD. Mark unimplemented settings explicitly as planned.
 - End-to-end guides: specs and AC IDs, task-level verification, assertion review, evidence collection, revision freshness, and archive followed by regenerated evidence.
 - Durable documentation: Decision Records, frontmatter, embedded Mermaid, optional plans, external tickets, and existing-project conventions and authorities.
 - Coding-agent setup and tested compatibility for Claude Code, Codex CLI, and OpenCode. Distinguish intended support from verified integrations and list the tested package/tool versions.

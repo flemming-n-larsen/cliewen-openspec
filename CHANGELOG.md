@@ -6,6 +6,10 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- The `cliewen-discovery` schema with proposal, investigation, and decision artifacts. It supports no-change outcomes and separate delivery handoff, shares writing/diagram guidance, and keeps investigation findings distinct from product evidence. Init installs both schemas while preserving the default unless delivery is explicitly selected.
+
+- `--change NAME` on the Node test adapter scopes evidence results while running all supplied tests and preserving failures across the full run. Reports declare the change scope; `check` rejects mismatched scope and requires a runner exit code for scoped reports. Collection without the flag remains supported.
+
 - A fresh-context CSV BOM trial starter with an isolated six-scenario baseline, packed-package hash, Git bundle, reference prompt, and review criteria. Run `npm run trial:prepare` from a source checkout to prepare a trial.
 
 - Configurable test types with Unit, Integration, and E2E defaults. The Node adapter exports explicit test-type tags, and evidence checks reject missing, unknown, or mismatched scenario/result types. Existing reports without types must be regenerated from explicitly tagged tests.
@@ -32,7 +36,7 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Current limitations
 
-- `cliewen-discovery`, `cliewen-all`, `update`, and `uninstall` remain planned.
+- `cliewen-all`, `update`, and `uninstall` remain planned.
 - Documentation metadata and Mermaid validators are not implemented. Test placement is agent guidance rather than CLI-enforced execution ordering.
 - AC allocation supports sequential work; parallel branches require collision resolution.
 - Evidence linkage and execution results do not establish assertion quality. Reviewed sufficiency still requires human judgment.

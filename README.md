@@ -2,17 +2,17 @@
 
 Durable decisions, living documentation, and evidence for OpenSpec.
 
-**Alpha implementation.** The first working slice installs `cliewen-delivery`, allocates acceptance IDs and checks real test evidence through OpenSpec archiving. No npm release is published yet.
+**Alpha implementation.** Installs `cliewen-delivery` and `cliewen-discovery`, allocates acceptance IDs, and checks real delivery test evidence through OpenSpec archiving. Discovery supports investigation and recommendation without required production implementation. No npm release is published yet.
 
-## Planned collection
+## Schema collection
 
 - **cliewen-delivery** — recommended workflow for understood changes.
 - **cliewen-discovery** — investigation, alternatives and decision handoff.
-- **cliewen-all** — combined discovery and delivery.
+- **cliewen-all** — planned combined discovery and delivery.
 
 `cliewen-base` names the internal shared foundation used to build these bundles. It is not a separately selectable schema. Discovery remains the workflow for investigation and decision-making.
 
-The shared design covers documentation, Decision Records, Mermaid, optional plans and evidence. Evidence is enabled by default. `cliewen-discovery` and `cliewen-all` remain planned. This alpha supplies documentation/DR guidance; structural metadata and Mermaid validators remain planned.
+The shared design covers documentation, Decision Records, Mermaid, optional plans and evidence. Evidence is enabled by default. See the [discovery guide](docs/guide/discovery.md) for investigation, a no-change outcome, and delivery handoff. This alpha supplies documentation/DR guidance; structural metadata and Mermaid validators remain planned.
 
 ## Try the alpha locally
 

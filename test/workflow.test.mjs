@@ -63,6 +63,10 @@ test('packed installation → OpenSpec change → real test evidence → archive
   assert.equal(JSON.parse(cl(['check','--change','export-data','--json'])).ok,true);
   const reportPath=path.join(root,'.cliewen-openspec/evidence.json');
   const clean=fs.readFileSync(reportPath,'utf8');
+  run(process.execPath, [adapter, '--change', 'export-data', 'test/export.test.mjs']);
+  assert.deepEqual(JSON.parse(fs.readFileSync(reportPath, 'utf8')).scope, {change: 'export-data'});
+  assert.equal(JSON.parse(cl(['check','--change','export-data','--json'])).ok, true);
+  fs.writeFileSync(reportPath, clean);
   const bad=JSON.parse(clean); bad.results[0].outcome='skipped'; fs.writeFileSync(reportPath,JSON.stringify(bad));
   assert.ok(JSON.parse(cl(['check','--change','export-data','--json'],1)).findings.some(f=>f.code==='test-skipped'));
   bad.results[0].outcome='pending'; bad.results[0].reason='Awaiting environment'; fs.writeFileSync(reportPath,JSON.stringify(bad));

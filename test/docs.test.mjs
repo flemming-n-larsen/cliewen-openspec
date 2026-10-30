@@ -57,6 +57,7 @@ test('documented CSV consumer commands pass from packed install through archive'
   const reportPath = path.join(pilot, '.cliewen-openspec/evidence.json');
   const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
   assert.equal(report.results.length, 6);
+  assert.deepEqual(report.scope, {change: 'add-csv-export'});
   assert.ok(report.results.every(r => r.outcome === 'passed'));
   const archive = blocks.at(-1);
   for (const command of archive.slice(0, 3)) line(command);

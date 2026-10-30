@@ -23,4 +23,4 @@ Evidence is enabled by default. Configuration controls project settings and expl
 
 ## Consequences
 
-All workflows must preserve compatible document metadata, decision status, AC identities and evidence formats. Version base and schemas together initially. Discovery findings cannot count as proof of product behavior that has not been implemented. The alpha implements delivery first; the other bundles remain planned.
+All workflows must preserve compatible document metadata, decision status, AC identities and evidence formats. Version base and schemas together initially. Discovery findings cannot count as proof of product behavior that has not been implemented. The alpha implements delivery and discovery as standalone bundles; the combined all workflow remains planned.

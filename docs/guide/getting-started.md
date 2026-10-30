@@ -41,7 +41,7 @@ npx --no-install cliewen-openspec init --dry-run
 npx --no-install cliewen-openspec init --default
 ```
 
-`npx --no-install` runs the locally installed command. OpenSpec creates the change/spec structure. Cliewen's dry run lists proposed writes. Its `init` installs the delivery schema, the DR template, project configuration, a documentation entry point, and an ownership manifest. `--default` sets `schema: cliewen-delivery` in `openspec/config.yaml`; omit it to preserve your current default.
+`npx --no-install` runs the locally installed command. OpenSpec creates the change/spec structure. Cliewen's dry run lists proposed writes. Its `init` installs the delivery and discovery schemas, the DR template, project configuration, a documentation entry point, and an ownership manifest. `--default` sets `schema: cliewen-delivery` in `openspec/config.yaml`; omit it to preserve your current default.
 
 For agent-authored work, select your agent during OpenSpec initialization instead of `--tools none`. See [agent setup](existing-projects.md#coding-agents).
 
@@ -99,11 +99,11 @@ The helper is for this known reference example, not a general task validator. It
 ## 6. Collect evidence
 
 ```sh
-node node_modules/cliewen-openspec/adapters/node-test.mjs test/export.test.mjs
+node node_modules/cliewen-openspec/adapters/node-test.mjs --change add-csv-export test/export.test.mjs
 npx --no-install cliewen-openspec check --change add-csv-export --json
 ```
 
-The adapter runs the tests again and writes an ignored report for the current Git revision. The check should return `"ok": true` and an informational `sufficiency-not-assessed` finding. That finding is expected: you review the assertions; the CLI checks execution and references. If the check fails, use [evidence troubleshooting](../testing/evidence.md#troubleshooting).
+The adapter runs every test in the file again and writes an ignored report for the current Git revision, scoped to `add-csv-export`. Failures outside the selected change still block verification. The check should return `"ok": true` and an informational `sufficiency-not-assessed` finding. That finding is expected: you review the assertions; the CLI checks execution and references. If the check fails, use [evidence troubleshooting](../testing/evidence.md#troubleshooting).
 
 ## 7. Archive and refresh evidence
 

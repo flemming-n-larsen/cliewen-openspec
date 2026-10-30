@@ -13,9 +13,9 @@ cliewen-openspec init
 cliewen-openspec init --default
 ```
 
-Requires OpenSpec's `specs` and `changes` directories. Installs `cliewen-delivery`, the Decision Record template, default project config, a docs entry point if missing, a local ignore file, and an owned-file manifest. Repeating an unchanged installation produces an empty writes list. Conflicting owned files stop installation.
+Requires OpenSpec's `specs` and `changes` directories. Installs `cliewen-delivery`, `cliewen-discovery`, the Decision Record template, default project config, a docs entry point if missing, a local ignore file, and an owned-file manifest. Repeating an unchanged installation produces an empty writes list. Conflicting owned files stop installation.
 
-`--default` changes the default schema in `openspec/config.yaml`; without it the current selection is preserved. `--dry-run` lists writes without applying them. Init prints its writes as JSON; `--json` also requests JSON errors. `--default` and `--dry-run` are supported only for init.
+`--default` selects `cliewen-delivery` as the default schema in `openspec/config.yaml`; without it the current selection is preserved. Select discovery explicitly when creating a change with OpenSpec. `--dry-run` lists writes without applying them. Init prints its writes as JSON; `--json` also requests JSON errors. `--default` and `--dry-run` are supported only for init.
 
 The alpha has no upgrade migration. Installing a different package does not refresh an existing installed schema. Keep your authored files and use a separate pilot when trying a changed schema. Do not delete a working project's config or registry to work around conflicts.
 
@@ -50,13 +50,15 @@ With `--change`, checks that change's active delta scenarios; removed scenarios 
 
 Installation and registry checks remain active when evidence is explicitly disabled. Evidence errors include missing reports, failed/skipped tests, missing/unknown/duplicate references, stale revisions, and dirty working trees. Pending with a reason is a warning unless `--fail-on-pending` is set. Manual verification is a warning. See [the report contract](../testing/evidence.md).
 
+For a change whose OpenSpec metadata selects `cliewen-discovery`, check performs installation and registry checks only and reports `discovery-review-required` when evidence is enabled. It does not request a product test report or validate the investigation. See [discovery review](discovery.md#configuration-and-verification).
+
 | Exit code | Meaning |
 |---|---|
 | 0 | No error findings; warnings and informational findings can remain |
 | 1 | One or more check findings are errors |
 | 2 | Command usage, configuration, report parsing, or another operation failed |
 
-`--change` and `--fail-on-pending` are only supported by check. Check is read-only and does not recover a transaction or generate evidence.
+Within the Cliewen CLI, `--change` and `--fail-on-pending` are only supported by check. Check is read-only and does not recover a transaction or generate evidence. The separate [Node test adapter](../testing/evidence.md#collect-evidence-for-one-change) also accepts `--change NAME` when collecting reports. Use the same change name for collection and checking; a mismatched declared scope is an error.
 
 ## recover
 

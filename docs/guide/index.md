@@ -5,7 +5,7 @@ type: guide
 
 Cliewen adds project documentation, Decision Records, stable acceptance criterion IDs, and test evidence to an OpenSpec workflow. Use it when you want an agent to leave behind an explanation of what changed and a record of which scenarios were tested.
 
-The current alpha provides one workflow: `cliewen-delivery`. It takes an understood change through proposal, behavior specs, design, implementation tasks, and verification. OpenSpec owns the change files, spec synchronization, and archive. Your coding agent writes the artifacts and implementation; Cliewen supplies instructions, templates, configuration, ID allocation, and evidence checks.
+The current alpha provides two workflows. `cliewen-delivery` takes an understood change through proposal, behavior specs, design, implementation tasks, and verification. [Discovery](discovery.md) investigates a question and produces a recommendation, including the option to make no change. OpenSpec owns the change files, spec synchronization, and archive. Your coding agent writes the artifacts and implementation; Cliewen supplies instructions, templates, configuration, ID allocation, and evidence checks.
 
 [Start with your first change](getting-started.md). It uses a small CSV exporter and ends with an archived change and fresh evidence.
 
@@ -16,6 +16,7 @@ Use the search button to find commands, configuration fields, and guide sections
 | Feature | What you can use |
 |---|---|
 | Delivery schema | Proposal, specs, design, and tasks templates with guidance for documentation and verification |
+| Discovery schema | Proposal, investigation, and decision templates for research, no-change conclusions, or delivery handoff |
 | Installation | Preview writes, preserve the existing default schema, or explicitly select delivery |
 | Acceptance IDs | Configure a prefix per capability, allocate numbers, and change a prefix while preserving existing IDs |
 | Task-level testing | Test each implementation task before continuing; optionally use TDD |
@@ -36,7 +37,7 @@ The [configuration reference](../configuration.md) lists every accepted setting 
 
 ## What is still planned?
 
-`cliewen-discovery` and `cliewen-all` are planned workflows. `cliewen-base` names their shared internal foundation and is not a selectable schema.
+`cliewen-all` remains planned. `cliewen-base` names the shared internal foundation and is not a selectable schema.
 
 The alpha supports configurable test types and checks declared scenario types against evidence. It does not implement `update`, `uninstall`, or existing-registry adapters. Structural checks for your project's documentation and Mermaid diagrams also remain planned.
 

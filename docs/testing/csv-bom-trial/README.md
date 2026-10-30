@@ -37,4 +37,8 @@ For the third-argument `{bom: true}` API used in the first run, execute `node sc
 
 The [first fresh-context result](result-001.md) records the profile, review, and limitations.
 
+Current packages support `--change add-optional-csv-bom` on the Node adapter, so a new trial can scope evidence without the custom filtering helper used in the first run. See [change-scoped evidence](../evidence.md#collect-evidence-for-one-change). Replaying the original baseline still installs its original tarball and behavior.
+
+The [BOM pilot follow-up](scoped-evidence-follow-up.md) verified the official adapter against the completed trial in an isolated clone.
+
 The first pilot run with conversation context is documented in [the earlier trial report](../csv-bom-agent-trial.md). Keep fresh-context results separate so the comparison remains clear. These scripts prepare an evaluation; they do not implement a Harbor runner or automatically score prose quality.

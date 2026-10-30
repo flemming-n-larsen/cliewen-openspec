@@ -1,19 +1,7 @@
-import { readFileSync } from 'node:fs';
 import { stringify } from 'yaml';
-
-// Resolve packaged sources relative to this module, independent of the caller's cwd.
-function template(relative: string): string {
-  return readFileSync(new URL('../schemas/' + relative, import.meta.url), 'utf8').replaceAll('\r\n', '\n');
-}
-
-function instruction(relative: string): string {
-  return template(relative).trim().split(/\n/).map(line => line.trim()).join(' ');
-}
+import { template, instruction, routing } from './schema-source.js';
 
 // Common source for the delivery bundle; future workflows reuse these artifacts.
-const diagrams = instruction('base/instructions/diagrams.md');
-const writing = instruction('base/instructions/writing.md');
-const routing = [writing, diagrams, instruction('base/instructions/routing.md')].join(' ');
 const testingApproach = instruction('base/instructions/testing-approach.md');
 
 const artifacts = [

@@ -71,6 +71,16 @@ test('conflicting schemas stop all writes', t => {
   const root=fixture(t); const dir=path.join(root,'openspec/schemas/cliewen-delivery'); fs.mkdirSync(dir,{recursive:true}); fs.writeFileSync(path.join(dir,'schema.yaml'),'custom');
   assert.throws(()=>init(root,false,false),/Conflict/); assert.equal(fs.existsSync(path.join(root,'.cliewen-openspec')),false);
 });
+
+test('a discovery schema conflict prevents writes to either bundle', t => {
+  const root = fixture(t);
+  const dir = path.join(root, 'openspec/schemas/cliewen-discovery');
+  fs.mkdirSync(dir, {recursive: true});
+  fs.writeFileSync(path.join(dir, 'schema.yaml'), 'custom discovery');
+  assert.throws(() => init(root, false, false), /Conflict/);
+  assert.equal(fs.existsSync(path.join(root, 'openspec/schemas/cliewen-delivery')), false);
+  assert.equal(fs.existsSync(path.join(root, '.cliewen-openspec')), false);
+});
 test('registry never reuses a retired highest ID and seeds from existing specs', t=>{
   const root=fixture(t); init(root,false,false); fs.writeFileSync(path.join(root,'.cliewen-openspec/config.yaml'),'ac:\n  capabilities:\n    example: EX\n'); const spec=path.join(root,'openspec/specs/example.md'); fs.writeFileSync(spec,'#### Scenario: Old [EX-009]\n');
   assert.equal(nextId(root,'example'),'EX-010'); fs.unlinkSync(spec); assert.equal(nextId(root,'example'),'EX-011');
