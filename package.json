@@ -17,6 +17,7 @@
   },
   "files": [
     "dist",
+    "schemas",
     "adapters",
     "README.md",
     "CHANGELOG.md",
