@@ -64,7 +64,7 @@ The first allocation prints `EXP-001`. Run the allocation command five more time
 
 ## 4. Write and review the proposal
 
-Give your coding agent the [reference prompt](../testing/pilot-prompt.md#prompt), then review its proposal, specs, design, and tasks. Each scenario heading should carry its allocated ID. Each implementation task should have relevant tests and a completion check.
+Give your coding agent the [reference prompt](../testing/pilot-prompt.md#prompt), then review its proposal, specs, design, and tasks. Each scenario heading should carry its allocated ID and have one `Test-type` line below it. Each implementation task should name its concrete tests, type, boundary, and completion check. The default types are Unit, Integration, and E2E; [configure your own types](../configuration.md#test-types) to preserve project terminology. For the Node adapter, tag each mapped test title with its AC ID and `[Test-type: Unit]`, or the matching configured type.
 
 For a repeatable walkthrough without an agent, copy the prepared artifacts from the source clone:
 

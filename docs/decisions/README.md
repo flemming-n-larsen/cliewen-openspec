@@ -9,7 +9,7 @@ These accepted records capture choices confirmed in the project conversation. Ac
 |---|---|---|
 | [001](001-shared-base-and-schemas.md) | A small schema collection shares a common base | Delivery implemented; discovery/all planned |
 | [002](002-base-and-workflow-names.md) | Base names the internal foundation, not a selectable workflow | Naming and product boundary |
-| [003](003-project-defined-test-types.md) | Default to Unit/Integration/E2E and allow a project-defined replacement | Configuration, export, and consistency validation planned |
+| [003](003-project-defined-test-types.md) | Default to Unit/Integration/E2E and allow a project-defined replacement | Configuration, Node export, and exact scenario/evidence type checks implemented; task boundaries reviewed |
 | [004](004-incremental-testing-and-optional-tdd.md) | Per-task testing by default, flexible ordering, optional TDD | Configuration and agent guidance implemented in current source |
 | [005](005-capability-owned-ac-identities.md) | Capabilities own sequences across prefix changes | Native allocation implemented; external adapters planned |
 | [006](006-preserve-existing-project-authorities-and-paths.md) | Preserve existing addresses, identities, and authorities | Guidance; full brownfield adapters planned |

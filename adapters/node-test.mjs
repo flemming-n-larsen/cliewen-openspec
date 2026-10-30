@@ -22,7 +22,11 @@ try {
   const results = [];
   for (const line of (run.stdout ?? '').split(/\r?\n/)) {
     const m = line.match(/^\s*(not ok|ok) \d+ - (.*\[([A-Z][A-Z0-9]*-\d+)\].*)$/);
-    if (m) results.push({ scenario: m[3], test: m[2], outcome: /#\s*(SKIP|TODO)/i.test(m[2]) ? 'skipped' : m[1] === 'ok' ? 'passed' : 'failed' });
+    if (m) {
+      const tags = [...m[2].matchAll(/\[Test-type: ([^\]\r\n]+)\]/g)];
+      if (tags.length !== 1 || !Object.hasOwn(settings.testing.types, tags[0][1])) throw Error(`Test ${m[2]} requires one configured [Test-type: NAME] tag`);
+      results.push({ scenario: m[3], test: m[2], testType: tags[0][1], outcome: /#\s*(SKIP|TODO)/i.test(m[2]) ? 'skipped' : m[1] === 'ok' ? 'passed' : 'failed' });
+    }
   }
   if (git('rev-parse', 'HEAD') !== revision || git('status', '--porcelain', '--untracked-files=all')) throw Error('Test execution changed repository inputs; evidence cannot be attributed to the original revision.');
   if (run.status === null) throw Error('Test runner did not complete; no report produced');

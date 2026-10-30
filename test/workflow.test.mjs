@@ -42,7 +42,7 @@ test('packed installation → OpenSpec change → real test evidence → archive
   write('openspec/changes/export-data/design.md','# Design\n\nA pure formatter. No new durable decision is needed.\n');
   write('openspec/changes/export-data/tasks.md','# Tasks\n\n## 1. Export\n- [x] 1.1 Implement formatter and verify EXPORT-1 with the Node test.\n');
   write('export.mjs',"export const csv = value => 'value\\n' + value + '\\n';\n");
-  write('test/export.test.mjs',"import {test} from 'node:test'; import assert from 'node:assert/strict'; import {csv} from '../export.mjs'; test('exports a row [EXPORT-1]',()=>assert.equal(csv('hello'),'value\\nhello\\n'));\n");
+  write('test/export.test.mjs',"import {test} from 'node:test'; import assert from 'node:assert/strict'; import {csv} from '../export.mjs'; test('exports a row [EXPORT-1] [Test-type: Unit]',()=>assert.equal(csv('hello'),'value\\nhello\\n'));\n");
   ospec('validate','export-data','--type','change','--strict');
   const tasksPath=path.join(root,'openspec/changes/export-data/tasks.md');
   const completedTasks=fs.readFileSync(tasksPath,'utf8');
@@ -98,4 +98,25 @@ test('packed installation → OpenSpec change → real test evidence → archive
   assert.equal(cl(['ac','next','--capability','export']),'CSV-3');
   commit(); collect();
   assert.equal(JSON.parse(cl(['check','--json'])).ok,true,'historical IDs remain valid evidence references after a prefix change');
+  const cfgPath = path.join(root, '.cliewen-openspec/config.yaml');
+  fs.appendFileSync(cfgPath, '\ntesting:\n  types:\n    Component check:\n      description: In-process component boundary\n');
+  const specPath = path.join(root, 'openspec/specs/export/spec.md');
+  fs.writeFileSync(specPath, fs.readFileSync(specPath, 'utf8').replace('Test-type: Unit', 'Test-type: Component check'));
+  write(testPath, originalTest.replace('[Test-type: Unit]', '[Test-type: Component check]')); commit(); collect();
+  assert.equal(JSON.parse(cl(['check','--json'])).ok, true, 'custom types work in the packed adapter and checker');
+  const customReport = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+  assert.equal(customReport.results[0].testType, 'Component check');
+  for (const [type, code] of [[undefined, 'missing-test-type'], ['Unit', 'unknown-test-type']]) {
+    const changed = structuredClone(customReport); changed.results[0].testType = type;
+    fs.writeFileSync(reportPath, JSON.stringify(changed));
+    assert.ok(JSON.parse(cl(['check','--json'],1)).findings.some(f => f.code === code));
+  }
+  fs.appendFileSync(cfgPath, '    Service check:\n      description: External service boundary\n');
+  commit(); collect();
+  const mismatch = JSON.parse(fs.readFileSync(reportPath, 'utf8')); mismatch.results[0].testType = 'Service check';
+  fs.writeFileSync(reportPath, JSON.stringify(mismatch));
+  assert.ok(JSON.parse(cl(['check','--json'],1)).findings.some(f => f.code === 'test-type-mismatch'));
+  write(testPath, originalTest); commit();
+  run(process.execPath, [adapter, testPath], 2);
+  assert.equal(fs.existsSync(reportPath), false, 'unknown test type invalidates earlier evidence');
 });

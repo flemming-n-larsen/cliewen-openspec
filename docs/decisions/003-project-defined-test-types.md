@@ -30,6 +30,6 @@ Specs declare the required type through `Test-type`. Tasks identify the concrete
 
 Descriptions make names useful across teams. Smoke, regression, and security generally describe purpose or selection rather than a verification level, but existing projects may retain their own terminology.
 
-This configuration and type-consistency validation are planned, not implemented in the current alpha. The alpha already includes `Test-type` in spec guidance, but its evidence format and Node adapter do not record test types. Implement configuration, scenario parsing, adapter export, validation, guidance, and documentation together before claiming this contract is enforced.
+The alpha implements configuration, scenario parsing, adapter export, and exact type-consistency checks. Tasks receive guidance to name the concrete test and boundary; their meaning still requires review. The Node adapter requires a [Test-type: NAME] title tag and exports testType. Older reports without types fail validation and must be regenerated after adding explicit metadata.
 
 Test type is independent of [test placement and TDD](004-incremental-testing-and-optional-tdd.md) and does not establish [assertion sufficiency](008-evidence-is-core-and-has-explicit-limits.md).

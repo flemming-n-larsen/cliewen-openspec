@@ -2,6 +2,8 @@
 
 ## 1. Implementation and immediate tests
 
+Each task below uses a Unit test in `test/export.test.mjs` at the pure `exportCsv` function boundary, without external dependencies. Each test title carries its AC ID and `[Test-type: Unit]`.
+
 - [ ] 1.1 Add the header and record path (EXP-001). Add an exact-output test and run `node --test --test-name-pattern="EXP-001" test/export.test.mjs`. Add an API example to README.md. Fix failures before continuing.
 - [ ] 1.2 Select and order explicit columns (EXP-002). Test reordered properties, multiple records, and ignored unselected fields. Run `node --test --test-name-pattern="EXP-00[12]" test/export.test.mjs` and fix failures.
 - [ ] 1.3 Quote comma-containing fields in headers and values (EXP-003), with a plain-field control. Run `node --test --test-name-pattern="EXP-00[123]" test/export.test.mjs` and fix failures.

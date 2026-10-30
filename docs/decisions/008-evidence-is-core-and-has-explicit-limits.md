@@ -19,4 +19,4 @@ Use adapters to export framework-neutral execution results while respecting exis
 
 The alpha records real Node test outcomes and runner status, checks the report against a clean Git revision, and reports linkage errors separately. Assertion sufficiency remains explicitly unassessed by the CLI. Human review must assess whether assertions establish the scenario at the intended boundary.
 
-Final passing evidence cannot establish historical TDD order. Test-type consistency is also not yet checked; it requires [the planned test-type support](003-project-defined-test-types.md). See [the current evidence contract](../testing/evidence.md) for supported outcomes and limitations.
+Final passing evidence cannot establish historical TDD order. Test-type names and exact scenario-to-evidence consistency are checked under [the test-type decision](003-project-defined-test-types.md); the claimed boundary still requires review. See [the current evidence contract](../testing/evidence.md) for supported outcomes and limitations.

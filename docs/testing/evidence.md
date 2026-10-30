@@ -18,7 +18,7 @@ node node_modules/cliewen-openspec/adapters/node-test.mjs test/export.test.mjs
 cliewen-openspec check --change add-export --json
 ```
 
-Tests use titles such as `exports rows [EXPORT-001]`. The reference adapter currently supports one AC tag per test title. It records real Node TAP results and the runner exit code, so failures outside mapped tests also block the check. Reports must be Git-ignored and untracked. The adapter rejects dirty input revisions and changes during execution, and invalidates older evidence when a new run starts. A crash cannot leave an earlier passing report usable.
+Tests use titles such as `exports rows [EXPORT-001] [Test-type: Unit]`. The reference adapter supports one AC tag and requires exactly one configured test-type tag per mapped test title. It records the declared type, real Node TAP results, and the runner exit code, so failures outside mapped tests also block the check. Reports must be Git-ignored and untracked. The adapter rejects dirty input revisions and changes during execution, and invalidates older evidence when a new run starts. A crash cannot leave an earlier passing report usable.
 
 ```json
 {
@@ -26,7 +26,7 @@ Tests use titles such as `exports rows [EXPORT-001]`. The reference adapter curr
   "revision": "<full Git commit>",
   "execution": {"exitCode": 0},
   "results": [
-    {"scenario":"EXPORT-001","test":"exports rows","outcome":"passed"}
+    {"scenario":"EXPORT-001","test":"exports rows","testType":"Unit","outcome":"passed"}
   ]
 }
 ```
@@ -57,4 +57,6 @@ The current alpha validates installation hashes and evidence only. Enabling othe
 
 A `manual` result is reported as a warning and does not become automated proof. The current format records free-text context, not a reviewed-sufficiency verdict. A pending result with a reason also remains a warning unless explicitly made blocking.
 
-Test-type configuration and level matching are planned. The Node adapter does not infer whether a test is Unit, Integration, or E2E, and the CLI does not currently enforce the `Test-type` line in a spec. See [the accepted design](../decisions/003-project-defined-test-types.md).
+Each selected scenario requires exactly one nonempty `Test-type` line. Each result requires `testType`, including pending and manual results. Types must belong to `testing.types` and match the scenario exactly. Findings are `invalid-scenario-test-type`, `missing-test-type`, `unknown-test-type`, and `test-type-mismatch`. Fix the scenario or test metadata, commit, and recollect evidence. Reports without types must be regenerated. The report envelope remains version 1 with stricter result checks.
+
+The adapter records explicit metadata; it cannot establish whether a test actually exercises the claimed boundary. Review that boundary and task descriptions alongside assertions. See [test-type configuration](../configuration.md#test-types).

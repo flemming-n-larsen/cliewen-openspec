@@ -38,6 +38,6 @@ The [configuration reference](../configuration.md) lists every accepted setting 
 
 `cliewen-discovery` and `cliewen-all` are planned workflows. `cliewen-base` names their shared internal foundation and is not a selectable schema.
 
-The alpha does not implement `update`, `uninstall`, existing-registry adapters, or configurable test types. Specs can carry `Test-type: Unit`, but evidence does not yet record or validate test levels. Structural checks for your project's documentation and Mermaid diagrams also remain planned.
+The alpha supports configurable test types and checks declared scenario types against evidence. It does not implement `update`, `uninstall`, or existing-registry adapters. Structural checks for your project's documentation and Mermaid diagrams also remain planned.
 
 Cliewen checks test execution, ID linkage, and revision freshness. You still need to review whether the assertions prove the intended behavior. The CLI also does not enforce the historical order of TDD steps.

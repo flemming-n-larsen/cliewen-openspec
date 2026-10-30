@@ -27,6 +27,13 @@ ac:
 testing:
   placement: per-task
   approach: flexible
+  types:
+    Unit:
+      description: Isolated behavior without external dependencies
+    Integration:
+      description: Interaction between components or dependencies
+    E2E:
+      description: Complete user or system workflow
 ```
 
 ## Documentation and features
@@ -43,6 +50,25 @@ testing:
 | `evidence.report` | `.cliewen-openspec/evidence.json` | Repository-local path to the execution report |
 
 All paths must stay inside the project; absolute paths, parent traversal, and symlink components are rejected. A custom evidence report path must be Git-ignored and untracked before the reference adapter can write it. Init only creates an ignore rule for the default `evidence.json` report.
+
+## Test types
+
+`testing.types` defaults to `Unit`, `Integration`, and `E2E`, with the descriptions shown above. A project-defined mapping replaces the entire default set. Names are case-sensitive, may contain spaces, and must be nonempty, single-line names without surrounding whitespace or square brackets. Each entry requires a nonempty `description`; an empty mapping is invalid.
+
+For example, a project that calls its tests Component and System can use:
+
+```yaml
+testing:
+  types:
+    Component:
+      description: One component tested in process with controlled dependencies
+    System:
+      description: A complete workflow against a deployed system
+```
+
+Each scenario needs exactly one `Test-type: Component` line beneath its heading. With the Node adapter, give each mapped test a title such as `exports rows [EXPORT-001] [Test-type: Component]`. Tasks should name the concrete test, type, and verification boundary. The checker requires evidence `testType` to match the scenario's declared type exactly; it does not assume one type substitutes for another. Task descriptions and the actual quality of the test boundary still require review.
+
+For existing projects, add types to scenarios and test titles, commit the inputs, then regenerate evidence. Older reports without `testType` fail the check and are not automatically upgraded. Evidence opt-out skips these checks. Testing types do not change per-task placement or TDD ordering.
 
 The alpha supplies guidance for documentation, decisions, Mermaid, planning, and review. It does not structurally validate those documents or independently enforce agent behavior. Disabling a facility preserves authored files. Evidence opt-out skips evidence checks; installation and registry checks still run.
 
@@ -65,6 +91,13 @@ ac:
 testing:
   placement: per-task
   approach: flexible
+  types:
+    Unit:
+      description: Isolated behavior without external dependencies
+    Integration:
+      description: Interaction between components or dependencies
+    E2E:
+      description: Complete user or system workflow
 ```
 
 ## Acceptance criterion IDs

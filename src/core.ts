@@ -10,7 +10,7 @@ export { nextId, renamePrefix, capabilityForPrefix } from './ac.js';
 export const version = '0.1.0-alpha.1';
 const state = '.cliewen-openspec';
 const features = ['documentation', 'decisions', 'mermaid', 'planning', 'review', 'evidence'];
-export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string }; ac: { capabilities: Record<string, string>; padding: number }; testing: { placement: 'per-task' | 'end-of-change'; approach: 'flexible' | 'tdd' } };
+export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string }; ac: { capabilities: Record<string, string>; padding: number }; testing: { placement: 'per-task' | 'end-of-change'; approach: 'flexible' | 'tdd'; types: Record<string, { description: string }> } };
 export type Finding = { code: string; severity: 'error' | 'warning' | 'info'; message: string };
 export function local(root: string, relative: string): string {
   if (!relative || path.isAbsolute(relative) || path.win32.parse(relative).root || relative.split(/[\\/]/).includes('..')) throw Error(`Unsafe repository path: ${relative}`);
@@ -29,7 +29,11 @@ const normalize = (s: string) => s.replace(/\r\n/g, '\n');
 const hash = (s: string) => createHash('sha256').update(normalize(s)).digest('hex');
 const read = (p: string) => fs.readFileSync(p, 'utf8');
 export function defaults(): Config {
-  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' }, ac: { capabilities: {}, padding: 3 }, testing: { placement: 'per-task', approach: 'flexible' } };
+  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' }, ac: { capabilities: {}, padding: 3 }, testing: { placement: 'per-task', approach: 'flexible', types: {
+    Unit: { description: 'Isolated behavior without external dependencies' },
+    Integration: { description: 'Interaction between components or dependencies' },
+    E2E: { description: 'Complete user or system workflow' }
+  } } };
 }
 function keys(o: unknown, allowed: string[], label: string): asserts o is Record<string, any> {
   if (!o || typeof o !== 'object' || Array.isArray(o)) throw Error(`${label} must be an object`);
@@ -57,7 +61,17 @@ export function config(root: string): Config {
     }
   }
   if (raw.testing !== undefined) {
-    keys(raw.testing, ['placement', 'approach'], 'testing');
+    keys(raw.testing, ['placement', 'approach', 'types'], 'testing');
+    if (raw.testing.types !== undefined) {
+      const types = raw.testing.types;
+      if (!types || typeof types !== 'object' || Array.isArray(types) || !Object.keys(types).length) throw Error('testing.types must be a nonempty name-to-description mapping');
+      for (const [name, definition] of Object.entries(types)) {
+        if (!name.trim() || name !== name.trim() || /[\r\n\[\]]/.test(name)) throw Error('Test type names must be nonempty, trimmed, single-line names without brackets');
+        keys(definition, ['description'], `testing.types.${name}`);
+        if (typeof definition.description !== 'string' || !definition.description.trim()) throw Error(`testing.types.${name}.description must be a nonempty string`);
+      }
+      c.testing.types = types;
+    }
     if (raw.testing.placement !== undefined) {
       if (!['per-task', 'end-of-change'].includes(raw.testing.placement)) throw Error('testing.placement must be per-task or end-of-change');
       c.testing.placement = raw.testing.placement;
@@ -146,21 +160,26 @@ export function markdowns(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? markdowns(path.join(dir, e.name)) : e.isFile() && e.name.endsWith('.md') ? [path.join(dir, e.name)] : []);
 }
-export function scenarios(root: string, change?: string): { id: string; title: string; file: string }[] {
+export function scenarios(root: string, change?: string): { id: string; title: string; file: string; testTypes: string[] }[] {
   if (change && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(change)) throw Error('Change must be a kebab-case name');
   const folder = change ? local(root, `openspec/changes/${change}/specs`) : local(root, 'openspec/specs');
   if (change && !fs.existsSync(folder)) throw Error(`Change specs do not exist: ${change}`);
-  const out: { id: string; title: string; file: string }[] = [];
+  const out: { id: string; title: string; file: string; testTypes: string[] }[] = [];
   for (const file of markdowns(folder)) {
     let fence = false, removed = false;
+    let current: (typeof out)[number] | undefined;
     for (const line of read(file).split(/\r?\n/)) {
       if (/^\s*(```|~~~)/.test(line)) { fence = !fence; continue; }
       if (fence) continue;
+      if (/^#{1,4} /.test(line)) current = undefined;
       if (/^## /.test(line)) removed = /^## REMOVED Requirements/.test(line);
       if (!removed && /^#### Scenario:/.test(line)) {
         const m = line.match(/\[([A-Z][A-Z0-9]*-\d+)\]\s*$/);
-        out.push({ id: m?.[1] ?? '', title: line, file: path.relative(root, file) });
+        current = { id: m?.[1] ?? '', title: line, file: path.relative(root, file), testTypes: [] };
+        out.push(current);
       }
+      const type = line.match(/^Test-type:\s*(.*?)\s*$/);
+      if (current && type) current.testTypes.push(type[1]);
     }
   }
   return out;
@@ -180,6 +199,10 @@ export function check(root: string, change?: string, failPending = false): Findi
   if (!c.features.evidence) { add('evidence-disabled', 'Evidence was explicitly disabled', 'info'); return findings; }
   const specs = scenarios(root, change); const ids = new Set<string>();
   for (const s of specs) { if (!s.id) add('missing-ac-id', `${s.file}: ${s.title}`); else if (ids.has(s.id)) add('duplicate-ac-id', s.id); else ids.add(s.id); }
+  for (const s of specs) {
+    if (s.testTypes.length !== 1 || !s.testTypes[0]) add('invalid-scenario-test-type', `${s.file}: ${s.id || s.title} requires exactly one nonempty Test-type line`);
+    for (const type of s.testTypes) if (!Object.hasOwn(c.testing.types, type)) add('unknown-test-type', `${s.id}: ${type}`);
+  }
   const reportPath = local(root, c.evidence.report);
   if (!fs.existsSync(reportPath)) { add('evidence-not-configured', `No report at ${c.evidence.report}`); return findings; }
   const report = JSON.parse(read(reportPath));
@@ -195,6 +218,12 @@ export function check(root: string, change?: string, failPending = false): Findi
     if (!r || typeof r.scenario !== 'string' || typeof r.test !== 'string' || !r.test || !['passed','failed','skipped','pending','manual'].includes(r.outcome)) throw Error('Invalid evidence result');
     const key = `${r.scenario}:${r.test}`; if (tests.has(key)) add('duplicate-test-result', key); tests.add(key);
     if (!ids.has(r.scenario)) add('unknown-ac-reference', r.scenario); else seen.add(r.scenario);
+    if (typeof r.testType !== 'string' || !r.testType.trim()) add('missing-test-type', key);
+    else if (!Object.hasOwn(c.testing.types, r.testType)) add('unknown-test-type', `${key}: ${r.testType}`);
+    else {
+      const scenario = specs.find(s => s.id === r.scenario);
+      if (scenario?.testTypes.length === 1 && scenario.testTypes[0] !== r.testType) add('test-type-mismatch', `${key}: expected ${scenario.testTypes[0]}, received ${r.testType}`);
+    }
     if (r.outcome === 'failed' || r.outcome === 'skipped') add(`test-${r.outcome}`, key);
     if (r.outcome === 'pending') { if (typeof r.reason !== 'string' || !r.reason.trim()) add('pending-without-reason', key); add('pending', `${key}: ${r.reason ?? ''}`, failPending ? 'error' : 'warning'); }
     if (r.outcome === 'manual') add('manual-verification', `${key}: ${r.reason ?? 'No review result recorded'}`, 'warning');
