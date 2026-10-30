@@ -70,6 +70,7 @@ After reviewing the assertions and evidence, archive with OpenSpec. Commit the a
 
 ## Project documents
 
+- [User guide source](docs/guide/index.md) and [published documentation](https://flemming-n-larsen.github.io/cliewen-openspec/)
 - [Decisions](docs/decisions/README.md)
 - [Changelog](CHANGELOG.md)
 - [Project configuration](docs/configuration.md)
@@ -85,6 +86,8 @@ Implemented commands: `init`, `ac next`, `ac rename-prefix`, `check` and `recove
 ## Development checks
 
 `npm test` builds TypeScript and runs unit and packed-installation integration tests. GitHub Actions runs the same suite on Windows and Linux with Node 22 and 24. These checks cover the alpha implementation; documentation semantic accuracy and assertion sufficiency still require review.
+
+Build the documentation with `npm run docs:build` and preview it with `npm run docs:serve`. For browser checks, install Chromium with `npx playwright install chromium`, then run `npm run docs:check`. Documentation tooling uses Node 22.12+ (Node 22 or 24 recommended). See [documentation development](docs/guide/development.md).
 
 ## License
 

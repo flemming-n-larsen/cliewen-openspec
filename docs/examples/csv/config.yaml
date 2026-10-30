@@ -1,0 +1,7 @@
+ac:
+  padding: 3
+  capabilities:
+    csv-export: EXP
+testing:
+  placement: per-task
+  approach: flexible

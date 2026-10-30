@@ -4,20 +4,51 @@
   "description": "OpenSpec workflows with durable decisions and behavioral evidence",
   "type": "module",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/flemming-n-larsen/cliewen-openspec.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flemming-n-larsen/cliewen-openspec.git"
+  },
   "homepage": "https://flemming-n-larsen.github.io/cliewen-openspec/",
-  "engines": { "node": ">=20.19.0" },
-  "bin": { "cliewen-openspec": "dist/cli.js" },
-  "files": ["dist", "adapters", "README.md", "CHANGELOG.md", "LICENSE", "docs/configuration.md", "docs/testing/evidence.md", "docs/testing/pilot-prompt.md"],
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "bin": {
+    "cliewen-openspec": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "adapters",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "docs/configuration.md",
+    "docs/testing/evidence.md",
+    "docs/testing/pilot-prompt.md"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "npm run build && node --test test/*.test.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "docs:build": "npm run build && node scripts/build-docs.mjs",
+    "docs:serve": "node scripts/serve-docs.mjs",
+    "docs:check": "node scripts/check-docs-browser.mjs"
   },
-  "dependencies": { "yaml": "2.9.1" },
+  "dependencies": {
+    "yaml": "2.9.1"
+  },
   "devDependencies": {
     "@fission-ai/openspec": "1.15.0",
     "@types/node": "26.6.6",
-    "typescript": "7.0.2"
+    "jsdom": "26.1.0",
+    "markdown-it": "15.0.3",
+    "mermaid": "12.2.0",
+    "playwright": "1.64.1",
+    "typescript": "7.0.2",
+    "vitepress": "1.6.4",
+    "vue": "3.5.44"
+  },
+  "overrides": {
+    "vite": "7.3.7",
+    "@vitejs/plugin-vue": "6.0.10"
   }
 }

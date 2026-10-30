@@ -16,4 +16,4 @@ These accepted records capture choices confirmed in the project conversation. Ac
 | [007](007-durable-documents-and-general-decision-records.md) | Lightweight docs, general DRs, frontmatter, Mermaid, optional plans | Guidance/templates implemented; structural validators planned |
 | [008](008-evidence-is-core-and-has-explicit-limits.md) | Evidence is core, with linkage/execution/freshness distinct from sufficiency | Alpha checks implemented; sufficiency requires review |
 | [009](009-agent-evaluation-profiles-and-initial-provider.md) | Use representative agent profiles and trial OpenCode pay-as-you-go with Harbor | Accepted evaluation direction; runner trial and automated agent suite pending |
-| [010](010-publish-user-documentation-early.md) | Publish navigable user documentation on GitHub Pages during alpha development | Landing page exists; documentation site expansion and checks planned |
+| [010](010-publish-user-documentation-early.md) | Publish navigable user documentation on GitHub Pages during alpha development | Site, replay fixture, and build/browser checks implemented in source; Pages deploys pushed main commits |

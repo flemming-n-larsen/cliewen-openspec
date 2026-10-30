@@ -6,6 +6,7 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- A VitePress user guide on GitHub Pages with local search, a light/dark appearance switch, and embedded Mermaid. It covers the first delivery change, defaults, supported configuration fields, CLI commands, evidence troubleshooting, and existing-project conventions. The build checks local links, anchors, configuration defaults, and Mermaid syntax; browser checks cover search, appearance, rendering, and navigation. A packed-installation test replays the guide's CSV consumer commands through archive and refreshed evidence.
 - Optional TDD guidance in task planning and implementation through `testing.approach: tdd`. The default is `flexible`; TDD requires per-task testing and instructs agents to observe the expected test failure before implementation, reach green, and refactor.
 - The `cliewen-delivery` schema with proposal, specs, design, and tasks artifacts.
 - Shared guidance for living documentation, Decision Records, embedded Mermaid diagrams, optional planning, review, and behavioral evidence.

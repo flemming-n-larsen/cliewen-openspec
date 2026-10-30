@@ -2,7 +2,7 @@
 
 Status: under development. This replaces the earlier configuration-only design.
 
-Implemented alpha: delivery bundle, `init`, capability-owned AC allocation and prefix changes, `check`, transaction recovery, configurable per-task testing with optional TDD, and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. The local CSV pilot also exercised five observed red-to-green cycles and an already-passing boundary case; automated multi-agent evaluation remains planned. See [current evidence contract and limits](docs/testing/evidence.md). Discovery/all, updates/removal, configurable test types, additional integrations, and structural document validators remain future work. GitHub Pages currently hosts a landing page; the navigable user documentation described below remains to be built.
+Implemented alpha: delivery bundle, `init`, capability-owned AC allocation and prefix changes, `check`, transaction recovery, configurable per-task testing with optional TDD, and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. The local CSV pilot also exercised five observed red-to-green cycles and an already-passing boundary case; automated multi-agent evaluation remains planned. See [current evidence contract and limits](docs/testing/evidence.md). Discovery/all, updates/removal, configurable test types, additional integrations, and structural project-document validators remain future work. The source now includes a navigable documentation site and a deterministic replay of its CSV guide; the Pages workflow builds and checks that site before deploying pushed main commits.
 
 ## Product and schemas
 
@@ -62,7 +62,7 @@ Updates replace only unmodified owned content; local modifications conflict unle
 
 1. Establish the public repository, plan, mapping, README, MIT license, and Pages landing page. Initial bootstrap complete.
 2. Exercise installation → delivery change → AC identity → test reference → execution evidence → review → archive. The deterministic workflow test is implemented and the local CSV/TDD pilot has run; automated agent-profile regressions remain pending.
-3. Start the user documentation site now, alongside alpha development: publish a navigable GitHub Pages guide for installation, the first delivery change, configuration, and evidence troubleshooting. Do not wait for discovery/all or an npm release.
+3. Publish and maintain the user documentation site alongside alpha development. The initial guide, configuration/CLI references, CSV replay, and site checks are implemented in source; deployment follows a push to main. Do not wait for discovery/all or an npm release. A real fresh-user walkthrough remains useful alongside deterministic and browser checks.
 4. Complete shared definitions, discovery/all schemas, installer safety, optional planning/review, reusable CI, and agent evaluation. Extend and verify the user guides with each shipped capability.
 5. Publish npm through a separate release action after a tarball passes installation tests and a fresh user can complete the documented quick start against that exact package.
 
@@ -70,7 +70,7 @@ Project CI supplies test outcomes. Reusable checks validate OpenSpec and evidenc
 
 ## User documentation and GitHub Pages
 
-Publish the user documentation on the existing GitHub Pages site. Documentation is a product deliverable maintained during implementation, not a final release task. Repository Markdown remains the authoritative content source; render or reuse it rather than maintaining separate copies of the same guidance. Keep existing document paths stable. Select the documentation build tool during the initial site milestone; no framework choice has been made yet. See [the documentation decision](docs/decisions/010-publish-user-documentation-early.md).
+Publish the user documentation on the existing GitHub Pages site using VitePress with local search and light/dark appearance. Documentation is a product deliverable maintained during implementation, not a final release task. Repository Markdown remains the authoritative content source; render or reuse it rather than maintaining separate copies of the same guidance. Keep existing document paths and published page URLs stable. See [the documentation decision](docs/decisions/010-publish-user-documentation-early.md).
 
 The first site increment must provide clear navigation and a working alpha path covering prerequisites, local tarball installation, OpenSpec initialization, what `init --default` changes, starting a change, and a small CSV example. Explain which actions the CLI performs and which artifacts the coding agent authors. Include the reference prompt, review boundaries, commands, expected outcomes, and what to do when a step fails.
 
@@ -82,7 +82,7 @@ Grow the site to cover:
 - Durable documentation: Decision Records, frontmatter, embedded Mermaid, optional plans, external tickets, and existing-project conventions and authorities.
 - Coding-agent setup and tested compatibility for Claude Code, Codex CLI, and OpenCode. Distinguish intended support from verified integrations and list the tested package/tool versions.
 - CLI reference, report formats, troubleshooting, known limitations, upgrade guidance when implemented, and release notes.
-- Separate contributor material for deterministic tests, agent evaluation profiles, Harbor trials, costs, and result interpretation, without making that infrastructure a prerequisite for using the schemas.
+- Keep contributor material for deterministic tests, agent evaluation profiles, Harbor trials, costs, and result interpretation in the repository, outside the public site's page set and search index. Decisions and release notes also remain repository documents.
 
 All content uses US English and shows implemented, experimental, and planned functionality accurately. Navigation must work on mobile and with a keyboard. Provide readable code blocks, copyable commands, and a path to configuration, troubleshooting, and release notes from the getting-started guide. Add search when the content volume warrants it. Mermaid rendering and accessible explanatory text are part of the documentation build requirement.
 

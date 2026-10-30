@@ -3,7 +3,7 @@ type: testing
 ---
 # Evidence alpha contract
 
-The first slice supports `init`, `ac next`, `check` and `recover`, and installs cliewen-delivery. It has been tested against OpenSpec 1.15.0 on Windows and Linux. This is not the complete first release: discovery/all, update/uninstall, existing-registry adapters, automated documentation/Mermaid checks and independent review tooling remain planned.
+The alpha supports `init`, `ac next`, `ac rename-prefix`, `check`, and `recover`, and installs `cliewen-delivery`. Package CI exercises OpenSpec 1.15.0 on Windows and Linux. Discovery/all, update/uninstall, existing-registry adapters, structural checks for your project's documentation and Mermaid, and independent review tooling remain planned.
 
 Initialize OpenSpec first. Install this package from a locally built tarball. Run `cliewen-openspec init --default` to explicitly select delivery; omit `--default` to preserve the existing schema. `--root PATH` supports an explicit target, and `init --dry-run` makes no changes.
 
@@ -36,3 +36,25 @@ Allowed outcomes: passed, failed, skipped, pending and manual. Pending requires 
 `--change` checks active delta scenarios (REMOVED scenarios are excluded). Supply a report scoped to that change; unrelated IDs are unknown references. Without it, check all permanent specs. OpenSpec retains responsibility for semantic merging. After archive changes the tree, commit and regenerate evidence for the new revision before checking permanent specs.
 
 The current alpha validates installation hashes and evidence only. Enabling other features supplies schema guidance, not implemented structural validators. The schema does not add a post-implementation artifact as an apply prerequisite. Archive is deliberately performed with OpenSpec, after reviewing evidence.
+
+## Troubleshooting
+
+| Finding or error | What to do |
+|---|---|
+| `evidence-not-configured` | Commit inputs, run the test adapter, and check that `evidence.report` points to its output |
+| `stale-evidence` | Regenerate the report after committing the intended inputs; archive also changes the revision |
+| `unverifiable-evidence` | Resolve tracked and untracked changes, then commit and rerun; confirm the project has a Git HEAD |
+| `test-failed`, `test-skipped`, or `runner-failed` | Inspect real test output, fix failures, and collect a new report; do not edit a report to claim a pass |
+| `missing-ac-id` or `missing-evidence` | Check scenario headings and bracketed IDs in test titles; supply a test result for each selected scenario |
+| `unknown-ac-reference` | Use the matching `--change` scope or collect a report containing only the scenarios being checked |
+| `duplicate-ac-id` or `duplicate-test-result` | Inspect duplicate scenario identities or repeated test result entries before recollecting |
+| `pending-without-reason` | Record why execution is pending; use `--fail-on-pending` when pending work must block |
+| `owned-file-modified` | Review edits to installer-owned files; init will not overwrite conflicting files, and alpha update is not implemented |
+| `invalid-ac-registry` | Restore a manually changed prefix mapping and use `ac rename-prefix`; preserve the registry and reserved numbers |
+| `interrupted-transaction` | Run `cliewen-openspec recover`, then review the restored files |
+| Adapter says the output is not ignored | Add the custom report path to `.gitignore`; default output is ignored by init |
+| `sufficiency-not-assessed` | Expected informational finding; review whether assertions actually establish the scenarios |
+
+A `manual` result is reported as a warning and does not become automated proof. The current format records free-text context, not a reviewed-sufficiency verdict. A pending result with a reason also remains a warning unless explicitly made blocking.
+
+Test-type configuration and level matching are planned. The Node adapter does not infer whether a test is Unit, Integration, or E2E, and the CLI does not currently enforce the `Test-type` line in a spec. See [the accepted design](../decisions/003-project-defined-test-types.md).

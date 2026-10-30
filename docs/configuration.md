@@ -3,7 +3,60 @@ type: reference
 ---
 # Project configuration
 
-Project settings live in `.cliewen-openspec/config.yaml`. New installations include these defaults. Existing config files can omit these sections and receive the same defaults.
+Cliewen reads project settings from `.cliewen-openspec/config.yaml`.
+
+## Full defaults
+
+This is the complete configuration written by `init`. Omitted fields use these values; unknown settings and invalid values fail validation. Changes apply when the next operation reads the config. They do not rewrite existing proposals or task lists.
+
+<!-- defaults -->
+```yaml
+docsRoot: docs
+features:
+  documentation: true
+  decisions: true
+  mermaid: true
+  planning: true
+  review: true
+  evidence: true
+evidence:
+  report: .cliewen-openspec/evidence.json
+ac:
+  capabilities: {}
+  padding: 3
+testing:
+  placement: per-task
+  approach: flexible
+```
+
+## Documentation and features
+
+| Setting | Default | Effect |
+|---|---|---|
+| `docsRoot` | `docs` | Root for durable explanations; init creates an entry README if absent |
+| `features.documentation` | `true` | Guidance to assess and maintain affected documentation |
+| `features.decisions` | `true` | Guidance for considering and recording durable decisions |
+| `features.mermaid` | `true` | Guidance to use embedded Mermaid where useful |
+| `features.planning` | `true` | Makes optional planning guidance available; does not require a plan |
+| `features.review` | `true` | Makes review guidance available; a separate reviewer remains optional |
+| `features.evidence` | `true` | Scenario-ID and execution-report checks |
+| `evidence.report` | `.cliewen-openspec/evidence.json` | Repository-local path to the execution report |
+
+All paths must stay inside the project; absolute paths, parent traversal, and symlink components are rejected. A custom evidence report path must be Git-ignored and untracked before the reference adapter can write it. Init only creates an ignore rule for the default `evidence.json` report.
+
+The alpha supplies guidance for documentation, decisions, Mermaid, planning, and review. It does not structurally validate those documents or independently enforce agent behavior. Disabling a facility preserves authored files. Evidence opt-out skips evidence checks; installation and registry checks still run.
+
+For example, to use a different documentation root and turn off Mermaid guidance:
+
+```yaml
+docsRoot: project-docs
+features:
+  mermaid: false
+```
+
+Other fields retain their defaults. The YAML objects `features`, `ac`, and `testing` support partial settings. If you provide `evidence`, include its `report` string. Changing `docsRoot` does not move existing files. The schema artifact graph is selected by the OpenSpec schema and is not rewritten by feature flags.
+
+## Testing and IDs at a glance
 
 ```yaml
 ac:
