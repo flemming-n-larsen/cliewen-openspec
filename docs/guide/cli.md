@@ -30,6 +30,17 @@ Refreshes owned schema files/templates using the installed package. Output conta
 
 Configuration, default schema, AC registry, authored changes/docs, and evidence are preserved. Apply recovers an interrupted transaction first and uses rollback; dry-run does neither. The command has no `--default` or force option. Usage, config, ownership, or write failures exit 2; success exits 0. See [the update guide](updating.md) for the full workflow and conflict rules.
 
+## uninstall
+
+```sh
+cliewen-openspec uninstall --dry-run --default-schema spec-driven --json
+cliewen-openspec uninstall --default-schema spec-driven --json
+```
+
+Removes only unchanged installer-owned resources and the ownership manifest, preserving authored files, config, registry, evidence, and custom resources. If the project default is not being removed, omit `--default-schema`; an unnecessary replacement flag is rejected. Otherwise an explicit replacement must validate through the public OpenSpec CLI. Active changes using removed schemas block uninstall, including inherited-default references. No change metadata is rewritten.
+
+Output includes `dryRun`, `writes`, and `deletes`. Apply supports recovery/rollback; dry-run does neither. Missing owned files are tolerated; edited owned files conflict. No force option or automatic npm dependency removal is provided. Supported manifest version is `0.1.0-alpha.1`; a missing manifest is an error. Success exits 0 and usage, validation, conflict, or operation failures exit 2. See [the uninstall guide](uninstalling.md).
+
 ## ac next
 
 ```sh
@@ -88,4 +99,4 @@ cliewen-openspec --version
 cliewen-openspec --help
 ```
 
-`uninstall` is not implemented. OpenSpec commands such as `new change`, `validate`, and `archive` belong to OpenSpec, not this CLI.
+OpenSpec commands such as `new change`, `validate`, and `archive` belong to OpenSpec, not this CLI.

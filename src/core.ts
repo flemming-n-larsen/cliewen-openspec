@@ -2,7 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { parse, parseDocument, stringify } from 'yaml';
+import { createRequire } from 'node:module';
+import { isDeepStrictEqual } from 'node:util';
+import { parse, parseDocument, stringify, isMap } from 'yaml';
 import { deliveryFiles } from './delivery.js';
 import { discoveryFiles } from './discovery.js';
 import { allFiles } from './all.js';
@@ -138,21 +140,120 @@ function manifestText(files: Record<string, string>): string {
   return JSON.stringify({version, files: Object.fromEntries(Object.entries(files).map(([file, content]) => [file, hash(content)]))}, null, 2) + '\n';
 }
 
-export function update(root: string, dryRun = false): { writes: string[]; deletes: string[] } {
-  if (!fs.existsSync(local(root, 'openspec/specs')) || !fs.existsSync(local(root, 'openspec/changes'))) throw Error('Run openspec init first (specs and changes directories are required).');
-  if (!dryRun) recover(root);
-  const manifestPath = `${state}/manifest.json`;
-  const mp = local(root, manifestPath);
-  if (!fs.existsSync(mp)) throw Error('No Cliewen installation manifest; run init first. Update does not adopt unowned files.');
+function ownedManifest(root: string, operation: 'update' | 'uninstall'): Manifest {
+  const mp = local(root, `${state}/manifest.json`);
+  if (!fs.existsSync(mp)) throw Error(operation === 'update'
+    ? 'No Cliewen installation manifest; run init first. Update does not adopt unowned files.'
+    : 'No Cliewen installation manifest; no files removed. Uninstall requires recorded ownership.');
   const previous = JSON.parse(read(mp));
   keys(previous, ['version', 'files'], 'manifest');
-  if (previous.version !== version) throw Error(`Unsupported installed version: ${previous.version}; update currently supports ${version} manifests only`);
+  if (previous.version !== version) throw Error(`Unsupported installed version: ${previous.version}; ${operation} currently supports ${version} manifests only`);
   if (!previous.files || typeof previous.files !== 'object' || Array.isArray(previous.files) || !Object.keys(previous.files).length) throw Error('Manifest files must be a nonempty ownership mapping');
   for (const [file, digest] of Object.entries(previous.files)) {
     local(root, file);
     const owned = file === `${state}/templates/decision.md` || /^openspec\/schemas\/cliewen-(delivery|discovery|all)\/(schema\.yaml|templates\/[a-z0-9][a-z0-9-]*\.md)$/.test(file);
     if (!owned || typeof digest !== 'string' || !/^[a-f0-9]{64}$/.test(digest)) throw Error(`Invalid owned-file entry in manifest: ${file}`);
   }
+  return previous as Manifest;
+}
+
+function validateReplacementSchema(root: string, name: string): void {
+  let entry: string | undefined;
+  for (const require of [createRequire(path.join(path.resolve(root), 'package.json')), createRequire(import.meta.url)]) {
+    try { entry = require.resolve('@fission-ai/openspec'); break; } catch { /* Try the package's own resolution context next. */ }
+  }
+  if (!entry) throw Error('Install OpenSpec locally to validate --default-schema before uninstalling.');
+  let cursor = path.dirname(entry);
+  while (true) {
+    const metadata = path.join(cursor, 'package.json');
+    if (fs.existsSync(metadata)) {
+      const pkg = JSON.parse(read(metadata));
+      if (pkg.name === '@fission-ai/openspec') {
+        const bin = pkg.bin?.openspec;
+        if (typeof bin !== 'string') throw Error('Installed OpenSpec does not declare its public CLI.');
+        const cli = path.resolve(cursor, bin);
+        const relative = path.relative(cursor, cli);
+        if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) throw Error('Invalid OpenSpec CLI path');
+        try {
+          execFileSync(process.execPath, [cli, 'schema', 'validate', name, '--json'], {cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 30000, env: {...process.env, OPENSPEC_TELEMETRY: '0', CI: '1'}});
+        } catch { throw Error(`Replacement schema failed OpenSpec validation: ${name}`); }
+        return;
+      }
+    }
+    const parent = path.dirname(cursor);
+    if (parent === cursor) throw Error('Cannot locate the public OpenSpec CLI metadata.');
+    cursor = parent;
+  }
+}
+
+export function uninstall(root: string, dryRun = false, replacement?: string): { writes: string[]; deletes: string[] } {
+  if (!dryRun) recover(root);
+  else if (fs.existsSync(local(root, `${state}/transaction.json`))) throw Error('Interrupted transaction exists; run recover before uninstall preview.');
+  const manifest = ownedManifest(root, 'uninstall');
+  const removed = new Set(Object.keys(manifest.files).flatMap(file => file.match(/^openspec\/schemas\/([^/]+)\//)?.[1] ?? []));
+  const canonical = (name: string) => name.replace(/\.ya?ml$/, '').toLowerCase();
+  const cfgPath = 'openspec/config.yaml';
+  const original = fs.existsSync(local(root, cfgPath)) ? read(local(root, cfgPath)) : '';
+  const doc = parseDocument(original || '{}');
+  if (doc.errors.length) throw Error(doc.errors[0].message);
+  if (doc.contents !== null && !isMap(doc.contents)) throw Error('OpenSpec config must be a YAML mapping');
+  const originalConfig = doc.toJS() as Record<string, unknown> | null;
+  const current = originalConfig?.schema;
+  if (current !== undefined && typeof current !== 'string') throw Error('OpenSpec default schema must be a string');
+  const defaultRemoved = typeof current === 'string' && removed.has(canonical(current));
+  if (defaultRemoved && !replacement) throw Error(`Default schema ${current} is being removed; pass --default-schema NAME explicitly.`);
+  if (!defaultRemoved && replacement !== undefined) throw Error('--default-schema is only supported when the current default uses a schema being removed.');
+  if (replacement !== undefined && (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(replacement) || removed.has(canonical(replacement)))) throw Error('Replacement must name a schema that is not being removed.');
+  const changes: Record<string, string | null> = {};
+  for (const [file, digest] of Object.entries(manifest.files)) {
+    const dest = local(root, file);
+    if (!fs.existsSync(dest)) continue;
+    if (hash(read(dest)) !== digest) throw Error(`Conflict: ${file} has local edits; no uninstall files changed.`);
+    changes[file] = null;
+  }
+  const inspect = (folder: string) => {
+    const directory = local(root, folder);
+    const metadata = path.join(directory, '.openspec.yaml');
+    const hasMetadata = fs.existsSync(local(root, `${folder}/.openspec.yaml`));
+    const hasArtifacts = ['proposal.md', 'investigation.md', 'decision.md', 'design.md', 'tasks.md', 'specs'].some(file => fs.existsSync(local(root, `${folder}/${file}`)));
+    if (hasMetadata || hasArtifacts) {
+      const selected = hasMetadata ? parse(read(metadata)) : {};
+      if (!selected || typeof selected !== 'object' || Array.isArray(selected) || (selected.schema !== undefined && typeof selected.schema !== 'string')) throw Error(`Cannot establish the schema for active change: ${folder}`);
+      const schema = selected.schema ?? current;
+      if (typeof schema === 'string' && removed.has(canonical(schema))) throw Error(`Active change ${folder} uses ${schema}; finish/archive it or explicitly migrate it before uninstalling. No change metadata was rewritten.`);
+      return;
+    }
+    for (const entry of fs.readdirSync(directory, {withFileTypes: true})) {
+      if (entry.isSymbolicLink()) throw Error(`Symlink not supported: ${folder}/${entry.name}`);
+      if (entry.isDirectory()) inspect(`${folder}/${entry.name}`);
+    }
+  };
+  const active = local(root, 'openspec/changes');
+  if (fs.existsSync(active)) for (const entry of fs.readdirSync(active, {withFileTypes: true})) {
+    if (entry.name === 'archive') continue;
+    if (entry.isSymbolicLink()) throw Error(`Symlink not supported: openspec/changes/${entry.name}`);
+    if (entry.isDirectory()) inspect(`openspec/changes/${entry.name}`);
+  }
+  if (replacement !== undefined) {
+    validateReplacementSchema(root, replacement);
+    doc.set('schema', replacement);
+    const before = {...originalConfig}; delete before.schema;
+    const after = {...doc.toJS()}; delete after.schema;
+    if (!isDeepStrictEqual(before, after)) throw Error('Replacing the default would change other YAML values through shared anchors; resolve those aliases explicitly before uninstalling.');
+    // Replace only the explicitly selected default; preserve unrelated YAML values and comments.
+    changes[cfgPath] = doc.toString();
+  }
+  changes[`${state}/manifest.json`] = null;
+  transaction(root, changes, dryRun);
+  return {writes: Object.keys(changes).filter(file => changes[file] !== null), deletes: Object.keys(changes).filter(file => changes[file] === null)};
+}
+
+export function update(root: string, dryRun = false): { writes: string[]; deletes: string[] } {
+  if (!fs.existsSync(local(root, 'openspec/specs')) || !fs.existsSync(local(root, 'openspec/changes'))) throw Error('Run openspec init first (specs and changes directories are required).');
+  if (!dryRun) recover(root);
+  const manifestPath = `${state}/manifest.json`;
+  const mp = local(root, manifestPath);
+  const previous = ownedManifest(root, 'update');
   const settings = config(root);
   validateRegistry(root, settings);
   const files = bundledFiles();

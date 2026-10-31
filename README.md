@@ -85,7 +85,7 @@ After reviewing the assertions and evidence, archive with OpenSpec. Commit the a
 - [Website](https://flemming-n-larsen.github.io/cliewen-openspec/)
 - [Credits](CREDITS.md)
 
-Implemented commands: `init`, `update`, `ac next`, `ac rename-prefix`, `check` and `recover`. `uninstall` remains planned; use this alpha only in a repository where you can review the installed files. Tests never establish assertion quality automatically.
+Implemented commands: `init`, `update`, `uninstall`, `ac next`, `ac rename-prefix`, `check` and `recover`. Review generated/resource changes before applying them. [Uninstall](docs/guide/uninstalling.md) preserves project data and requires an explicit replacement when removing the selected default. Tests never establish assertion quality automatically.
 
 ## Development checks
 

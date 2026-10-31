@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import path from 'node:path';
-import { check, init, update, nextId, renamePrefix, capabilityForPrefix, recover, version } from './core.js';
+import { check, init, update, uninstall, nextId, renamePrefix, capabilityForPrefix, recover, version } from './core.js';
 
 const args = process.argv.slice(2);
 const wantsJson = args.includes('--json');
@@ -11,12 +11,14 @@ try {
   const json = flag('--json'), dry = flag('--dry-run'), makeDefault = flag('--default'), failPending = flag('--fail-on-pending');
   const change = option('--change');
   const capability = option('--capability');
+  const replacement = option('--default-schema');
   const command = args.shift();
-  if (dry && !['init', 'update'].includes(command ?? '')) throw Error('--dry-run is supported only by init and update');
+  if (dry && !['init', 'update', 'uninstall'].includes(command ?? '')) throw Error('--dry-run is supported only by init, update, and uninstall');
+  if (replacement !== undefined && command !== 'uninstall') throw Error('--default-schema is supported only by uninstall');
   if (makeDefault && command !== 'init') throw Error('--default is supported only by init');
   if ((change || failPending) && command !== 'check') throw Error('--change and --fail-on-pending are supported only by check');
   if (change && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(change)) throw Error('Change must be a kebab-case name');
-  if (json && !['init', 'update', 'check'].includes(command ?? '')) throw Error('--json is supported only by init, update, and check');
+  if (json && !['init', 'update', 'uninstall', 'check'].includes(command ?? '')) throw Error('--json is supported only by init, update, uninstall, and check');
   if (capability && (command !== 'ac' || args[0] !== 'next')) throw Error('--capability is supported only by ac next');
   if (command === 'ac') {
     const action = args.shift();
@@ -31,12 +33,13 @@ try {
   else if (command === '--version') console.log(version);
   else if (command === 'init') console.log(JSON.stringify({ dryRun: dry, writes: init(root, dry, makeDefault) }, null, 2));
   else if (command === 'update') console.log(JSON.stringify({dryRun: dry, ...update(root, dry)}, null, 2));
+  else if (command === 'uninstall') console.log(JSON.stringify({dryRun: dry, ...uninstall(root, dry, replacement)}, null, 2));
   else if (command === 'recover') { if (!dry) recover(root); console.log('Recovery complete'); }
   else if (command === 'check') {
     const findings = check(root, change, failPending); const ok = !findings.some(f => f.severity === 'error');
     console.log(json ? JSON.stringify({ ok, findings }, null, 2) : findings.map(f => `${f.severity.toUpperCase()} ${f.code}: ${f.message}`).join('\n'));
     process.exitCode = ok ? 0 : 1;
-  } else if (!command || command === '--help') console.log('cliewen-openspec (alpha)\ninit [--default] [--dry-run]\nupdate [--dry-run] [--json]\nac next --capability NAME\nac next PREFIX (registered active prefix only)\nac rename-prefix CAPABILITY PREFIX\ncheck [--change NAME] [--json] [--fail-on-pending]\nrecover\nAll commands accept --root PATH. uninstall is not implemented yet.');
+  } else if (!command || command === '--help') console.log('cliewen-openspec (alpha)\ninit [--default] [--dry-run]\nupdate [--dry-run] [--json]\nuninstall [--default-schema NAME] [--dry-run] [--json]\nac next --capability NAME\nac next PREFIX (registered active prefix only)\nac rename-prefix CAPABILITY PREFIX\ncheck [--change NAME] [--json] [--fail-on-pending]\nrecover\nAll commands accept --root PATH.');
   else throw Error(`Unknown command: ${command}`);
 } catch (e) {
   const message = e instanceof Error ? e.message : String(e);

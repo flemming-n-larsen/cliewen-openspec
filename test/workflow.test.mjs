@@ -23,7 +23,7 @@ test('packed installation → OpenSpec change → real test evidence → archive
   const pack=JSON.parse(run(process.execPath,[npm,'pack','--json','--ignore-scripts','--pack-destination',root],0,project));
   const tar=path.join(root,pack[0].filename);
   write('package.json',JSON.stringify({private:true,type:'module'}));
-  run(process.execPath,[npm,'install','--ignore-scripts','--no-audit','--no-fund',tar]);
+  run(process.execPath,[npm,'install','--ignore-scripts','--no-audit','--no-fund',tar,'@fission-ai/openspec@1.15.0']);
   fs.unlinkSync(tar);
   // Replace local tarball dependency path before committing the test fixture.
   write('package.json',JSON.stringify({private:true,type:'module'}));
@@ -139,4 +139,19 @@ test('packed installation → OpenSpec change → real test evidence → archive
   write(testPath, originalTest); commit();
   run(process.execPath, [adapter, testPath], 2);
   assert.equal(fs.existsSync(reportPath), false, 'unknown test type invalidates earlier evidence');
+  const specBeforeUninstall = fs.readFileSync(specPath, 'utf8');
+  const registryBeforeUninstall = fs.readFileSync(path.join(root, '.cliewen-openspec/ac-registry.json'), 'utf8');
+  const configBeforeUninstall = fs.readFileSync(cfgPath, 'utf8');
+  const previewRemoval = JSON.parse(cl(['uninstall', '--dry-run', '--default-schema', 'spec-driven', '--json']));
+  assert.ok(previewRemoval.deletes.includes('.cliewen-openspec/manifest.json'));
+  assert.equal(fs.existsSync(path.join(root, 'openspec/schemas/cliewen-delivery/schema.yaml')), true);
+  cl(['uninstall', '--default-schema', 'spec-driven', '--json']);
+  assert.equal(fs.readFileSync(specPath, 'utf8'), specBeforeUninstall);
+  assert.equal(fs.readFileSync(cfgPath, 'utf8'), configBeforeUninstall);
+  assert.equal(fs.readFileSync(path.join(root, '.cliewen-openspec/ac-registry.json'), 'utf8'), registryBeforeUninstall);
+  assert.match(fs.readFileSync(path.join(root, 'openspec/config.yaml'), 'utf8'), /schema: spec-driven/);
+  ospec('schema', 'validate', 'spec-driven');
+  assert.equal(fs.existsSync(path.join(root, 'openspec/schemas/cliewen-delivery/schema.yaml')), false);
+  cl(['init']);
+  assert.equal(cl(['ac', 'next', '--capability', 'export']), 'CSV-4');
 });
