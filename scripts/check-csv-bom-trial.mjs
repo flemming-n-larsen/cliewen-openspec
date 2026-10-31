@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
+import {hasInstruction} from './lib/trial-instructions.mjs';
 
 const [project, artifacts, schema = 'cliewen-delivery', ...extra] = process.argv.slice(2);
 if (!project || !artifacts || extra.length || !['cliewen-delivery', 'cliewen-all'].includes(schema)) throw Error('Use node scripts/check-csv-bom-trial.mjs PROJECT ARTIFACTS [cliewen-delivery|cliewen-all]');
@@ -49,9 +50,7 @@ console.log('Independent opt-in, default, empty-input, escaping, CRLF, Unicode, 
 run('independent behavior assertions', process.execPath, ['--input-type=module', '-e', acceptance]);
 const instructions = schema === 'cliewen-all' ? ['proposal', 'investigation', 'decision', 'specs', 'tasks', 'apply'] : ['proposal', 'specs', 'design', 'tasks', 'apply'];
 for (const name of instructions) {
-  let passed = false;
-  try { const saved = JSON.parse(fs.readFileSync(path.join(root, 'docs/testing/instructions', `${name}.json`), 'utf8')); passed = saved.schemaName === schema && typeof saved.instruction === 'string' && saved.instruction.length > 0; }
-  catch { /* Missing or malformed saved instructions remain a failed observation. */ }
+  const passed = hasInstruction(root, name, schema, 'add-optional-csv-bom');
   checks.push({label: `saved ${name} instructions`, passed});
 }
 const passed = checks.every(c => c.passed !== false && (c.exitCode === undefined || c.exitCode === 0));

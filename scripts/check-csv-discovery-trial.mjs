@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {parse} from 'yaml';
+import {hasInstruction} from './lib/trial-instructions.mjs';
 
 const [project, artifacts, ...extra] = process.argv.slice(2);
 if (!project || !artifacts || extra.length) throw Error('Use node scripts/check-csv-discovery-trial.mjs PROJECT ARTIFACTS');
@@ -32,9 +33,7 @@ const health = run('Cliewen health', process.execPath, ['node_modules/cliewen-op
 try { const h = JSON.parse(health.stdout); checks.push({label: 'health explicitly requires discovery review', passed: h.ok === true && h.findings.some(f => f.code === 'discovery-review-required') && !h.findings.some(f => f.code === 'sufficiency-not-assessed')}); }
 catch { checks.push({label: 'health explicitly requires discovery review', passed: false}); }
 for (const name of ['proposal', 'investigation', 'decision', 'apply']) {
-  let passed = false;
-  try { const s = JSON.parse(fs.readFileSync(path.join(root, 'docs/testing/instructions', `${name}.json`), 'utf8')); passed = s.schemaName === 'cliewen-discovery' && typeof s.instruction === 'string' && s.instruction.length > 0; }
-  catch { /* Missing instruction responses are unobserved, not passes. */ }
+  const passed = hasInstruction(root, name, 'cliewen-discovery', 'investigate-csv-streaming');
   checks.push({label: `saved ${name} instructions`, passed});
 }
 let proposed = false;

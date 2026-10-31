@@ -3,25 +3,27 @@ type: guide
 ---
 # Evaluate every schema
 
-Every shipped schema needs deterministic regression coverage and a reviewed agent trial. [agent-evaluation.yaml](agent-evaluation.yaml) lists the profiles, scenarios, source files, and observed reports. It is a coverage plan, not an agent runner or a record that every listed combination passed.
+Every shipped schema needs deterministic regression coverage and a reviewed agent trial. [agent-evaluation.yaml](agent-evaluation.yaml) lists the profiles, scenarios, source files, and observed reports. Use the [CLI trial guide](cli-evaluation.md) to run the pinned profiles and capture raw traces. Plan validation alone does not establish that a combination passed.
 
 ## Current coverage
 
 | Schema | Development trial | Observed coverage | Still needed before release |
 |---|---|---|---|
-| cliewen-delivery | Optional CSV BOM with per-task TDD | One Codex collaboration run with fresh task context; [report](csv-bom-trial/result-001.md) | Pinned CLI profiles; flexible and end-of-change variants; repeated runs |
-| cliewen-discovery | Investigate CSV streaming | One Codex collaboration run with fresh task context; [report](csv-discovery-trial/result-001.md) | Pinned CLI profiles; targeted no-change and handoff cases; repeated runs |
-| cliewen-all | One CSV investigation through delivery with an explicit human review stage | Proposed decision stop followed by user-approved delivery; [completed result](csv-all-trial/result-002.md). Deterministic delivery/no-delivery branches pass | Add no-delivery agent coverage, pinned CLI profiles, and repeated runs |
+| cliewen-delivery | Optional CSV BOM with per-task TDD | Codex CLI passes; Claude product checks pass with a project-boundary failure; OpenCode authentication blocked | Retry failed/blocked cases; flexible and end-of-change variants; repeated runs |
+| cliewen-discovery | Investigate CSV streaming | Codex CLI and Claude pass; OpenCode authentication blocked | OpenCode trial; targeted no-change and handoff cases; repeated runs |
+| cliewen-all | One CSV investigation through delivery with an explicit human review stage | Codex CLI passes through delivery; Claude product checks pass with a project-boundary failure; OpenCode authentication blocked | Retry failed/blocked cases; no-delivery agent coverage; repeated runs |
+
+The [first CLI round](cli-trials/result-001.md) records findings and limitations. Earlier collaboration observations remain in the scenario reports referenced by the manifest.
 
 The common base is checked through every consuming schema, not as a separate user workflow. Existing deterministic tests also cover discovery ending without implementation and creating a separate delivery change. They do not substitute for the missing agent trials.
 
 ## Profiles
 
-Use one named profile per schema for routine development, and hold that profile constant while comparing instruction changes. The current reference is `codex-collaboration-observed`, using the inherited `gpt-6.1-sol` session model. It describes the runs we actually performed. Agent version, effort, provider routing, and full instruction isolation were not exposed, so this is an observed reference rather than a fully pinned repeatable profile.
+Use one named profile per schema for routine development, and hold that profile constant while comparing instruction changes. The current reference is `codex-cli-primary`, which passed the primary scenario for each schema. The earlier `codex-collaboration-observed` profile remains a historical reference: it used the inherited `gpt-6.1-sol` session model without exposed agent version, effort, routing, or full instruction isolation.
 
-The release plan reserves one primary profile each for Codex CLI, Claude Code, and OpenCode. Their exact models and settings remain unconfigured. Before a release trial, pin the executable version, exact model identifier, provider/routing, effort or explicit lack of that setting, effective instructions, permissions, time/token/cost limits, and trace format. Save those settings with each run. Do not silently use a changing default or call an unconfigured profile tested.
+The release plan pins Codex CLI 0.166.0 with `gpt-6.1-sol` at medium effort, Claude Code 2.1.316 with `claude-opus-5-5` at medium effort, and OpenCode 1.18.34 with Zen `opencode/glm-5.3-flash` at high effort. The manifest records provider, access, context, budgets, and trace settings. The runner saves those settings with each attempt and refuses version mismatches. A pinned profile still needs successful, reviewed trials.
 
-Choose models already available to maintainers, then compare changes against that baseline. Do not run a full product of agents, models, and efforts. A different model or effort gets a new profile identity and a separate result. Provider purchases, paid runs, and Harbor integration are outside this plan's implementation.
+Choose models already available to maintainers, then compare changes against that baseline. Do not run a full product of agents, models, and efforts. A different model or effort gets a new profile identity and a separate result. Explicit trial commands can consume existing subscription allowances or incur usage charges. Provider purchases and Harbor integration remain outside this implementation.
 
 ## When to run trials
 
@@ -29,7 +31,7 @@ Choose models already available to maintainers, then compare changes against tha
 - For shared writing, diagrams, decisions, configuration, identity, or evidence changes, run each affected shipped schema. If the impact is uncertain, run delivery and discovery.
 - For adapter-only behavior, run deterministic evidence regressions and the delivery scenario; add discovery if its review contract changes.
 - Before introducing a new selectable schema, add a ready development scenario, independent checker, rubric, and actual reviewed result. A planned row does not satisfy this requirement.
-- Before release, run each shipped schema's primary scenario with all three pinned CLI profiles. Run additional behavior variants with the named `releaseVariantProfile`, currently the planned Codex CLI profile. Repeat required combinations at least twice from fresh copies, and retain every attempt.
+- Before release, run each shipped schema's primary scenario with all three pinned CLI profiles. Run additional behavior variants with the named `releaseVariantProfile`, currently Codex CLI. Repeat required combinations at least twice from fresh copies, and retain every attempt.
 
 This keeps the main schema/profile comparison small. Extra model or effort experiments are optional and should answer a specific question.
 

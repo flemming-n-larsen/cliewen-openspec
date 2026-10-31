@@ -6,6 +6,8 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- Pinned CLI evaluation profiles and an explicit runner for Codex CLI, Claude Code, and OpenCode. Preparation clones matching per-schema baselines; runs preserve raw events, settings, timing, exposed usage, and staged approval continuations. CI tests use fake CLIs and make no model calls.
+
 - `uninstall` with preview, owned-file/hash conflict checks, rollback, and preserved project data. Active changes referencing removed schemas block removal; a removed OpenSpec default requires explicit `--default-schema` validated through the public OpenSpec CLI. The npm package and authored files remain.
 
 - `update` refreshes owned schema files/templates from supported alpha manifests, with dry-run, unowned/local-edit conflict checks, retired-file cleanup, rollback, and preserved project configuration, selected default, registry, and authored files. Other manifest versions and config/registry migrations remain unsupported.

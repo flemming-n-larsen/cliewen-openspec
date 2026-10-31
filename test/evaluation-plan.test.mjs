@@ -25,7 +25,7 @@ test('evaluation plan covers shipped schemas without treating planned profiles a
     plan => { plan.schemas['cliewen-all'].status = 'planned'; },
     plan => { plan.scenarios['csv-bom-tdd'].readiness = 'planned'; },
     plan => { plan.scenarios['csv-bom-tdd'].prompt = 'missing-prompt.md'; },
-    plan => { plan.profiles['codex-cli-primary'].readiness = 'pinned'; },
+    plan => { plan.profiles['codex-cli-primary'].effort = null; },
     plan => { plan.schemas['cliewen-delivery'].releaseVariantProfile = 'missing-profile'; },
   ]) {
     const changed = structuredClone(source); modify(changed); run(changed, 1);

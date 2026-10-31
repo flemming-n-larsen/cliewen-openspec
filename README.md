@@ -91,6 +91,8 @@ Implemented commands: `init`, `update`, `uninstall`, `ac next`, `ac rename-prefi
 
 `npm test` builds TypeScript and runs unit and packed-installation integration tests. GitHub Actions runs the same suite on Windows and Linux with Node 22 and 24. These checks cover the alpha implementation; documentation semantic accuracy and assertion sufficiency still require review.
 
+For actual agent trials, use the [CLI evaluation guide](docs/testing/cli-evaluation.md). `npm run trial:cli:prepare` creates matching projects for three pinned CLI profiles; `npm run trial:cli -- SUITE PROFILE SCHEMA` explicitly launches one case and saves raw logs. These commands use local agent authentication and may incur usage charges. CI uses fake CLIs and makes no model calls.
+
 Build the documentation with `npm run docs:build` and preview it with `npm run docs:serve`. For browser checks, install Chromium with `npx playwright install chromium`, then run `npm run docs:check`. Documentation tooling uses Node 22.12+ (Node 22 or 24 recommended). See [documentation development](docs/guide/development.md).
 
 ## License

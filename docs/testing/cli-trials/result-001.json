@@ -1,0 +1,632 @@
+{
+  "capturedAt": "2026-10-31T22:42:30.209Z",
+  "suitePreparedAt": "2026-10-31T22:27:28.774Z",
+  "platform": "win32",
+  "node": "v24.0.0",
+  "rawArtifacts": ".tmp/agent-trials/cli-evaluation-001",
+  "releaseReady": false,
+  "cases": [
+    {
+      "schema": "cliewen-delivery",
+      "profile": "codex-cli-primary",
+      "scenario": "csv-bom-tdd",
+      "outcome": "pass",
+      "reason": "Independent checks and rubric review passed within recorded limits",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:26:54.192Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "8912e45ed055374d096252d704c508f3d8888f1d",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-delivery\\project"
+      },
+      "agentRevision": "a7c3f913a021ebbee613f056d4e14c8714bdfc01",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "a7c3f913a021ebbee613f056d4e14c8714bdfc01",
+      "independentChecks": {
+        "passed": true,
+        "revision": "a7c3f913a021ebbee613f056d4e14c8714bdfc01"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "codex-cli 0.166.0",
+          "requestedModel": "gpt-6.1-sol",
+          "effort": "medium",
+          "provider": "openai; existing ChatGPT CLI authentication",
+          "startedAt": "2026-10-31T22:28:11.944Z",
+          "endedAt": "2026-10-31T22:30:35.398Z",
+          "durationSeconds": 143.453,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": null,
+          "usage": {
+            "input_tokens": 523792,
+            "cached_input_tokens": 471296,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 8347,
+            "reasoning_output_tokens": 191
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-delivery/artifacts/cli/codex-cli-primary"
+    },
+    {
+      "schema": "cliewen-delivery",
+      "profile": "claude-code-primary",
+      "scenario": "csv-bom-tdd",
+      "outcome": "task-failure",
+      "reason": "Explicit project-only boundary violated by temporary helper writes under /tmp; independent product checks pass",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:26:54.192Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "8912e45ed055374d096252d704c508f3d8888f1d",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-delivery\\project"
+      },
+      "agentRevision": "92e30d66cee3f509318ef8d50dcb7175caee2730",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "92e30d66cee3f509318ef8d50dcb7175caee2730",
+      "independentChecks": {
+        "passed": true,
+        "revision": "92e30d66cee3f509318ef8d50dcb7175caee2730"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "2.1.316 (Claude Code)",
+          "requestedModel": "claude-opus-5-5",
+          "effort": "medium",
+          "provider": "Anthropic firstParty; existing claude.ai Pro authentication",
+          "startedAt": "2026-10-31T22:30:09.876Z",
+          "endedAt": "2026-10-31T22:33:01.208Z",
+          "durationSeconds": 171.331,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [
+            "claude-opus-5-5"
+          ],
+          "reportedCostUSD": 1.0689254000000001,
+          "usage": {
+            "input_tokens": 52,
+            "cache_creation_input_tokens": 62243,
+            "cache_read_input_tokens": 1029467,
+            "output_tokens": 18244,
+            "output_tokens_details": {
+              "thinking_tokens": 1670
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 62243,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1259,
+                "cache_read_input_tokens": 61004,
+                "cache_creation_input_tokens": 1239,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 1239
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "fallback_credit": null
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-delivery/artifacts/cli/claude-code-primary"
+    },
+    {
+      "schema": "cliewen-delivery",
+      "profile": "opencode-primary",
+      "scenario": "csv-bom-tdd",
+      "outcome": "infrastructure-failure",
+      "reason": "Zen API returned 401 api_key_expired before model work",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:26:54.192Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "8912e45ed055374d096252d704c508f3d8888f1d",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-delivery\\project"
+      },
+      "agentRevision": "8912e45ed055374d096252d704c508f3d8888f1d",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "8912e45ed055374d096252d704c508f3d8888f1d",
+      "independentChecks": null,
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "1.18.34",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "provider": "OpenCode Zen pay-as-you-go; existing credentials; one enabled provider",
+          "startedAt": "2026-10-31T22:31:32.059Z",
+          "endedAt": "2026-10-31T22:31:35.718Z",
+          "durationSeconds": 3.658,
+          "exitCode": 1,
+          "eventFailure": true,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": 0,
+          "usage": null
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-delivery/artifacts/cli/opencode-primary"
+    },
+    {
+      "schema": "cliewen-discovery",
+      "profile": "codex-cli-primary",
+      "scenario": "csv-streaming-investigation",
+      "outcome": "pass",
+      "reason": "Independent checks and rubric review passed within recorded limits",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:07.805Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-discovery\\project",
+        "fixture": "csv-streaming-discovery",
+        "preparationBaseline": "2a47879f6be511227ffeaaef331c26ec3df564b6"
+      },
+      "agentRevision": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+      "agentWorkingTreeStatus": "?? docs/decisions/001-csv-streaming.md\n?? docs/testing/csv-streaming-experiment-output.txt\n?? docs/testing/csv-streaming-experiment.mjs\n?? docs/testing/csv-streaming-health.json\n?? docs/testing/csv-streaming-schema.json\n?? docs/testing/csv-streaming-spec-validation.json\n?? docs/testing/csv-streaming-status.json\n?? docs/testing/csv-streaming-tests.txt\n?? docs/testing/csv-streaming.md\n?? docs/testing/instructions/investigate-csv-streaming-apply.json\n?? docs/testing/instructions/investigate-csv-streaming-decision.json\n?? docs/testing/instructions/investigate-csv-streaming-investigation.json\n?? docs/testing/instructions/investigate-csv-streaming-proposal.json\n?? openspec/changes/investigate-csv-streaming/.openspec.yaml\n?? openspec/changes/investigate-csv-streaming/decision.md\n?? openspec/changes/investigate-csv-streaming/investigation.md\n?? openspec/changes/investigate-csv-streaming/proposal.md",
+      "snapshotRevision": "38719415234d020e8e57749c53e02ea561e75f02",
+      "independentChecks": {
+        "passed": true,
+        "revision": "90612e5b9c5da0102feb4ea170bad541b1b8a041"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "codex-cli 0.166.0",
+          "requestedModel": "gpt-6.1-sol",
+          "effort": "medium",
+          "provider": "openai; existing ChatGPT CLI authentication",
+          "startedAt": "2026-10-31T22:28:12.002Z",
+          "endedAt": "2026-10-31T22:30:43.733Z",
+          "durationSeconds": 151.73,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": null,
+          "usage": {
+            "input_tokens": 439442,
+            "cached_input_tokens": 402816,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 7976,
+            "reasoning_output_tokens": 499
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-discovery/artifacts/cli/codex-cli-primary"
+    },
+    {
+      "schema": "cliewen-discovery",
+      "profile": "claude-code-primary",
+      "scenario": "csv-streaming-investigation",
+      "outcome": "pass",
+      "reason": "Independent checks and rubric review passed within recorded limits",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:07.805Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-discovery\\project",
+        "fixture": "csv-streaming-discovery",
+        "preparationBaseline": "2a47879f6be511227ffeaaef331c26ec3df564b6"
+      },
+      "agentRevision": "4f61f6cf9fe8dbe5131660ce0c7cc1badc601511",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "4f61f6cf9fe8dbe5131660ce0c7cc1badc601511",
+      "independentChecks": {
+        "passed": true,
+        "revision": "4f61f6cf9fe8dbe5131660ce0c7cc1badc601511"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "2.1.316 (Claude Code)",
+          "requestedModel": "claude-opus-5-5",
+          "effort": "medium",
+          "provider": "Anthropic firstParty; existing claude.ai Pro authentication",
+          "startedAt": "2026-10-31T22:30:09.902Z",
+          "endedAt": "2026-10-31T22:33:11.950Z",
+          "durationSeconds": 182.047,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [
+            "claude-opus-5-5"
+          ],
+          "reportedCostUSD": 1.0052404,
+          "usage": {
+            "input_tokens": 42,
+            "cache_creation_input_tokens": 58621,
+            "cache_read_input_tokens": 818522,
+            "output_tokens": 18620,
+            "output_tokens_details": {
+              "thinking_tokens": 2460
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 58621,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1713,
+                "cache_read_input_tokens": 57782,
+                "cache_creation_input_tokens": 839,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 839
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "fallback_credit": null
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-discovery/artifacts/cli/claude-code-primary"
+    },
+    {
+      "schema": "cliewen-discovery",
+      "profile": "opencode-primary",
+      "scenario": "csv-streaming-investigation",
+      "outcome": "infrastructure-failure",
+      "reason": "Zen API returned 401 api_key_expired before model work",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:07.805Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-discovery\\project",
+        "fixture": "csv-streaming-discovery",
+        "preparationBaseline": "2a47879f6be511227ffeaaef331c26ec3df564b6"
+      },
+      "agentRevision": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+      "independentChecks": null,
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "1.18.34",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "provider": "OpenCode Zen pay-as-you-go; existing credentials; one enabled provider",
+          "startedAt": "2026-10-31T22:31:32.294Z",
+          "endedAt": "2026-10-31T22:31:35.802Z",
+          "durationSeconds": 3.507,
+          "exitCode": 1,
+          "eventFailure": true,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": 0,
+          "usage": null
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-discovery/artifacts/cli/opencode-primary"
+    },
+    {
+      "schema": "cliewen-all",
+      "profile": "codex-cli-primary",
+      "scenario": "combined-investigation-and-delivery",
+      "outcome": "pass",
+      "reason": "Independent checks and rubric review passed within recorded limits",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:21.556Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-all\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "a55694593a6b9a6466ab9df5539e38a8e9b4393a"
+      },
+      "agentRevision": "23a363124e5762cc2148b695015f5d910612b0ce",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "23a363124e5762cc2148b695015f5d910612b0ce",
+      "independentChecks": {
+        "passed": true,
+        "revision": "23a363124e5762cc2148b695015f5d910612b0ce"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "codex-cli 0.166.0",
+          "requestedModel": "gpt-6.1-sol",
+          "effort": "medium",
+          "provider": "openai; existing ChatGPT CLI authentication",
+          "startedAt": "2026-10-31T22:28:12.206Z",
+          "endedAt": "2026-10-31T22:30:32.617Z",
+          "durationSeconds": 140.41,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": null,
+          "usage": {
+            "input_tokens": 303071,
+            "cached_input_tokens": 280320,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 8138,
+            "reasoning_output_tokens": 427
+          }
+        },
+        {
+          "phase": "approved-continuation",
+          "cliVersion": "codex-cli 0.166.0",
+          "requestedModel": "gpt-6.1-sol",
+          "effort": "medium",
+          "provider": "openai; existing ChatGPT CLI authentication",
+          "startedAt": "2026-10-31T22:36:56.136Z",
+          "endedAt": "2026-10-31T22:40:03.317Z",
+          "durationSeconds": 187.18,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": null,
+          "usage": {
+            "input_tokens": 766384,
+            "cached_input_tokens": 727936,
+            "cache_write_input_tokens": 0,
+            "output_tokens": 11121,
+            "reasoning_output_tokens": 920
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-all/artifacts/cli/codex-cli-primary"
+    },
+    {
+      "schema": "cliewen-all",
+      "profile": "claude-code-primary",
+      "scenario": "combined-investigation-and-delivery",
+      "outcome": "task-failure",
+      "reason": "Explicit project-only boundary violated by temporary helper writes under /tmp; independent product checks pass",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:21.556Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-all\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "a55694593a6b9a6466ab9df5539e38a8e9b4393a"
+      },
+      "agentRevision": "7912364ab7ff425f39c98f755122f34473c3dad5",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "7912364ab7ff425f39c98f755122f34473c3dad5",
+      "independentChecks": {
+        "passed": true,
+        "revision": "7912364ab7ff425f39c98f755122f34473c3dad5"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "2.1.316 (Claude Code)",
+          "requestedModel": "claude-opus-5-5",
+          "effort": "medium",
+          "provider": "Anthropic firstParty; existing claude.ai Pro authentication",
+          "startedAt": "2026-10-31T22:30:10.098Z",
+          "endedAt": "2026-10-31T22:32:08.376Z",
+          "durationSeconds": 118.277,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [
+            "claude-opus-5-5"
+          ],
+          "reportedCostUSD": 0.6917262000000001,
+          "usage": {
+            "input_tokens": 26,
+            "cache_creation_input_tokens": 46200,
+            "cache_read_input_tokens": 387311,
+            "output_tokens": 12228,
+            "output_tokens_details": {
+              "thinking_tokens": 1179
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 46200,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1232,
+                "cache_read_input_tokens": 45710,
+                "cache_creation_input_tokens": 490,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 490
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "fallback_credit": null
+          }
+        },
+        {
+          "phase": "approved-continuation",
+          "cliVersion": "2.1.316 (Claude Code)",
+          "requestedModel": "claude-opus-5-5",
+          "effort": "medium",
+          "provider": "Anthropic firstParty; existing claude.ai Pro authentication",
+          "startedAt": "2026-10-31T22:37:06.831Z",
+          "endedAt": "2026-10-31T22:41:06.304Z",
+          "durationSeconds": 239.473,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [
+            "claude-opus-5-5"
+          ],
+          "reportedCostUSD": 1.3717065999999998,
+          "usage": {
+            "input_tokens": 72,
+            "cache_creation_input_tokens": 61526,
+            "cache_read_input_tokens": 1890553,
+            "output_tokens": 25055,
+            "output_tokens_details": {
+              "thinking_tokens": 3869
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 61526,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1061,
+                "cache_read_input_tokens": 74223,
+                "cache_creation_input_tokens": 1115,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 1115
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "fallback_credit": null
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-all/artifacts/cli/claude-code-primary"
+    },
+    {
+      "schema": "cliewen-all",
+      "profile": "opencode-primary",
+      "scenario": "combined-investigation-and-delivery",
+      "outcome": "infrastructure-failure",
+      "reason": "Zen API returned 401 api_key_expired before model work",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:21.556Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-all\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "a55694593a6b9a6466ab9df5539e38a8e9b4393a"
+      },
+      "agentRevision": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+      "agentWorkingTreeStatus": "",
+      "snapshotRevision": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+      "independentChecks": null,
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "1.18.34",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "provider": "OpenCode Zen pay-as-you-go; existing credentials; one enabled provider",
+          "startedAt": "2026-10-31T22:31:32.132Z",
+          "endedAt": "2026-10-31T22:31:35.660Z",
+          "durationSeconds": 3.528,
+          "exitCode": 1,
+          "eventFailure": true,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": 0,
+          "usage": null
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-001/cliewen-all/artifacts/cli/opencode-primary"
+    }
+  ]
+}

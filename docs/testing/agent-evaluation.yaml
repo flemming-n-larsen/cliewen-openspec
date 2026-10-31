@@ -14,29 +14,62 @@ profiles:
     permissions: inherited session tools
     context: fresh task with shared instruction carryover
   codex-cli-primary:
-    readiness: unconfigured
+    readiness: pinned
     agent: Codex CLI
     runner: cli
-    model: null
-    agentVersion: null
-    provider: null
-    effort: null
+    model: gpt-6.1-sol
+    agentVersion: 0.166.0
+    provider: openai; existing ChatGPT CLI authentication
+    effort: medium
+    permissions: danger-full-access, approval never; project scope is an
+      instruction, not OS isolation
+    context: fresh process; ignore user config and execpolicy rules; project AGENTS
+      and managed/global instructions may remain
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: null
+      tokenLimit: null
+      billing: existing ChatGPT entitlement; no purchase
+    traceFormat: codex exec --json JSONL plus stderr
   claude-code-primary:
-    readiness: unconfigured
+    readiness: pinned
     agent: Claude Code
     runner: cli
-    model: null
-    agentVersion: null
-    provider: null
-    effort: null
+    model: claude-opus-5-5
+    agentVersion: 2.1.316
+    provider: Anthropic firstParty; existing claude.ai Pro authentication
+    effort: medium
+    permissions: dontAsk with explicit local read/edit/write/shell tools;
+      Agent/Task/Web tools denied; no OS isolation
+    context: fresh print process; safe-mode and no session persistence; project
+      AGENTS explicitly read
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: 2
+      tokenLimit: null
+      billing: existing subscription; CLI list-equivalent cost is not an invoice
+    traceFormat: Claude stream-json with verbose events plus stderr
   opencode-primary:
-    readiness: unconfigured
+    readiness: pinned
     agent: OpenCode
     runner: cli
-    model: null
-    agentVersion: null
-    provider: null
-    effort: null
+    model: opencode/glm-5.3-flash
+    agentVersion: 1.18.34
+    provider: OpenCode Zen pay-as-you-go; existing credentials; one enabled provider
+    effort: high
+    permissions: local tools allowed; external_directory, task, question, webfetch
+      and websearch denied; no OS isolation
+    context: fresh run; pure mode, disabled external skills/Claude context and
+      configured MCP servers; other native global rules may remain
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: 0.5
+      tokenLimit: null
+      billing: local reported-cost stop; not a provider-enforced hard spending cap
+    traceFormat: OpenCode --format json events plus stderr
 
 scenarios:
   csv-bom-tdd:
@@ -46,17 +79,18 @@ scenarios:
     checker: scripts/check-csv-bom-trial.mjs
     prompt: docs/testing/csv-bom-trial/prompt.md
     rubric: docs/testing/csv-bom-trial/rubric.md
-    testing: {placement: per-task, approach: tdd}
+    testing: { placement: per-task, approach: tdd }
     observedResults:
       - docs/testing/csv-bom-trial/result-001.md
+      - docs/testing/cli-trials/result-001.md
   csv-bom-flexible:
     schema: cliewen-delivery
     readiness: planned
-    testing: {placement: per-task, approach: flexible}
+    testing: { placement: per-task, approach: flexible }
   csv-bom-final-tests:
     schema: cliewen-delivery
     readiness: planned
-    testing: {placement: end-of-change, approach: flexible}
+    testing: { placement: end-of-change, approach: flexible }
   csv-streaming-investigation:
     schema: cliewen-discovery
     readiness: ready
@@ -66,6 +100,7 @@ scenarios:
     rubric: docs/testing/csv-discovery-trial/rubric.md
     observedResults:
       - docs/testing/csv-discovery-trial/result-001.md
+      - docs/testing/cli-trials/result-001.md
   discovery-no-change:
     schema: cliewen-discovery
     readiness: planned
@@ -82,6 +117,7 @@ scenarios:
     observedResults:
       - docs/testing/csv-all-trial/result-001.md
       - docs/testing/csv-all-trial/result-002.md
+      - docs/testing/cli-trials/result-001.md
   combined-no-delivery:
     schema: cliewen-all
     readiness: planned
@@ -89,22 +125,27 @@ scenarios:
 schemas:
   cliewen-delivery:
     status: implemented
-    developmentProfile: codex-collaboration-observed
+    developmentProfile: codex-cli-primary
     developmentScenario: csv-bom-tdd
     releaseVariantProfile: codex-cli-primary
-    releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
-    releaseScenarios: [csv-bom-tdd, csv-bom-flexible, csv-bom-final-tests]
+    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-primary ]
+    releaseScenarios: [ csv-bom-tdd, csv-bom-flexible, csv-bom-final-tests ]
   cliewen-discovery:
     status: implemented
-    developmentProfile: codex-collaboration-observed
+    developmentProfile: codex-cli-primary
     developmentScenario: csv-streaming-investigation
     releaseVariantProfile: codex-cli-primary
-    releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
-    releaseScenarios: [csv-streaming-investigation, discovery-no-change, discovery-delivery-handoff]
+    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-primary ]
+    releaseScenarios:
+      [
+        csv-streaming-investigation,
+        discovery-no-change,
+        discovery-delivery-handoff
+      ]
   cliewen-all:
     status: implemented
-    developmentProfile: codex-collaboration-observed
+    developmentProfile: codex-cli-primary
     developmentScenario: combined-investigation-and-delivery
     releaseVariantProfile: codex-cli-primary
-    releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
-    releaseScenarios: [combined-investigation-and-delivery, combined-no-delivery]
+    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-primary ]
+    releaseScenarios: [ combined-investigation-and-delivery, combined-no-delivery ]
