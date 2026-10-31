@@ -33,7 +33,9 @@
     "docs:build": "npm run build && node scripts/build-docs.mjs",
     "docs:serve": "node scripts/serve-docs.mjs",
     "docs:check": "node scripts/check-docs-browser.mjs",
-    "trial:prepare": "node scripts/prepare-csv-bom-trial.mjs"
+    "trial:prepare": "node scripts/prepare-csv-bom-trial.mjs",
+    "trial:discovery": "node scripts/prepare-csv-discovery-trial.mjs",
+    "eval:check": "npm run build && node scripts/check-agent-evaluation.mjs"
   },
   "dependencies": {
     "yaml": "2.9.1"

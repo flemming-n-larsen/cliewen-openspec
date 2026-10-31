@@ -23,7 +23,7 @@ Try Harbor as the first runner candidate because it has integrations for the thr
 
 Harbor is evaluation infrastructure for maintainers, not a dependency for schema users. Its adoption remains conditional on a practical trial of the environment, authentication, supported settings, and available execution traces. The first scenario family is CSV export with per-task/flexible, per-task/TDD, and end-of-change/flexible configurations.
 
-The existing CSV pilot is manually exercised. A Harbor-backed runner and automated agent regression suite are not implemented yet. No account purchase, credit top-up, or paid evaluation run is recorded by this decision. Credentials belong outside fixtures and committed results. Prices and model catalogs remain external operational details rather than a pinned part of the methodology.
+The CSV pilots now have isolated starters, reviewed collaboration-agent trials, and independent checks. The [schema-wide evaluation plan](../testing/agent-evaluation.md) defines coverage and release gates; its manifest is checked in CI. CLI profiles remain unconfigured, and a Harbor-backed runner and automatic multi-provider execution are not implemented. No account purchase, credit top-up, or paid provider trial is recorded by this decision. Credentials belong outside fixtures and committed results. Prices and model catalogs remain external operational details rather than a pinned part of the methodology.
 
 ## References
 

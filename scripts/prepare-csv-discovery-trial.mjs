@@ -1,0 +1,34 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import {fileURLToPath} from 'node:url';
+import {spawnSync} from 'node:child_process';
+
+const source = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const args = process.argv.slice(2);
+if (args.length > 1 || (args[0] && !path.isAbsolute(args[0]))) throw Error('Use npm run trial:discovery -- [ABSOLUTE_NEW_DIRECTORY]');
+const trial = args[0] ?? path.join(os.tmpdir(), `cliewen-csv-discovery-${Date.now()}`);
+const setup = spawnSync(process.execPath, [path.join(source, 'scripts/prepare-csv-bom-trial.mjs'), trial], {cwd: source, env: process.env, encoding: 'utf8', timeout: 180000});
+if (setup.status !== 0) throw Error(`${setup.stdout}\n${setup.stderr}`);
+const prepared = JSON.parse(setup.stdout);
+const root = prepared.root;
+const artifacts = prepared.artifacts;
+const git = (...argv) => {
+  const r = spawnSync('git', argv, {cwd: root, encoding: 'utf8', timeout: 30000});
+  if (r.status !== 0) throw Error(r.stderr);
+  return r.stdout.trim();
+};
+fs.writeFileSync(path.join(root, 'AGENTS.md'), 'Write project text in US English. Read .cliewen-openspec/config.yaml and use the installed cliewen-discovery schema through OpenSpec instructions for each artifact and review. Preserve existing implementation, tests, specs, AC identities, and document paths.\n');
+git('add', 'AGENTS.md');
+git('commit', '-m', 'Prepare discovery-only CSV investigation baseline');
+const baseline = git('rev-parse', 'HEAD');
+for (const name of ['prompt.md', 'rubric.md']) fs.copyFileSync(path.join(source, 'docs/testing/csv-discovery-trial', name), path.join(artifacts, name));
+const metadataPath = path.join(artifacts, 'baseline.json');
+const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf8'));
+metadata.fixture = 'csv-streaming-discovery';
+metadata.preparationBaseline = metadata.baseline;
+metadata.baseline = baseline;
+fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2) + '\n');
+fs.renameSync(path.join(artifacts, 'baseline.bundle'), path.join(artifacts, 'preparation-baseline.bundle'));
+git('bundle', 'create', path.join(artifacts, 'baseline.bundle'), '--all');
+console.log(JSON.stringify({...prepared, baseline}, null, 2));

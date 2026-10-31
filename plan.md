@@ -92,7 +92,11 @@ Build and check the site in pull-request CI before deployment, including local l
 
 ## Acceptance
 
+The [schema-wide agent evaluation plan](docs/testing/agent-evaluation.md) and [coverage manifest](docs/testing/agent-evaluation.yaml) define development scenarios, release profiles, variants, and review gates for every schema. CI checks that installed schemas have ready development scenarios and valid source references. Existing collaboration runs are observed references; the three CLI profiles and additional release variants remain unconfigured or planned. Plan validation does not execute or certify agent evaluations.
+
 The [CSV BOM trial starter](docs/testing/csv-bom-trial/README.md) prepares an isolated baseline, records package/source inputs, and supplies a prompt and review criteria. It supports manual fresh-context trials and replay from a Git bundle. Provider runners, automatic trace capture, repeated profile comparisons, and Harbor integration remain planned.
+
+The [CSV discovery trial starter](docs/testing/csv-discovery-trial/README.md) reuses that baseline for a streaming investigation without product changes. Its prompt defines local experiment limits and requires a proposed recommendation; its checker verifies baseline preservation, artifact status, saved instructions, and discovery health. Evidence quality and recommendation sufficiency remain manual review tasks.
 
 Add reproducible agent trials alongside deterministic package tests. Use fixed representative profiles for Claude Code, Codex CLI, and OpenCode, and isolated CSV scenario variants for flexible per-task testing, TDD, and end-of-change testing. Trial Harbor with OpenCode Zen/pay-as-you-go before committing to the runner or a subscription. Record model/provider/settings, outcomes, execution traces, cost, and duration; distinguish planning quality from implementation behavior. This suite is planned; see [the evaluation decision](docs/decisions/009-agent-evaluation-profiles-and-initial-provider.md).
 

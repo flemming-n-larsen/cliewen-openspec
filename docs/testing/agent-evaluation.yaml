@@ -1,0 +1,100 @@
+version: 1
+
+# Observed profiles document past runs. Release profiles must be pinned before use.
+profiles:
+  codex-collaboration-observed:
+    readiness: observed-only
+    agent: Codex collaboration sub-agent
+    runner: collaboration
+    model: gpt-6.1-sol
+    modelSource: inherited orchestrator session
+    agentVersion: null
+    provider: null
+    effort: null
+    permissions: inherited session tools
+    context: fresh task with shared instruction carryover
+  codex-cli-primary:
+    readiness: unconfigured
+    agent: Codex CLI
+    runner: cli
+    model: null
+    agentVersion: null
+    provider: null
+    effort: null
+  claude-code-primary:
+    readiness: unconfigured
+    agent: Claude Code
+    runner: cli
+    model: null
+    agentVersion: null
+    provider: null
+    effort: null
+  opencode-primary:
+    readiness: unconfigured
+    agent: OpenCode
+    runner: cli
+    model: null
+    agentVersion: null
+    provider: null
+    effort: null
+
+scenarios:
+  csv-bom-tdd:
+    schema: cliewen-delivery
+    readiness: ready
+    prepare: scripts/prepare-csv-bom-trial.mjs
+    checker: scripts/check-csv-bom-trial.mjs
+    prompt: docs/testing/csv-bom-trial/prompt.md
+    rubric: docs/testing/csv-bom-trial/rubric.md
+    testing: {placement: per-task, approach: tdd}
+    observedResults:
+      - docs/testing/csv-bom-trial/result-001.md
+  csv-bom-flexible:
+    schema: cliewen-delivery
+    readiness: planned
+    testing: {placement: per-task, approach: flexible}
+  csv-bom-final-tests:
+    schema: cliewen-delivery
+    readiness: planned
+    testing: {placement: end-of-change, approach: flexible}
+  csv-streaming-investigation:
+    schema: cliewen-discovery
+    readiness: ready
+    prepare: scripts/prepare-csv-discovery-trial.mjs
+    checker: scripts/check-csv-discovery-trial.mjs
+    prompt: docs/testing/csv-discovery-trial/prompt.md
+    rubric: docs/testing/csv-discovery-trial/rubric.md
+    observedResults:
+      - docs/testing/csv-discovery-trial/result-001.md
+  discovery-no-change:
+    schema: cliewen-discovery
+    readiness: planned
+  discovery-delivery-handoff:
+    schema: cliewen-discovery
+    readiness: planned
+  combined-investigation-and-delivery:
+    schema: cliewen-all
+    readiness: planned
+
+schemas:
+  cliewen-delivery:
+    status: implemented
+    developmentProfile: codex-collaboration-observed
+    developmentScenario: csv-bom-tdd
+    releaseVariantProfile: codex-cli-primary
+    releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
+    releaseScenarios: [csv-bom-tdd, csv-bom-flexible, csv-bom-final-tests]
+  cliewen-discovery:
+    status: implemented
+    developmentProfile: codex-collaboration-observed
+    developmentScenario: csv-streaming-investigation
+    releaseVariantProfile: codex-cli-primary
+    releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
+    releaseScenarios: [csv-streaming-investigation, discovery-no-change, discovery-delivery-handoff]
+  cliewen-all:
+    status: planned
+    developmentProfile: codex-collaboration-observed
+    developmentScenario: combined-investigation-and-delivery
+    releaseVariantProfile: codex-cli-primary
+    releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
+    releaseScenarios: [combined-investigation-and-delivery]

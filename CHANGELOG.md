@@ -6,6 +6,10 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- A schema-wide agent evaluation plan and coverage manifest, distinguishing observed collaboration trials from unconfigured CLI release profiles. `npm run eval:check` and CI check coverage of installed schemas without starting agents or claiming release readiness.
+
+- A CSV streaming discovery trial starter, bounded investigation prompt, review criteria, and independent checks for unchanged product inputs and proposed recommendations. Run `npm run trial:discovery` to prepare a fresh baseline.
+
 - The `cliewen-discovery` schema with proposal, investigation, and decision artifacts. It supports no-change outcomes and separate delivery handoff, shares writing/diagram guidance, and keeps investigation findings distinct from product evidence. Init installs both schemas while preserving the default unless delivery is explicitly selected.
 
 - `--change NAME` on the Node test adapter scopes evidence results while running all supplied tests and preserving failures across the full run. Reports declare the change scope; `check` rejects mismatched scope and requires a runner exit code for scoped reports. Collection without the flag remains supported.
