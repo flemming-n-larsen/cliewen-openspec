@@ -18,3 +18,5 @@ Run `node scripts/check-csv-all-review.mjs PROJECT ARTIFACTS` to check the first
 Preserve the entire artifact directory for replay. Clone `baseline.bundle` into a new sibling project and run `npm ci` while retaining the tarball. These are contributor trials, not a Harbor runner or a claim of compatibility across CLI/model profiles.
 
 The [first-stage report](result-001.md) records the observed review stop and incomplete end-to-end coverage.
+
+The [delivery follow-up](result-002.md) records the completed continuation after actual user agreement, including independent behavior and evidence checks.

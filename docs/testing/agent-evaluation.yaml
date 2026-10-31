@@ -81,6 +81,7 @@ scenarios:
     rubric: docs/testing/csv-all-trial/rubric.md
     observedResults:
       - docs/testing/csv-all-trial/result-001.md
+      - docs/testing/csv-all-trial/result-002.md
   combined-no-delivery:
     schema: cliewen-all
     readiness: planned

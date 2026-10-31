@@ -15,9 +15,20 @@ cliewen-openspec init --default
 
 Requires OpenSpec's `specs` and `changes` directories. Installs `cliewen-delivery`, `cliewen-discovery`, `cliewen-all`, the Decision Record template, default project config, a docs entry point if missing, a local ignore file, and an owned-file manifest. Repeating an unchanged installation produces an empty writes list. Conflicting owned files stop installation.
 
-`--default` selects `cliewen-delivery` as the default schema in `openspec/config.yaml`; without it the current selection is preserved. Select discovery explicitly when creating a change with OpenSpec. `--dry-run` lists writes without applying them. Init prints its writes as JSON; `--json` also requests JSON errors. `--default` and `--dry-run` are supported only for init.
+`--default` selects `cliewen-delivery` as the default schema in `openspec/config.yaml`; without it the current selection is preserved. Select discovery explicitly when creating a change with OpenSpec. `--dry-run` lists writes without applying them. Init prints its writes as JSON; `--json` also requests JSON errors. `--default` is supported only for init. Dry-run also works with update.
 
-The alpha has no upgrade migration. Installing a different package does not refresh an existing installed schema. Keep your authored files and use a separate pilot when trying a changed schema. Do not delete a working project's config or registry to work around conflicts.
+Installing a different package does not automatically refresh an existing installed schema. Use update for supported ownership manifests; do not delete project configuration or the registry to work around conflicts.
+
+## update
+
+```sh
+cliewen-openspec update --dry-run --json
+cliewen-openspec update --json
+```
+
+Refreshes owned schema files/templates using the installed package. Output contains `dryRun`, `writes`, and `deletes`. It adds new bundle files, replaces unchanged owned content, and deletes unchanged retired owned files. Edited files conflict unless already identical to the new content. Unowned paths are never adopted. Current alpha updates support `0.1.0-alpha.1` manifests; other versions require an explicit future migration.
+
+Configuration, default schema, AC registry, authored changes/docs, and evidence are preserved. Apply recovers an interrupted transaction first and uses rollback; dry-run does neither. The command has no `--default` or force option. Usage, config, ownership, or write failures exit 2; success exits 0. See [the update guide](updating.md) for the full workflow and conflict rules.
 
 ## ac next
 
@@ -77,4 +88,4 @@ cliewen-openspec --version
 cliewen-openspec --help
 ```
 
-`update` and `uninstall` are not implemented. OpenSpec commands such as `new change`, `validate`, and `archive` belong to OpenSpec, not this CLI.
+`uninstall` is not implemented. OpenSpec commands such as `new change`, `validate`, and `archive` belong to OpenSpec, not this CLI.

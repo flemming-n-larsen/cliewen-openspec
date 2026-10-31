@@ -11,7 +11,7 @@ Every shipped schema needs deterministic regression coverage and a reviewed agen
 |---|---|---|---|
 | cliewen-delivery | Optional CSV BOM with per-task TDD | One Codex collaboration run with fresh task context; [report](csv-bom-trial/result-001.md) | Pinned CLI profiles; flexible and end-of-change variants; repeated runs |
 | cliewen-discovery | Investigate CSV streaming | One Codex collaboration run with fresh task context; [report](csv-discovery-trial/result-001.md) | Pinned CLI profiles; targeted no-change and handoff cases; repeated runs |
-| cliewen-all | One CSV investigation through delivery with an explicit human review stage | First agent stage stopped correctly at proposed decision; [partial result](csv-all-trial/result-001.md). Deterministic delivery/no-delivery branches pass | Complete agent delivery after real human approval, add no-delivery agent coverage, and pin CLI profiles |
+| cliewen-all | One CSV investigation through delivery with an explicit human review stage | Proposed decision stop followed by user-approved delivery; [completed result](csv-all-trial/result-002.md). Deterministic delivery/no-delivery branches pass | Add no-delivery agent coverage, pinned CLI profiles, and repeated runs |
 
 The common base is checked through every consuming schema, not as a separate user workflow. Existing deterministic tests also cover discovery ending without implementation and creating a separate delivery change. They do not substitute for the missing agent trials.
 

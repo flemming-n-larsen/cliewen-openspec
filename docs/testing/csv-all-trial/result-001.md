@@ -3,6 +3,8 @@ type: evaluation
 ---
 # Combined CSV trial 001: review boundary
 
+Historical stage-1 report. See [the completed delivery follow-up](result-002.md) for the subsequent user-approved continuation; the observations below describe the earlier review boundary.
+
 The first agent stage passed its review-boundary checks on October 31, 2026. The agent used one `cliewen-all` change and proposed an optional third-argument BOM option with unchanged default output. It stopped with `status: proposed` and `outcome: delivery`, without changing preexisting files or claiming human approval. End-to-end agent delivery remains incomplete.
 
 ## Profile and inputs

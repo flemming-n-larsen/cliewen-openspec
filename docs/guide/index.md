@@ -19,6 +19,7 @@ Use the search button to find commands, configuration fields, and guide sections
 | Discovery schema | Proposal, investigation, and decision templates for research, no-change conclusions, or delivery handoff |
 | Combined schema | One proposal and decision/design source, then product specs/tasks or native skip_specs with closure tasks |
 | Installation | Preview writes, preserve the existing default schema, or explicitly select delivery |
+| Update | Refresh owned schemas/templates from a supported manifest with conflict checks, preview, and rollback; [guide](updating.md) |
 | Acceptance IDs | Configure a prefix per capability, allocate numbers, and change a prefix while preserving existing IDs |
 | Task-level testing | Test each implementation task before continuing; optionally use TDD |
 | Evidence | Run tagged Node tests, record their Git revision, and check outcomes and scenario references |
@@ -40,6 +41,6 @@ The [configuration reference](../configuration.md) lists every accepted setting 
 
 All three planned schemas are implemented in source. `cliewen-base` names the shared internal foundation and is not a selectable schema. Release-profile agent evaluation remains pending.
 
-The alpha supports configurable test types and checks declared scenario types against evidence. It does not implement `update`, `uninstall`, or existing-registry adapters. Structural checks for your project's documentation and Mermaid diagrams also remain planned.
+The alpha supports configurable test types and checks declared scenario types against evidence. It does not implement `uninstall` or existing-registry adapters. Structural checks for your project's documentation and Mermaid diagrams also remain planned.
 
 Cliewen checks test execution, ID linkage, and revision freshness. You still need to review whether the assertions prove the intended behavior. The CLI also does not enforce the historical order of TDD steps.

@@ -185,4 +185,4 @@ Existing filenames and paths are stable public addresses: never rename, move, or
 
 ## Existing alpha installations
 
-The updated schema and templates are installed by a fresh `init`. This alpha does not implement `update`; adding settings to an older installation alone does not replace its schema instructions. Use a fresh pilot to evaluate the updated workflow. Preserve any existing pilot's artifacts and results.
+Install the new package, then use [update](guide/updating.md) to preview and refresh owned schema files and templates. Current support covers existing 0.1.0-alpha.1 manifests, including earlier builds. Configuration, registry, authored artifacts, and document paths are preserved. Adding config settings alone does not replace installed instructions. Other manifest versions and config/registry migrations are not supported automatically.

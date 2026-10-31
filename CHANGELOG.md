@@ -6,6 +6,8 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- `update` refreshes owned schema files/templates from supported alpha manifests, with dry-run, unowned/local-edit conflict checks, retired-file cleanup, rollback, and preserved project configuration, selected default, registry, and authored files. Other manifest versions and config/registry migrations remain unsupported.
+
 - The `cliewen-all` schema combines investigation and delivery in one change, using the decision as its design source. Native `skip_specs` supports no-change/further-investigation closure without fake product requirements. Combined checks validate outcome consistency and accepted decision status before delivery evidence.
 
 - A schema-wide agent evaluation plan and coverage manifest, distinguishing observed collaboration trials from unconfigured CLI release profiles. `npm run eval:check` and CI check coverage of installed schemas without starting agents or claiming release readiness.
@@ -42,7 +44,7 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Current limitations
 
-- `update` and `uninstall` remain planned. Full CLI-profile evaluation and complete combined-agent delivery coverage remain pending.
+- `uninstall` remains planned. Full CLI-profile and repeated release evaluation remain pending. The combined agent pilot completed delivery after human agreement.
 - Documentation metadata and Mermaid validators are not implemented. Test placement is agent guidance rather than CLI-enforced execution ordering.
 - AC allocation supports sequential work; parallel branches require collision resolution.
 - Evidence linkage and execution results do not establish assertion quality. Reviewed sufficiency still requires human judgment.

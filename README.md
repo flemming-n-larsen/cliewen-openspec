@@ -55,6 +55,8 @@ npx --no-install cliewen-openspec ac next --capability export
 
 `--default` explicitly selects delivery for future changes. Omit it to preserve the existing schema. `init --dry-run` previews writes. Use the generated ID in scenario headings and test titles; commit the ID registry along with specs.
 
+For an existing installation, install the new tarball and use `cliewen-openspec update --dry-run --json`, then `cliewen-openspec update --json` after reviewing the plan. Update refreshes owned resources from supported manifests, preserving configuration, selected schemas, IDs, and authored files. See [updating an installation](docs/guide/updating.md).
+
 Configure capability-specific AC prefixes and number padding, and choose test placement in `.cliewen-openspec/config.yaml`. Testing each implementation task before moving on is the default. Use `ac rename-prefix` to change an established prefix without resetting its sequence. See [project configuration](docs/configuration.md) for examples and prefix selection.
 
 Optionally set `testing.approach: tdd` with `testing.placement: per-task` to plan red-green-refactor within every implementation task. The default `flexible` approach allows tests before or after code within the selected placement.
@@ -83,7 +85,7 @@ After reviewing the assertions and evidence, archive with OpenSpec. Commit the a
 - [Website](https://flemming-n-larsen.github.io/cliewen-openspec/)
 - [Credits](CREDITS.md)
 
-Implemented commands: `init`, `ac next`, `ac rename-prefix`, `check` and `recover`. `update` and `uninstall` remain planned; use this alpha only in a repository where you can review the installed files. Tests never establish assertion quality automatically.
+Implemented commands: `init`, `update`, `ac next`, `ac rename-prefix`, `check` and `recover`. `uninstall` remains planned; use this alpha only in a repository where you can review the installed files. Tests never establish assertion quality automatically.
 
 ## Development checks
 

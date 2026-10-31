@@ -26,4 +26,4 @@ Use OpenSpec's setup selection for the agent you run. The reproducible guide use
 
 Claude Code, Codex CLI, and OpenCode are the target evaluation profiles. The project has not completed automated trials across all three, their models, and effort settings. The tested package workflow uses OpenSpec 1.15.0 and Node 22/24 on Windows/Linux CI; this does not establish compatibility with every agent configuration.
 
-The schema tells the agent to read `.cliewen-openspec/config.yaml`. Check the generated plan against your settings before implementation. Changing config does not rewrite an already authored tasks file, and changing the npm package does not update an installed alpha schema.
+The schema tells the agent to read `.cliewen-openspec/config.yaml`. Check the generated plan against your settings before implementation. Changing config does not rewrite an already authored tasks file. After changing the npm package, use [update](updating.md) to refresh owned schemas from a supported manifest while preserving project configuration and authored files.

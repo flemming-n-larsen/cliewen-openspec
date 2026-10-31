@@ -22,7 +22,10 @@ export function local(root: string, relative: string): string {
   let cursor = root;
   for (const part of path.relative(root, target).split(path.sep)) {
     cursor = path.join(cursor, part);
-    if (fs.existsSync(cursor) && fs.lstatSync(cursor).isSymbolicLink()) throw Error(`Symlink not supported: ${relative}`);
+    let entry: fs.Stats | undefined;
+    try { entry = fs.lstatSync(cursor); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+    if (entry?.isSymbolicLink()) throw Error(`Symlink not supported: ${relative}`);
   }
   return target;
 }
@@ -97,7 +100,7 @@ export function config(root: string): Config {
   local(root, c.docsRoot); local(root, c.evidence.report); return c;
 }
 type Journal = { files: Record<string, string | null> };
-export function transaction(root: string, writes: Record<string, string>, dryRun = false) {
+export function transaction(root: string, writes: Record<string, string | null>, dryRun = false) {
   const jp = local(root, `${state}/transaction.json`);
   if (fs.existsSync(jp)) throw Error('Interrupted transaction exists; run recover before writing.');
   for (const p of Object.keys(writes)) local(root, p);
@@ -106,7 +109,11 @@ export function transaction(root: string, writes: Record<string, string>, dryRun
   fs.mkdirSync(path.dirname(jp), { recursive: true });
   fs.writeFileSync(jp, JSON.stringify(journal), { flag: 'wx' });
   try {
-    for (const [p, content] of Object.entries(writes)) { const dest = local(root, p); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.writeFileSync(dest, content); }
+    for (const [p, content] of Object.entries(writes)) {
+      const dest = local(root, p);
+      if (content === null) { if (fs.existsSync(dest)) fs.unlinkSync(dest); }
+      else { fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.writeFileSync(dest, content); }
+    }
     fs.unlinkSync(jp);
   } catch (error) { recover(root); throw error; }
   return Object.keys(writes);
@@ -126,13 +133,63 @@ export function recover(root: string) {
   fs.unlinkSync(jp);
 }
 type Manifest = { version: string; files: Record<string, string> };
+function bundledFiles(): Record<string, string> { return {...deliveryFiles(), ...discoveryFiles(), ...allFiles()}; }
+function manifestText(files: Record<string, string>): string {
+  return JSON.stringify({version, files: Object.fromEntries(Object.entries(files).map(([file, content]) => [file, hash(content)]))}, null, 2) + '\n';
+}
+
+export function update(root: string, dryRun = false): { writes: string[]; deletes: string[] } {
+  if (!fs.existsSync(local(root, 'openspec/specs')) || !fs.existsSync(local(root, 'openspec/changes'))) throw Error('Run openspec init first (specs and changes directories are required).');
+  if (!dryRun) recover(root);
+  const manifestPath = `${state}/manifest.json`;
+  const mp = local(root, manifestPath);
+  if (!fs.existsSync(mp)) throw Error('No Cliewen installation manifest; run init first. Update does not adopt unowned files.');
+  const previous = JSON.parse(read(mp));
+  keys(previous, ['version', 'files'], 'manifest');
+  if (previous.version !== version) throw Error(`Unsupported installed version: ${previous.version}; update currently supports ${version} manifests only`);
+  if (!previous.files || typeof previous.files !== 'object' || Array.isArray(previous.files) || !Object.keys(previous.files).length) throw Error('Manifest files must be a nonempty ownership mapping');
+  for (const [file, digest] of Object.entries(previous.files)) {
+    local(root, file);
+    const owned = file === `${state}/templates/decision.md` || /^openspec\/schemas\/cliewen-(delivery|discovery|all)\/(schema\.yaml|templates\/[a-z0-9][a-z0-9-]*\.md)$/.test(file);
+    if (!owned || typeof digest !== 'string' || !/^[a-f0-9]{64}$/.test(digest)) throw Error(`Invalid owned-file entry in manifest: ${file}`);
+  }
+  const settings = config(root);
+  validateRegistry(root, settings);
+  const files = bundledFiles();
+  const changes: Record<string, string | null> = {};
+  for (const [file, content] of Object.entries(files)) {
+    const dest = local(root, file);
+    const exists = fs.existsSync(dest);
+    const oldHash = previous.files[file];
+    if (exists && !oldHash) throw Error(`Unowned schema file already exists: ${file}; no update files written.`);
+    if (exists) {
+      const current = read(dest);
+      if (hash(current) !== oldHash && normalize(current) !== normalize(content)) throw Error(`Conflict: ${file}; local edits differ from the update. No update files written.`);
+      if (normalize(current) !== normalize(content)) changes[file] = content;
+    } else changes[file] = content;
+  }
+  for (const [file, digest] of Object.entries(previous.files)) {
+    if (Object.hasOwn(files, file)) continue;
+    const dest = local(root, file);
+    if (fs.existsSync(dest)) {
+      if (hash(read(dest)) !== digest) throw Error(`Conflict: retired owned file ${file} has local edits. No update files written.`);
+      changes[file] = null;
+    }
+  }
+  // Publish new ownership only after every content change; rollback includes the old manifest.
+  const manifest = manifestText(files);
+  if (read(mp) !== manifest) changes[manifestPath] = manifest;
+  transaction(root, changes, dryRun);
+  return {writes: Object.keys(changes).filter(file => changes[file] !== null), deletes: Object.keys(changes).filter(file => changes[file] === null)};
+}
+
 export function init(root: string, dryRun: boolean, makeDefault: boolean) {
   if (!fs.existsSync(local(root, 'openspec/specs')) || !fs.existsSync(local(root, 'openspec/changes'))) throw Error('Run openspec init first (specs and changes directories are required).');
   if (!dryRun) recover(root);
   const mp = local(root, `${state}/manifest.json`);
   const previous: Manifest | undefined = fs.existsSync(mp) ? JSON.parse(read(mp)) : undefined;
-  if (previous && previous.version !== version) throw Error('Upgrade migration is not implemented in this alpha.');
-  const files = {...deliveryFiles(), ...discoveryFiles(), ...allFiles()}; const writes: Record<string, string> = {};
+  if (previous && previous.version !== version) throw Error('Installed version differs; use update for a supported installation or review migration requirements.');
+  const files = bundledFiles(); const writes: Record<string, string> = {};
   for (const [p, content] of Object.entries(files)) {
     const dest = local(root, p);
     if (fs.existsSync(dest) && normalize(read(dest)) !== normalize(content)) throw Error(`Conflict: ${p}; no files written.`);
@@ -154,7 +211,7 @@ export function init(root: string, dryRun: boolean, makeDefault: boolean) {
     const doc = parseDocument(original || '{}'); if (doc.errors.length) throw Error(doc.errors[0].message);
     doc.set('schema', 'cliewen-delivery'); const next = doc.toString(); if (next !== original) writes[cfgPath] = next;
   }
-  const manifest = JSON.stringify({ version, files: Object.fromEntries(Object.entries(files).map(([p, c]) => [p, hash(c)])) }, null, 2) + '\n';
+  const manifest = manifestText(files);
   if (!fs.existsSync(mp) || read(mp) !== manifest) writes[`${state}/manifest.json`] = manifest;
   return transaction(root, writes, dryRun);
 }

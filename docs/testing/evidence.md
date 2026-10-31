@@ -3,7 +3,7 @@ type: testing
 ---
 # Evidence alpha contract
 
-The alpha supports `init`, `ac next`, `ac rename-prefix`, `check`, and `recover`, and installs `cliewen-delivery`, `cliewen-discovery`, and `cliewen-all`. Package CI exercises OpenSpec 1.15.0 on Windows and Linux. Update/uninstall, existing-registry adapters, structural checks for your project's documentation and Mermaid, and independent review tooling remain planned.
+The alpha supports `init`, `update`, `ac next`, `ac rename-prefix`, `check`, and `recover`, and installs `cliewen-delivery`, `cliewen-discovery`, and `cliewen-all`. Package CI exercises OpenSpec 1.15.0 on Windows and Linux. Uninstall, existing-registry adapters, structural checks for your project's documentation and Mermaid, and independent review tooling remain planned.
 
 Initialize OpenSpec first. Install this package from a locally built tarball. Run `cliewen-openspec init --default` to explicitly select delivery; omit `--default` to preserve the existing schema. `--root PATH` supports an explicit target, and `init --dry-run` makes no changes.
 
@@ -67,7 +67,7 @@ For `cliewen-all`, check first validates decision frontmatter and the outcome br
 | `evidence-scope-mismatch` | Collect for the requested change and pass the same name to `check`; after archive, recollect without the adapter's `--change` for permanent specs |
 | `duplicate-ac-id` or `duplicate-test-result` | Inspect duplicate scenario identities or repeated test result entries before recollecting |
 | `pending-without-reason` | Record why execution is pending; use `--fail-on-pending` when pending work must block |
-| `owned-file-modified` | Review edits to installer-owned files; init will not overwrite conflicting files, and alpha update is not implemented |
+| `owned-file-modified` | Review edits to installer-owned files; update replaces unmodified owned content and rejects conflicting local edits. See the update guide |
 | `invalid-ac-registry` | Restore a manually changed prefix mapping and use `ac rename-prefix`; preserve the registry and reserved numbers |
 | `interrupted-transaction` | Run `cliewen-openspec recover`, then review the restored files |
 | Adapter says the output is not ignored | Add the custom report path to `.gitignore`; default output is ignored by init |
