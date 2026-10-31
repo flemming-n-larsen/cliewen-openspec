@@ -41,7 +41,7 @@ npx --no-install cliewen-openspec init --dry-run
 npx --no-install cliewen-openspec init --default
 ```
 
-`npx --no-install` runs the locally installed command. OpenSpec creates the change/spec structure. Cliewen's dry run lists proposed writes. Its `init` installs the delivery and discovery schemas, the DR template, project configuration, a documentation entry point, and an ownership manifest. `--default` sets `schema: cliewen-delivery` in `openspec/config.yaml`; omit it to preserve your current default.
+`npx --no-install` runs the locally installed command. OpenSpec creates the change/spec structure. Cliewen's dry run lists proposed writes. Its `init` installs the delivery, discovery, and combined schemas, the DR template, project configuration, a documentation entry point, and an ownership manifest. `--default` sets `schema: cliewen-delivery` in `openspec/config.yaml`; omit it to preserve your current default.
 
 For agent-authored work, select your agent during OpenSpec initialization instead of `--tools none`. See [agent setup](existing-projects.md#coding-agents).
 

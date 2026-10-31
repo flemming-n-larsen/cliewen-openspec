@@ -3,8 +3,8 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 
-const [project, artifacts, ...extra] = process.argv.slice(2);
-if (!project || !artifacts || extra.length) throw Error('Use node scripts/check-csv-bom-trial.mjs PROJECT ARTIFACTS');
+const [project, artifacts, schema = 'cliewen-delivery', ...extra] = process.argv.slice(2);
+if (!project || !artifacts || extra.length || !['cliewen-delivery', 'cliewen-all'].includes(schema)) throw Error('Use node scripts/check-csv-bom-trial.mjs PROJECT ARTIFACTS [cliewen-delivery|cliewen-all]');
 const root = path.resolve(project);
 const output = path.join(path.resolve(artifacts), 'independent-checks.json');
 if (fs.existsSync(output)) throw Error(`Refusing to replace an earlier evaluation: ${output}`);
@@ -47,10 +47,10 @@ assert.equal(exportCsv([], ['a,b', 'c"d']), '"a,b","c""d"\\r\\n');
 console.log('Independent opt-in, default, empty-input, escaping, CRLF, Unicode, and UTF-8 byte assertions passed.');
 `;
 run('independent behavior assertions', process.execPath, ['--input-type=module', '-e', acceptance]);
-const instructions = ['proposal', 'specs', 'design', 'tasks', 'apply'];
+const instructions = schema === 'cliewen-all' ? ['proposal', 'investigation', 'decision', 'specs', 'tasks', 'apply'] : ['proposal', 'specs', 'design', 'tasks', 'apply'];
 for (const name of instructions) {
   let passed = false;
-  try { const saved = JSON.parse(fs.readFileSync(path.join(root, 'docs/testing/instructions', `${name}.json`), 'utf8')); passed = saved.schemaName === 'cliewen-delivery' && typeof saved.instruction === 'string' && saved.instruction.length > 0; }
+  try { const saved = JSON.parse(fs.readFileSync(path.join(root, 'docs/testing/instructions', `${name}.json`), 'utf8')); passed = saved.schemaName === schema && typeof saved.instruction === 'string' && saved.instruction.length > 0; }
   catch { /* Missing or malformed saved instructions remain a failed observation. */ }
   checks.push({label: `saved ${name} instructions`, passed});
 }

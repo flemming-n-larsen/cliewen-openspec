@@ -74,6 +74,15 @@ scenarios:
     readiness: planned
   combined-investigation-and-delivery:
     schema: cliewen-all
+    readiness: ready
+    prepare: scripts/prepare-csv-all-trial.mjs
+    checker: scripts/check-csv-all-trial.mjs
+    prompt: docs/testing/csv-all-trial/prompt.md
+    rubric: docs/testing/csv-all-trial/rubric.md
+    observedResults:
+      - docs/testing/csv-all-trial/result-001.md
+  combined-no-delivery:
+    schema: cliewen-all
     readiness: planned
 
 schemas:
@@ -92,9 +101,9 @@ schemas:
     releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
     releaseScenarios: [csv-streaming-investigation, discovery-no-change, discovery-delivery-handoff]
   cliewen-all:
-    status: planned
+    status: implemented
     developmentProfile: codex-collaboration-observed
     developmentScenario: combined-investigation-and-delivery
     releaseVariantProfile: codex-cli-primary
     releaseProfiles: [codex-cli-primary, claude-code-primary, opencode-primary]
-    releaseScenarios: [combined-investigation-and-delivery]
+    releaseScenarios: [combined-investigation-and-delivery, combined-no-delivery]

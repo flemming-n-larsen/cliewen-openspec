@@ -1,0 +1,2 @@
+The implementation and testing guidance above applies only to outcome: delivery in decision.md. Link its chosen approach instead of writing design.md or repeating investigation findings.
+For outcome: no-change or further-investigation, do not invent implementation or test tasks. Use tasks.md only for genuine closure work such as reviewing the recommendation, retaining useful knowledge, and cleaning isolated experiments. Do not require product test evidence for an investigation-only outcome.

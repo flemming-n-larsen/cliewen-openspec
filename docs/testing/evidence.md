@@ -3,7 +3,7 @@ type: testing
 ---
 # Evidence alpha contract
 
-The alpha supports `init`, `ac next`, `ac rename-prefix`, `check`, and `recover`, and installs `cliewen-delivery` and `cliewen-discovery`. Package CI exercises OpenSpec 1.15.0 on Windows and Linux. The combined all schema, update/uninstall, existing-registry adapters, structural checks for your project's documentation and Mermaid, and independent review tooling remain planned.
+The alpha supports `init`, `ac next`, `ac rename-prefix`, `check`, and `recover`, and installs `cliewen-delivery`, `cliewen-discovery`, and `cliewen-all`. Package CI exercises OpenSpec 1.15.0 on Windows and Linux. Update/uninstall, existing-registry adapters, structural checks for your project's documentation and Mermaid, and independent review tooling remain planned.
 
 Initialize OpenSpec first. Install this package from a locally built tarball. Run `cliewen-openspec init --default` to explicitly select delivery; omit `--default` to preserve the existing schema. `--root PATH` supports an explicit target, and `init --dry-run` makes no changes.
 
@@ -51,6 +51,8 @@ The adapter exits 0 when the runner passes, 1 when it fails with reportable resu
 The current alpha validates installation hashes and evidence only. Enabling other features supplies schema guidance, not implemented structural validators. The schema does not add a post-implementation artifact as an apply prerequisite. Archive is deliberately performed with OpenSpec, after reviewing evidence.
 
 For `cliewen-discovery` changes, `check --change NAME` reads the schema selection from OpenSpec metadata and checks installation and registry health only. With evidence enabled, it reports `discovery-review-required` instead of requesting a product test report. Review research sources, actual observations, uncertainty, and the recommendation yourself. An `ok: true` result does not validate discovery documents or prove product behavior. See [the discovery guide](../guide/discovery.md).
+
+For `cliewen-all`, check first validates decision frontmatter and the outcome branch. Delivery needs accepted status and must not skip specs, then follows this product evidence contract. No-change or further-investigation needs native `skip_specs: true` and no Markdown product deltas; it reports `discovery-review-required` without assessing product evidence. Outcome consistency and accepted-status checks remain active if evidence is disabled. Metadata cannot prove real human approval. See [the combined guide](../guide/all.md).
 
 ## Troubleshooting
 

@@ -3,7 +3,7 @@ type: architecture
 ---
 # Alpha architecture
 
-The executable delegates to repository operations in `src/core.ts`. `src/delivery.ts` and `src/discovery.ts` assemble standalone bundles from the text sources under `schemas/`, using the shared loader and guidance in `src/schema-source.ts`. The package exposes only public OpenSpec schema/configuration surfaces.
+The executable delegates to repository operations in `src/core.ts`. `src/delivery.ts`, `src/discovery.ts`, and `src/all.ts` assemble standalone bundles from the text sources under `schemas/`, using the shared loader and guidance in `src/schema-source.ts`. The combined workflow uses native skip_specs metadata for no-delivery outcomes and checks its small decision contract before product evidence. The package exposes only public OpenSpec schema/configuration surfaces.
 
 ```mermaid
 flowchart LR

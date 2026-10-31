@@ -11,7 +11,7 @@ Every shipped schema needs deterministic regression coverage and a reviewed agen
 |---|---|---|---|
 | cliewen-delivery | Optional CSV BOM with per-task TDD | One Codex collaboration run with fresh task context; [report](csv-bom-trial/result-001.md) | Pinned CLI profiles; flexible and end-of-change variants; repeated runs |
 | cliewen-discovery | Investigate CSV streaming | One Codex collaboration run with fresh task context; [report](csv-discovery-trial/result-001.md) | Pinned CLI profiles; targeted no-change and handoff cases; repeated runs |
-| cliewen-all | Investigation through delivery | Schema and scenario not implemented | A complete scenario, checker, rubric, agent trials, and deterministic coverage |
+| cliewen-all | One CSV investigation through delivery with an explicit human review stage | First agent stage stopped correctly at proposed decision; [partial result](csv-all-trial/result-001.md). Deterministic delivery/no-delivery branches pass | Complete agent delivery after real human approval, add no-delivery agent coverage, and pin CLI profiles |
 
 The common base is checked through every consuming schema, not as a separate user workflow. Existing deterministic tests also cover discovery ending without implementation and creating a separate delivery change. They do not substitute for the missing agent trials.
 
@@ -52,13 +52,13 @@ Each preparer prints project and evaluator artifact paths and saves a baseline b
 
 Use the scenario's checker after completion and review its rubric. Snapshot the implementation or investigation, actual observations, instruction responses, and evaluator output. Preserve raw traces when available. Credentials do not belong in fixtures or reports.
 
-The flexible and end-of-change delivery variants and targeted discovery outcome variants are planned; their runnable fixtures and prompts still need implementation. A no-change case must permit an honest recommendation, rather than reward reaching a predetermined answer.
+The flexible and end-of-change delivery variants, targeted discovery outcomes, and combined no-delivery agent variant remain planned. The combined primary scenario is staged: its first prompt stops at a proposed decision, and actual human agreement is required before the agent's delivery stage. A correct approval-boundary stop does not complete end-to-end coverage. A no-change case must permit an honest recommendation, rather than reward reaching a predetermined answer.
 
 ## Assess and report
 
 Score planning and final outcomes separately. Check readability, explained references, useful diagrams, scope, preserved project authorities, and the quality of evidence. For delivery, independently test the implementation, review task boundaries and type matching, and inspect actual red/green observations when TDD is configured. For discovery, review sources, experiment limits, uncertainty, proposed status, and the reasoning behind any handoff or no-change outcome.
 
-For the planned combined schema, also check that the recommendation leads into one coherent delivery plan, shared explanations are linked rather than duplicated, accepted decisions are not invented, and investigation findings do not count as product test evidence. The combined schema must define its no-delivery outcome before it is marked ready.
+For the combined schema, also check that the recommendation leads into one coherent delivery plan, shared explanations are linked rather than duplicated, accepted decisions are not invented, and investigation findings do not count as product test evidence. Its no-delivery branch must use native skip_specs and genuine closure checks without fake product specs or implementation tasks.
 
 Record one result per attempt with schema/scenario/profile IDs, baseline and final revision, package hash, exact configuration, start/end timestamps, instructions and access, commands, actual outcomes, independent checks, human review findings, cost/token usage where available, and missing observations. Use these outcomes:
 

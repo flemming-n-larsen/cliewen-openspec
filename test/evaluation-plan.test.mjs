@@ -22,7 +22,7 @@ test('evaluation plan covers shipped schemas without treating planned profiles a
   assert.match(run(source, 0).stdout, /does not run agents or certify release readiness/);
   for (const modify of [
     plan => { delete plan.schemas['cliewen-discovery']; },
-    plan => { plan.schemas['cliewen-all'].status = 'implemented'; },
+    plan => { plan.schemas['cliewen-all'].status = 'planned'; },
     plan => { plan.scenarios['csv-bom-tdd'].readiness = 'planned'; },
     plan => { plan.scenarios['csv-bom-tdd'].prompt = 'missing-prompt.md'; },
     plan => { plan.profiles['codex-cli-primary'].readiness = 'pinned'; },

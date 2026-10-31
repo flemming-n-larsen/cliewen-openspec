@@ -13,7 +13,7 @@ cliewen-openspec init
 cliewen-openspec init --default
 ```
 
-Requires OpenSpec's `specs` and `changes` directories. Installs `cliewen-delivery`, `cliewen-discovery`, the Decision Record template, default project config, a docs entry point if missing, a local ignore file, and an owned-file manifest. Repeating an unchanged installation produces an empty writes list. Conflicting owned files stop installation.
+Requires OpenSpec's `specs` and `changes` directories. Installs `cliewen-delivery`, `cliewen-discovery`, `cliewen-all`, the Decision Record template, default project config, a docs entry point if missing, a local ignore file, and an owned-file manifest. Repeating an unchanged installation produces an empty writes list. Conflicting owned files stop installation.
 
 `--default` selects `cliewen-delivery` as the default schema in `openspec/config.yaml`; without it the current selection is preserved. Select discovery explicitly when creating a change with OpenSpec. `--dry-run` lists writes without applying them. Init prints its writes as JSON; `--json` also requests JSON errors. `--default` and `--dry-run` are supported only for init.
 
@@ -51,6 +51,8 @@ With `--change`, checks that change's active delta scenarios; removed scenarios 
 Installation and registry checks remain active when evidence is explicitly disabled. Evidence errors include missing reports, failed/skipped tests, missing/unknown/duplicate references, stale revisions, and dirty working trees. Pending with a reason is a warning unless `--fail-on-pending` is set. Manual verification is a warning. See [the report contract](../testing/evidence.md).
 
 For a change whose OpenSpec metadata selects `cliewen-discovery`, check performs installation and registry checks only and reports `discovery-review-required` when evidence is enabled. It does not request a product test report or validate the investigation. See [discovery review](discovery.md#configuration-and-verification).
+
+For `cliewen-all`, check requires valid decision outcome/status fields. Delivery requires accepted status, unskipped product specs, and ordinary evidence when enabled. No-delivery outcomes require native `skip_specs: true` and no Markdown product deltas, and return `discovery-review-required`. Findings include `all-decision-required`, `all-decision-unaccepted`, and `all-outcome-conflict`. These outcome checks remain active with evidence disabled; actual human agreement and research sufficiency require review. See [the combined workflow](all.md).
 
 | Exit code | Meaning |
 |---|---|

@@ -35,7 +35,8 @@
     "docs:check": "node scripts/check-docs-browser.mjs",
     "trial:prepare": "node scripts/prepare-csv-bom-trial.mjs",
     "trial:discovery": "node scripts/prepare-csv-discovery-trial.mjs",
-    "eval:check": "npm run build && node scripts/check-agent-evaluation.mjs"
+    "eval:check": "npm run build && node scripts/check-agent-evaluation.mjs",
+    "trial:all": "node scripts/prepare-csv-all-trial.mjs"
   },
   "dependencies": {
     "yaml": "2.9.1"

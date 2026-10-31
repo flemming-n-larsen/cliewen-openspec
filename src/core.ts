@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { parse, parseDocument, stringify } from 'yaml';
 import { deliveryFiles } from './delivery.js';
 import { discoveryFiles } from './discovery.js';
+import { allFiles } from './all.js';
 import { validateRegistry } from './ac.js';
 export { nextId, renamePrefix, capabilityForPrefix } from './ac.js';
 
@@ -131,7 +132,7 @@ export function init(root: string, dryRun: boolean, makeDefault: boolean) {
   const mp = local(root, `${state}/manifest.json`);
   const previous: Manifest | undefined = fs.existsSync(mp) ? JSON.parse(read(mp)) : undefined;
   if (previous && previous.version !== version) throw Error('Upgrade migration is not implemented in this alpha.');
-  const files = {...deliveryFiles(), ...discoveryFiles()}; const writes: Record<string, string> = {};
+  const files = {...deliveryFiles(), ...discoveryFiles(), ...allFiles()}; const writes: Record<string, string> = {};
   for (const [p, content] of Object.entries(files)) {
     const dest = local(root, p);
     if (fs.existsSync(dest) && normalize(read(dest)) !== normalize(content)) throw Error(`Conflict: ${p}; no files written.`);
@@ -197,14 +198,33 @@ export function check(root: string, change?: string, failPending = false): Findi
     for (const [p, h] of Object.entries(m.files)) if (!fs.existsSync(local(root, p)) || hash(read(local(root, p))) !== h) add('owned-file-modified', p);
   }
   try { validateRegistry(root, c); } catch (e) { add('invalid-ac-registry', e instanceof Error ? e.message : String(e)); }
-  if (!c.features.evidence) { add('evidence-disabled', 'Evidence was explicitly disabled', 'info'); return findings; }
   if (change && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(change)) {
     const metadata = local(root, `openspec/changes/${change}/.openspec.yaml`);
-    if (fs.existsSync(metadata) && parse(read(metadata))?.schema === 'cliewen-discovery') {
-      add('discovery-review-required', 'Installation and registry checks only: review investigation sources, experiment outcomes, uncertainty, and the decision. Discovery findings do not prove product behavior.', 'info');
+    const selection = fs.existsSync(metadata) ? parse(read(metadata)) : undefined;
+    if (selection?.schema === 'cliewen-discovery') {
+      if (c.features.evidence) add('discovery-review-required', 'Installation and registry checks only: review investigation sources, experiment outcomes, uncertainty, and the decision. Discovery findings do not prove product behavior.', 'info');
+      else add('evidence-disabled', 'Evidence was explicitly disabled', 'info');
       return findings;
     }
+    if (selection?.schema === 'cliewen-all') {
+      const decisionPath = local(root, `openspec/changes/${change}/decision.md`);
+      const frontmatter = fs.existsSync(decisionPath) ? read(decisionPath).match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/) : undefined;
+      const decision = frontmatter ? parse(frontmatter[1]) : undefined;
+      if (!decision || decision.type !== 'decision' || !['delivery', 'no-change', 'further-investigation'].includes(decision.outcome) || !['proposed', 'accepted'].includes(decision.status)) {
+        add('all-decision-required', 'decision.md needs type: decision, status: proposed or accepted, and outcome: delivery, no-change, or further-investigation');
+        return findings;
+      }
+      if (decision.outcome !== 'delivery') {
+        if (selection.skip_specs !== true) add('all-outcome-conflict', 'A no-delivery outcome requires skip_specs: true in .openspec.yaml');
+        if (markdowns(local(root, `openspec/changes/${change}/specs`)).length) add('all-outcome-conflict', 'A no-delivery outcome must not contain product spec deltas');
+        add('discovery-review-required', 'No-delivery outcome: review investigation evidence and recommendation. Product execution evidence is not assessed.', 'info');
+        return findings;
+      }
+      if (selection.skip_specs === true) { add('all-outcome-conflict', 'Delivery must not skip product specs'); return findings; }
+      if (decision.status !== 'accepted') { add('all-decision-unaccepted', 'Delivery requires an accepted decision following human agreement; artifact completion is not approval'); return findings; }
+    }
   }
+  if (!c.features.evidence) { add('evidence-disabled', 'Evidence was explicitly disabled', 'info'); return findings; }
   const specs = scenarios(root, change); const ids = new Set<string>();
   for (const s of specs) { if (!s.id) add('missing-ac-id', `${s.file}: ${s.title}`); else if (ids.has(s.id)) add('duplicate-ac-id', s.id); else ids.add(s.id); }
   for (const s of specs) {
