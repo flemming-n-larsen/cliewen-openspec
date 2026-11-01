@@ -49,7 +49,7 @@ testing:
 | `features.evidence` | `true` | Scenario-ID and execution-report checks |
 | `evidence.report` | `.cliewen-openspec/evidence.json` | Repository-local path to the execution report |
 
-All paths must stay inside the project; absolute paths, parent traversal, and symlink components are rejected. A custom evidence report path must be Git-ignored and untracked before the reference adapter can write it. Init only creates an ignore rule for the default `evidence.json` report.
+All paths must stay inside the project; absolute paths, parent traversal, and symlink components are rejected. A custom evidence report path must be Git-ignored and untracked before the reference adapter can write it. New installations ignore the default `evidence.json` report, `transaction.json`, and local `tdd/` history in `.cliewen-openspec/.gitignore`. Existing ignore files are preserved.
 
 ## Test types
 
@@ -70,7 +70,7 @@ Each scenario needs exactly one `Test-type: Component` line beneath its heading.
 
 For existing projects, add types to scenarios and test titles, commit the inputs, then regenerate evidence. Older reports without `testType` fail the check and are not automatically upgraded. Evidence opt-out skips these checks. Testing types do not change per-task placement or TDD ordering.
 
-The alpha supplies guidance for documentation, decisions, Mermaid, planning, and review. It does not structurally validate those documents or independently enforce agent behavior. Disabling a facility preserves authored files. Evidence opt-out skips evidence checks; installation and registry checks still run.
+The alpha supplies guidance for documentation, decisions, Mermaid, planning, and review. It does not structurally validate those documents or independently enforce agent behavior. Disabling a facility preserves authored files. Evidence opt-out skips product evidence checks; installation, registry, and explicitly selected TDD completion checks still run.
 
 For example, to use a different documentation root and turn off Mermaid guidance:
 
@@ -153,7 +153,7 @@ The earlier experimental `ac.prefix` setting is no longer supported. Replace it 
 
 Both modes retain final regression testing and revision-bound evidence collection. Per-task test runs provide immediate feedback; the evidence adapter records results for the final committed inputs. Disabling evidence does not disable ordinary task-level testing.
 
-This setting is agent guidance supplied by the installed schema and task template. The CLI does not parse tasks to enforce test ordering, and configuration changes do not rewrite existing task lists. Ask the agent to revise an existing plan when changing this setting.
+In flexible mode, placement is guidance supplied by the installed schema and task template. Selecting TDD also enables the completion checks below. Configuration changes do not rewrite existing task lists; revise the task plan when changing this setting.
 
 ## Test-driven development
 
@@ -175,7 +175,84 @@ With TDD, each implementation task contains one red-green-refactor cycle:
 
 For example: "Add quotation-mark escaping: write and run the tagged test first and confirm the expected failure; implement escaping until the test passes; refactor and rerun the relevant tests." Record commands and observed red/green outcomes in task completion notes. If a new test already passes against existing code, report that honestly rather than claiming an observed red phase. Documentation-only work uses appropriate validation checks.
 
-This controls execution planning in `tasks.md` and the apply instructions, not OpenSpec's spec artifact format. Final regression and committed-revision evidence collection remain unchanged. The CLI does not verify historical test ordering, and a final passing report does not prove TDD was followed. The new instructions require an updated installed schema; changing config alone does not update an older alpha installation.
+With TDD selected, `check --change NAME` also requires task metadata and recorded execution history. This applies to delivery and the delivery outcome of `cliewen-all`, including when `features.evidence` is false. Discovery and combined no-delivery closure do not require delivery history. Flexible mode keeps its existing behavior.
+
+### Describe each task
+
+Add one `yaml cliewen-tasks` fenced block to the change's `tasks.md`. Every checkbox needs a unique numeric ID and a matching entry. Keep the normal task text and completion check; the block supplies the machine-readable verification details.
+
+````markdown
+- [ ] 1.1 Add CSV quoting and verify quotation marks at the Unit function boundary.
+
+```yaml cliewen-tasks
+version: 1
+tasks:
+  "1.1":
+    method: tdd
+    command: [node, --test, test/export.test.mjs]
+    tests: [test/export.test.mjs]
+    implementation: [export.mjs]
+```
+````
+
+`command` is an executable followed by its arguments, run from your project root without a shell. Use explicit project-relative file paths, including files that will be created. Globs and directories are not file lists. Test and implementation lists must be distinct and together cover the task's verification boundary. Review that coverage; Cliewen cannot discover omitted production files or infer which assertions a command runs.
+
+Choose a method for each task:
+
+| Method | Recorded sequence | When to use it |
+|---|---|---|
+| `tdd` | start → red → green | New or changed behavior; tests change before red while implementation stays unchanged |
+| `characterization` | start → baseline → green | Add coverage for existing behavior; baseline already passes against unchanged implementation |
+| `refactor` | start → baseline → green | Existing tests pass before and after refactoring; test files stay unchanged |
+| `verification` | start → verify | Work with another suitable completion check, such as documentation links or a build |
+
+Every method uses `command`, `tests`, and `implementation`. TDD requires both file lists to be nonempty; characterization and refactor require test files. Verification can use `tests: []` and list documents under `implementation`. Every method other than `tdd` requires a nonempty `reason` explaining the departure. For example, a documentation task can use `method: verification`, `reason: "Only the command reference changes; build the docs and check links."`, and its documentation build command. Review reasons with the task plan. A configuration or tooling change that changes behavior still needs a behavior test.
+
+### Record actual runs
+
+Run these commands from the adopting project's root. Start before changing the task's declared files:
+
+```sh
+npx --no-install cliewen-openspec tdd start --change add-csv-export --task 1.1
+```
+
+Write the focused test, then record the red run using the exact command argument list from the task:
+
+```sh
+npx --no-install cliewen-openspec tdd run --change add-csv-export --task 1.1 --phase red --reason "Quotation marks are not escaped yet" -- node --test test/export.test.mjs
+```
+
+The recorder returns the test command's exit code. A red run should exit nonzero. Inspect the captured failure before implementing: syntax, import, setup, or wrong-expectation failures do not establish missing behavior. `--reason` records your explanation; it does not validate it.
+
+Implement the behavior and record green:
+
+```sh
+npx --no-install cliewen-openspec tdd run --change add-csv-export --task 1.1 --phase green -- node --test test/export.test.mjs
+```
+
+Keep test files unchanged between red and green. After refactoring production code, record green again. Failed green attempts are retained; the last run must pass. Changing tests requires another start and verification cycle. Do not manufacture a red phase for behavior already implemented; choose the honest method and explain it in the reviewed plan.
+
+For characterization or refactoring, use `--phase baseline` for the passing run before production changes, then `--phase green`. For a verification exception, use `--phase verify` after the work. Each task begins with `tdd start`. If its definition changes, start a new cycle; the recorder appends history and preserves earlier attempts.
+
+After the task's actual verification succeeds, mark its checkbox complete. Once all tasks are complete, run:
+
+```sh
+npx --no-install cliewen-openspec check --change add-csv-export --json
+```
+
+Keep final evidence collection and this completion check outside numbered task checkboxes and recorded task commands. A final verification task should run the actual regression suite or documentation check. Recording `check` itself would make it assess its own unfinished history while a recorder lock exists.
+
+### Completion checks and limits
+
+The recorder appends JSON events to `.cliewen-openspec/tdd/add-csv-export.jsonl`. Events contain task-definition and file hashes, command arguments, output, exit code, and recording time. It compares snapshots before and after each command; commands that change declared inputs cannot establish the required sequence. It blocks simultaneous recording for the same change. Later tasks can edit shared files if their recorded starting states continue from the earlier task's recorded state.
+
+Missing metadata/history, unchecked tasks, stale definitions/files, malformed history, and incomplete or invalid ordering produce errors. A final passing product evidence report cannot replace this history. `check` reads it without running tests or writing files. Without `--change`, permanent-spec checks report that TDD ordering was not assessed; they do not establish task completion after archive.
+
+History is local verification data, separate from the final revision-bound evidence report. Keep it available until completion review; CI needs the same history as an artifact if it performs this check. Existing installations must add `tdd/` to `.cliewen-openspec/.gitignore` before recording. Update preserves that file. Review captured project output before sharing it; do not hand-edit events or discard failures to obtain a pass.
+
+The history is not tamper-proof and the recorder does not restrict writes through other tools. Review the actual failure cause, assertions, declared file coverage, and exception reasons. These checks establish consistency of the captured sequence, not a guarantee that every edit was observed. Stronger write control remains planned.
+
+Final regression and clean committed-revision evidence collection remain required when evidence is enabled. Finish task notes before committing and collecting evidence. Install the updated package and refresh installed schemas with `update`; older authored task lists need explicit metadata and honest new verification, not reconstructed historical claims.
 
 ## Decision filenames
 

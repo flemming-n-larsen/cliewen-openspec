@@ -22,7 +22,7 @@ Use the search button to find commands, configuration fields, and guide sections
 | Update | Refresh owned schemas/templates from a supported manifest with conflict checks, preview, and rollback; [guide](updating.md) |
 | Uninstall | Remove unchanged owned resources, preserve project data, and explicitly replace a removed default; [guide](uninstalling.md) |
 | Acceptance IDs | Configure a prefix per capability, allocate numbers, and change a prefix while preserving existing IDs |
-| Task-level testing | Test each implementation task before continuing; optionally use TDD |
+| Task-level testing | Test each implementation task before continuing; optional TDD records commands/file hashes and checks task completion |
 | Evidence | Run tagged Node tests, record their Git revision, and check outcomes and scenario references |
 | Decision Records | A Markdown template and guidance for recording choices that affect future work |
 | Documentation and Mermaid | Guidance for maintaining explanations and embedded diagrams |
@@ -44,4 +44,4 @@ All three planned schemas are implemented in source. `cliewen-base` names the sh
 
 The alpha supports configurable test types and checks declared scenario types against evidence. Existing-registry adapters, general version/config migrations, and structural checks for your project's documentation and Mermaid diagrams remain planned.
 
-Cliewen checks test execution, ID linkage, and revision freshness. You still need to review whether the assertions prove the intended behavior. The CLI also does not enforce the historical order of TDD steps.
+Cliewen checks test execution, ID linkage, and revision freshness. Optional [TDD completion checks](../configuration.md#test-driven-development) assess recorded task sequences. You still need to review assertions, failure causes, exception reasons, and whether the declared files cover the work. The recorder does not control every write or provide tamper-proof history.

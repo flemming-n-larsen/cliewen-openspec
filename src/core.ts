@@ -9,6 +9,7 @@ import { deliveryFiles } from './delivery.js';
 import { discoveryFiles } from './discovery.js';
 import { allFiles } from './all.js';
 import { validateRegistry } from './ac.js';
+import { checkTdd } from './tdd.js';
 export { nextId, renamePrefix, capabilityForPrefix } from './ac.js';
 
 export const version = '0.1.0-alpha.1';
@@ -305,7 +306,7 @@ export function init(root: string, dryRun: boolean, makeDefault: boolean) {
   const entry = `${docsRoot}/README.md`;
   if (!fs.existsSync(local(root, entry))) writes[entry] = '---\ntype: overview\n---\n# Project documentation\n\nKeep architecture/, design/, decisions/, testing/ and optional plans/ here as needed. Link to OpenSpec specs for behavior. Do not invent project intent.\n';
   const ignore = `${state}/.gitignore`;
-  if (!fs.existsSync(local(root, ignore))) writes[ignore] = 'evidence.json\ntransaction.json\n';
+  if (!fs.existsSync(local(root, ignore))) writes[ignore] = 'evidence.json\ntransaction.json\ntdd/\n';
   const cfgPath = 'openspec/config.yaml';
   const original = fs.existsSync(local(root, cfgPath)) ? read(local(root, cfgPath)) : '';
   if (makeDefault) {
@@ -382,6 +383,7 @@ export function check(root: string, change?: string, failPending = false): Findi
       if (decision.status !== 'accepted') { add('all-decision-unaccepted', 'Delivery requires an accepted decision following human agreement; artifact completion is not approval'); return findings; }
     }
   }
+  if (c.testing.approach === 'tdd') findings.push(...checkTdd(root, change));
   if (!c.features.evidence) { add('evidence-disabled', 'Evidence was explicitly disabled', 'info'); return findings; }
   const specs = scenarios(root, change); const ids = new Set<string>();
   for (const s of specs) { if (!s.id) add('missing-ac-id', `${s.file}: ${s.title}`); else if (ids.has(s.id)) add('duplicate-ac-id', s.id); else ids.add(s.id); }

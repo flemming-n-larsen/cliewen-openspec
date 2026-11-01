@@ -23,6 +23,6 @@ Each top-level test title has one bracketed AC ID. The reference adapter uses th
 
 ## Try TDD with an agent
 
-Use a fresh pilot and set `testing.approach: tdd` before asking the agent to plan the change. Keep `testing.placement: per-task`. Ask it to implement the reviewed tasks and record its actual red/green runs. Do not copy the finished implementation for a TDD trial.
+Use a fresh pilot and set `testing.approach: tdd` before asking the agent to plan the change. Keep `testing.placement: per-task`. Ask it to implement the reviewed tasks using the [task metadata and TDD recorder](../configuration.md#test-driven-development), starting capture before task edits. Do not copy the finished implementation for a TDD trial.
 
 Check that the first failure is an assertion about missing behavior, followed by a passing run after implementation. Some later boundary tests may already pass; record that outcome without inventing a red phase. A final green report alone cannot establish the order of earlier work.

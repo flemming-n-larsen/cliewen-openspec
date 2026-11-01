@@ -6,6 +6,8 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Added
 
+- TDD task metadata, `tdd start`/`tdd run`, and blocking delivery completion checks against recorded commands and file hashes. Flexible remains the default. Characterization, refactoring, and other verification methods require task reasons; failure causes and assertion quality still need review. Local history does not restrict writes or provide tamper-proof execution records.
+
 - Pinned CLI evaluation profiles and an explicit runner for Codex CLI, Claude Code, and OpenCode. Preparation clones matching per-schema baselines; runs preserve raw events, settings, timing, exposed usage, and staged approval continuations. CI tests use fake CLIs and make no model calls.
 
 - `uninstall` with preview, owned-file/hash conflict checks, rollback, and preserved project data. Active changes referencing removed schemas block removal; a removed OpenSpec default requires explicit `--default-schema` validated through the public OpenSpec CLI. The npm package and authored files remain.

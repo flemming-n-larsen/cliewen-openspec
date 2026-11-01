@@ -82,7 +82,23 @@ For `cliewen-all`, check requires valid decision outcome/status fields. Delivery
 | 1 | One or more check findings are errors |
 | 2 | Command usage, configuration, report parsing, or another operation failed |
 
-Within the Cliewen CLI, `--change` and `--fail-on-pending` are only supported by check. Check is read-only and does not recover a transaction or generate evidence. The separate [Node test adapter](../testing/evidence.md#collect-evidence-for-one-change) also accepts `--change NAME` when collecting reports. Use the same change name for collection and checking; a mismatched declared scope is an error.
+When `testing.approach: tdd` is selected, delivery checks also assess every numbered task's metadata, completion, and recorded execution history. Missing or invalid history blocks completion even with product evidence disabled. Discovery and combined no-delivery closure are exempt. Without `--change`, the checker warns that TDD ordering was not assessed. See [the task format and limits](../configuration.md#test-driven-development).
+
+`--change` is supported by check and tdd; `--fail-on-pending` is only supported by check. Check is read-only and does not recover a transaction or generate evidence. The separate [Node test adapter](../testing/evidence.md#collect-evidence-for-one-change) also accepts `--change NAME` when collecting reports. Use the same change name for collection and checking; a mismatched declared scope is an error.
+
+## tdd
+
+```sh
+cliewen-openspec tdd start --change add-csv-export --task 1.1
+cliewen-openspec tdd run --change add-csv-export --task 1.1 --phase red --reason "CSV quoting is missing" -- node --test test/export.test.mjs
+cliewen-openspec tdd run --change add-csv-export --task 1.1 --phase green -- node --test test/export.test.mjs
+```
+
+`start` records the declared files before a task's edits. `run` executes the task's exact command argument list from the project root and appends its output, exit code, and before/after file hashes to `.cliewen-openspec/tdd/CHANGE.jsonl`. Both require `--change` and `--task`; run also requires `--phase` and a command after `--`. Put recorder options, including `--root`, before the separator. Arguments after it belong to the test command and are passed unchanged, without a shell.
+
+Phases are `red`, `green`, `baseline`, and `verify`. Red requires `--reason`; it preserves a failing command's nonzero exit code. Other runs also return the command's exit code. Recorder/usage failures exit 2. Start exits 0 on success. Neither command accepts `--json` or `--dry-run`. The recorder can be used to prepare history before selecting TDD; it never changes project configuration or task checkboxes.
+
+Use baseline/green for characterization or refactoring and verify for a justified alternative check. History retains failed runs; review the output and declared files. A leftover `.lock` file blocks recording and completion checks. Confirm that no recorder command is running before removing that specific lock. The [configuration reference](../configuration.md#test-driven-development) provides the metadata format, sequence rules, and adoption steps.
 
 ## recover
 

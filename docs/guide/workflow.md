@@ -39,7 +39,7 @@ Describe the desired behavior and where you want the agent to stop. The installe
 
 > Create a change proposal for CSV export with a header, explicit column order, escaped commas and quotation marks, and header-only output for an empty list. Use the existing change `add-csv-export`. Stop after proposal, specs, design, and tasks so I can review them before implementation.
 
-Review the input scope, scenarios, and task checks. Once you are satisfied, authorize implementation. With the defaults, every implementation task gets its relevant tests and must pass before the next task begins. Set `testing.approach: tdd` to request the test-first cycle described in [configuration](../configuration.md#test-driven-development).
+Review the input scope, scenarios, and task checks. Once you are satisfied, authorize implementation. With the defaults, every implementation task gets its relevant tests and must pass before the next task begins. Set `testing.approach: tdd` to use the [task metadata, test-first recorder, and completion checks](../configuration.md#test-driven-development). Review each exception reason with the task plan and start recording before task edits.
 
 ## Keep durable explanations useful
 

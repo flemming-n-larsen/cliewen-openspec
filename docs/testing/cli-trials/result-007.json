@@ -1,0 +1,232 @@
+{
+  "capturedAt": "2026-11-01T10:43:57.168Z",
+  "rawArtifacts": ".tmp/agent-trials/cli-evaluation-007",
+  "releaseReady": false,
+  "reviewer": "Coordinating evaluator; no fresh human implementation review",
+  "finalPackageSha256": "763cc8c15f3d10e92613d7209c2a178c62bac383c3bf87ebf7dcbc9631ec2cbf",
+  "finalPackageMatchesDeliveryTrial": true,
+  "changesBetweenCandidates": [
+    "Preserve declared filename case in task metadata/history for artifact transfer.",
+    "Move final evidence collection/completion check outside numbered tasks to avoid self-assessment while recording."
+  ],
+  "cases": [
+    {
+      "schema": "cliewen-all",
+      "profile": "opencode-2-2-5",
+      "outcome": "incomplete",
+      "rawArtifacts": ".tmp/agent-trials/cli-evaluation-007/combined",
+      "baseline": {
+        "preparedAt": "2026-11-01T10:24:30.677Z",
+        "sourceRevision": "93021916f6dd0daf9e48d3a092066bec1116bf25",
+        "sourceStatus": "M CHANGELOG.md\n M docs/configuration.md\n M docs/guide/cli.md\n M docs/guide/index.md\n M docs/testing/evidence.md\n M schemas/all/templates/tasks.md\n M schemas/base/instructions/testing-approach.md\n M schemas/delivery/templates/tasks.md\n M src/cli.ts\n M src/core.ts\n?? src/tdd.ts\n?? test/tdd.test.mjs",
+        "baseline": "051962b7aecc381483c694663de194ec8685b43e",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "19d474b60ed7e6e92f65979973f7a1dd8814d2d40fd2046f403799b34abdfd4e"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Code\\cliewen-trials\\tdd-completion-20261101-001\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "5f5150cea05f027c8fa16992a7e0d03f4ffc5002"
+      },
+      "revision": "de688ec6f6a779682339678e94773497d354a1ab",
+      "independentChecks": {
+        "passed": false,
+        "failedLabels": [
+          "clean input revision",
+          "active change evidence",
+          "evidence check reports success"
+        ],
+        "file": "artifacts/cli/opencode-2-2-5/independent-checks.json"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "opencode v2.2.5",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "startedAt": "2026-11-01T10:24:42.262Z",
+          "endedAt": "2026-11-01T10:30:17.972Z",
+          "durationSeconds": 335.709,
+          "exitCode": 0,
+          "stopReason": null,
+          "eventFailure": false,
+          "reportedCostUSD": 0.05480302000000001,
+          "observedModels": []
+        },
+        {
+          "phase": "approved-continuation",
+          "cliVersion": "opencode v2.2.5",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "startedAt": "2026-11-01T10:31:25.354Z",
+          "endedAt": "2026-11-01T10:41:25.383Z",
+          "durationSeconds": 600.028,
+          "exitCode": 1,
+          "stopReason": "wall-time-limit",
+          "eventFailure": true,
+          "reportedCostUSD": 0.05657744000000001,
+          "observedModels": []
+        }
+      ],
+      "recorded": [
+        {
+          "task": "1.1",
+          "phase": "start",
+          "exitCode": null
+        },
+        {
+          "task": "1.1",
+          "phase": "red",
+          "exitCode": 1
+        },
+        {
+          "task": "1.1",
+          "phase": "green",
+          "exitCode": 1
+        },
+        {
+          "task": "1.1",
+          "phase": "start",
+          "exitCode": null
+        },
+        {
+          "task": "1.1",
+          "phase": "red",
+          "exitCode": 0
+        },
+        {
+          "task": "1.1",
+          "phase": "green",
+          "exitCode": 0
+        },
+        {
+          "task": "1.2",
+          "phase": "start",
+          "exitCode": null
+        },
+        {
+          "task": "1.2",
+          "phase": "verify",
+          "exitCode": 0
+        },
+        {
+          "task": "1.1",
+          "phase": "start",
+          "exitCode": null
+        }
+      ],
+      "manualReview": {
+        "approvalBoundary": "pass: proposed status, unchanged product inputs and registry; no allocation/reset execution observed",
+        "approvalProvenance": "existing bounded owner pilot/regression authorization relayed after evaluator design review; no new human review claimed",
+        "tdd": "fail: a corrected test was followed by a red-phase command with exit zero; the checker rejects the latest cycle",
+        "completion": "blocked: unfinished closure task, missing/invalid history, and absent final evidence",
+        "infrastructure": "provider.transport ECONNRESET during continuation; wall-time limit reached before completion",
+        "archivePushPr": "none performed"
+      }
+    },
+    {
+      "schema": "cliewen-delivery",
+      "profile": "opencode-2-2-5",
+      "outcome": "task-failure",
+      "rawArtifacts": ".tmp/agent-trials/cli-evaluation-007/delivery",
+      "baseline": {
+        "preparedAt": "2026-11-01T10:36:36.554Z",
+        "sourceRevision": "93021916f6dd0daf9e48d3a092066bec1116bf25",
+        "sourceStatus": "M CHANGELOG.md\n M docs/configuration.md\n M docs/decisions/004-incremental-testing-and-optional-tdd.md\n M docs/decisions/008-evidence-is-core-and-has-explicit-limits.md\n M docs/decisions/013-tdd-enforcement-and-task-exceptions.md\n M docs/decisions/015-combined-workflow-and-approval-boundaries.md\n M docs/decisions/README.md\n M docs/guide/cli.md\n M docs/guide/csv-example.md\n M docs/guide/index.md\n M docs/guide/workflow.md\n M docs/testing/evidence.md\n M plan.md\n M schemas/all/templates/tasks.md\n M schemas/base/instructions/testing-approach.md\n M schemas/delivery/templates/tasks.md\n M src/cli.ts\n M src/core.ts\n?? src/tdd.ts\n?? test/tdd.test.mjs",
+        "baseline": "2acfd8103dbcab7c42367ddaaee8446a78fa4591",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "763cc8c15f3d10e92613d7209c2a178c62bac383c3bf87ebf7dcbc9631ec2cbf"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Code\\cliewen-trials\\tdd-completion-20261101-002\\project"
+      },
+      "revision": "36e05fc92f41cb59001c59227de81c9f825980b1",
+      "independentChecks": {
+        "passed": false,
+        "failedLabels": [
+          "saved apply instructions"
+        ],
+        "file": "artifacts/cli/opencode-2-2-5/independent-checks.json"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "opencode v2.2.5",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "startedAt": "2026-11-01T10:36:51.486Z",
+          "endedAt": "2026-11-01T10:41:13.839Z",
+          "durationSeconds": 262.352,
+          "exitCode": 0,
+          "stopReason": null,
+          "eventFailure": false,
+          "reportedCostUSD": 0.04973258,
+          "observedModels": []
+        }
+      ],
+      "recorded": [
+        {
+          "task": "1.1",
+          "phase": "start",
+          "exitCode": null
+        },
+        {
+          "task": "1.1",
+          "phase": "red",
+          "exitCode": 1
+        },
+        {
+          "task": "1.1",
+          "phase": "green",
+          "exitCode": 0
+        },
+        {
+          "task": "1.2",
+          "phase": "start",
+          "exitCode": null
+        },
+        {
+          "task": "1.2",
+          "phase": "baseline",
+          "exitCode": 0
+        },
+        {
+          "task": "1.2",
+          "phase": "green",
+          "exitCode": 0
+        },
+        {
+          "task": "2.1",
+          "phase": "start",
+          "exitCode": null
+        },
+        {
+          "task": "2.1",
+          "phase": "verify",
+          "exitCode": 0
+        }
+      ],
+      "manualReview": {
+        "tdd": "pass: raw edits and recorded hashes show tests before intended assertion failures, then implementation and green; characterization and documentation verification are justified separately",
+        "finalEvidence": "pass on clean final HEAD; product checker returns ok with informational findings only",
+        "behavior": "pass: nine tagged tests and independent supported-input assertions",
+        "instructionRetrieval": "fail: no apply instruction retrieval observed and no saved apply JSON; required explicitly by the trial prompt",
+        "writing": "API/default/example and testing boundaries documented; no general writing-quality certification",
+        "archivePushPr": "none performed"
+      }
+    }
+  ],
+  "limits": [
+    "Local recorder history is not tamper-proof and does not control all write routes.",
+    "Assertion quality, failure cause, declared file coverage, and exception suitability require review.",
+    "No OS isolation; existing provider credentials/account used, with no purchase or top-up.",
+    "Observed-model lists are empty; profile records the requested model and effort.",
+    "No overall passing agent trial or release compatibility claim."
+  ]
+}
