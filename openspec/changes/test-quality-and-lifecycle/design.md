@@ -31,6 +31,8 @@ testing:
 
 Each mode accepts `off`, `review`, or `enforce`. Off skips that policy's checks and guidance. Review reports incomplete records as warnings; enforce blocks on missing or invalid records. Minima are nonnegative integers. Unknown keys and invalid values fail configuration validation. Boundary cases still receive review where meaningful despite a zero minimum.
 
+Omitted settings retain defaults. A partial `minimumCases` mapping overrides only the named categories; counts must be safe integers. Adapter collection preserves execution results when optional case metadata is incomplete or ambiguous, letting the selected policy determine severity.
+
 Enforce requires `features.evidence: true`; contradictory configuration fails with recovery instructions. With evidence disabled, review mode supplies guidance and explicitly reports execution-backed assessment as unavailable. Policies are independent of placement, TDD, documentation, and optional independent-review guidance. Existing installation, registry, and TDD checks retain their contracts.
 
 Warn-first adoption avoids new blocking requirements in existing projects. A universal minimum without exceptions was rejected because some scenarios lack a meaningful negative case. Exceptions name the policy, scenario, reason, and reviewed disposition. They waive only the stated obligation, never failed tests or stale evidence. A status field cannot authenticate human approval.
@@ -45,7 +47,7 @@ Use committed change-local review records and generated ignored execution eviden
 
 Extend report version 1 with optional `caseId` and `coverage` result fields. The [compatibility trial](../../../docs/testing/test-quality-trial.md#limits-and-remaining-work) confirmed that the existing checker accepts these fields while retaining its execution and identity checks; it rejects version 2. Keep scenario/test-name pairs unique even when case IDs differ. New checks must validate the added fields rather than relying on the old parser's tolerance.
 
-Finalize exact review-record fields, identity encoding, and diagnostics before implementation. Version-1 reports without case metadata remain usable with these policies off; stricter policies request recollection or missing review records explicitly. Multi-scenario adapter export is deferred; lifecycle review must still preserve shared-test obligations.
+The [proposed record contract](record-contract.md) specifies exact fields, identity encoding, freshness inputs, exceptions, and diagnostics for review before implementation. Version-1 reports without case metadata remain usable with these policies off; stricter policies request recollection or missing review records explicitly. Multi-scenario adapter export is deferred; lifecycle review must still preserve shared-test obligations.
 
 ### Lifecycle
 
@@ -55,7 +57,7 @@ Retirement requires an explicit accepted requirement change and reason. Preserve
 
 ## Risks / Trade-offs
 
-The [first design trial](../../../docs/testing/test-quality-trial.md) confirms that positive-only coverage and weak assertions miss relevant defects, and that changed or retired behavior needs targeted test maintenance. Its candidate evaluator is experimental; product parser compatibility and review-record validation remain unverified.
+The [design trials](../../../docs/testing/test-quality-trial.md) show that positive-only coverage and weak assertions miss relevant defects, and that changed or retired behavior needs targeted test maintenance. Nine checks establish the current product parser's compatibility behavior; 26 candidate-record checks exercise scoped exceptions, shared-test removal, freshness, and admissible effectiveness declarations. Future product enforcement and full record-schema validation remain unimplemented.
 
 Categories and review conclusions may be wrong even when structurally valid. Keep semantic limits visible in passing diagnostics. Controlled defects run in disposable fixtures, with restoration verified. Trial observations remain separate from delivery evidence.
 

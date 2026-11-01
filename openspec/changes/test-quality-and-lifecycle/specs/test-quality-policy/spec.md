@@ -46,3 +46,29 @@ The system SHALL validate required effectiveness records without claiming to pro
 #### Scenario: Unrelated failure
 - **WHEN** a missing dependency causes the recorded failure
 - **THEN** review requires a relevant behavior failure before accepting the effectiveness claim
+
+### Requirement: Review input freshness
+The system SHALL validate review records against their declared inspected inputs, command scope, and available baseline. Editing a declared source or test input SHALL invalidate the review, while the review record SHALL NOT require its own content hash.
+
+#### Scenario: Tests change after review
+- **WHEN** an inspected test file differs from its recorded digest
+- **THEN** review mode warns and enforce mode blocks until the changed input is reviewed
+
+#### Scenario: Review wording changes
+- **WHEN** only the review record's explanation changes and its inspected inputs stay the same
+- **THEN** the review has no self-hash freshness failure, while execution evidence still requires recollection after a commit
+
+#### Scenario: Archive changes review scope
+- **WHEN** a change-scoped record is offered for a permanent-spec check after archive
+- **THEN** the checker requests a permanent-spec record with reviewed inputs instead of silently carrying approval across scopes
+
+### Requirement: Legacy report adoption
+The system SHALL preserve version-1 execution checks and apply new metadata obligations according to independently configured policy modes.
+
+#### Scenario: Old results with policies disabled
+- **WHEN** all new policies are off and a valid version-1 report lacks case metadata
+- **THEN** existing execution, linkage, type, and freshness checks retain their behavior
+
+#### Scenario: Missing optional metadata in review mode
+- **WHEN** a mapped test lacks case metadata while coverage uses review mode
+- **THEN** collection retains its execution result and the coverage checker warns rather than causing a collection failure

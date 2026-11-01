@@ -24,10 +24,14 @@ The candidate evaluator rejected duplicate case identities even when categories 
 
 ## Limits and remaining work
 
+The record experiment `node scripts/trial-quality-records.mjs` completed 26 candidate checks, recorded in `.tmp/quality-records-1793548241545.json`. Checks cover matching and mismatched exception scopes, proposed/blank/stale exceptions, preservation of execution failures, accepted and unaccepted retirement declarations, shared-test removal, retained assertions, input changes/deletions, and ineffective failure classifications.
+
+One deliberate control confirms a limit: changing an undeclared helper does not invalidate a hash-bound review. Another confirms that editing review prose does not cause a self-hash cycle. These findings informed the [record contract](../../openspec/changes/test-quality-and-lifecycle/record-contract.md), which requires relevant inputs and explicit review of dependency completeness.
+
 A follow-up run of `node scripts/trial-quality-compatibility.mjs` completed nine checks against the actual alpha checker on Windows with Node v24.0.0. The raw record is `.tmp/quality-compatibility-1793547753988.json`. Build the package with `npm run build` before rerunning it.
 
 The current parser accepts an original version-1 report and additive `caseId`/`coverage` fields. It still rejects duplicate scenario/test names even when case IDs differ, failed tests, stale evidence, missing test types, and report version 2. Future configuration keys remain rejected. Evidence opt-out still permits a missing report. This supports extending version 1 additively while retaining existing validation; accepting additional fields does not mean the alpha checks their meaning.
 
-Candidate policy checks in the first script exercise a small experimental model. The follow-up establishes the existing parser's behavior, but future-policy migration is unimplemented. Neither script validates accepted retirement authority, exception records, review freshness, or completeness of impact analysis. Those checks and exact record formats remain outstanding in [the change tasks](../../openspec/changes/test-quality-and-lifecycle/tasks.md).
+Candidate policy and record checks exercise small experimental models. The compatibility script establishes the existing parser's behavior; future-policy migration remains unimplemented. The record experiment checks selected declaration and hash rules, not a complete YAML validator or authenticated retirement authority. Actual Git-input capture, required-path completeness, and full contract validation remain implementation work in [the change tasks](../../openspec/changes/test-quality-and-lifecycle/tasks.md).
 
 Distinct identities cannot prove meaningfully distinct cases. The lifecycle experiment demonstrates test behavior after a controlled change; deciding that the requirement may be retired remains a separate review. No independent fresh-agent trial was run.

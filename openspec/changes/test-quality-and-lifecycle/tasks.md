@@ -2,10 +2,11 @@
 
 ## 1. Review and trial gate
 
-- [ ] 1.1 Review the proposal, policy defaults, exceptions, and Decision 017.
+- [x] 1.1 Record the approved direction in Decision 017 and prepare the proposal; detailed defaults and formats require the review in task 1.5.
 - [x] 1.2 Trial a missing negative test, ineffective assertion, changed expected behavior, and retired criterion in disposable fixtures. Include valid controls; record actual observations and failure causes. See [the design trial](../../../docs/testing/test-quality-trial.md): 18 executions and 21 candidate policy checks; product compatibility and record validation remain outstanding.
-- [ ] 1.3 Exercise duplicates, multiple distinct cases, shared-test retirement, refactoring, independent policy modes, evidence disabled, and old report compatibility. Separate mechanical findings from semantic review.
-- [ ] 1.4 Revise the design and Decision 017 from findings. Define exact record schemas, identities, freshness inputs, diagnostics, and report compatibility; obtain agreement before runtime implementation.
+- [x] 1.3 Exercise duplicates, multiple distinct cases, shared-test retirement, refactoring, independent policy modes, evidence disabled, and old report compatibility. Candidate checks cover future policy rules; nine checks against the existing product establish current parser behavior. See the trial report for limits.
+- [x] 1.4 Revise the design and Decision 017 from findings. Define the proposed record fields, identities, freshness inputs, diagnostics, and report compatibility in [the record contract](record-contract.md).
+- [ ] 1.5 Review the concrete policy defaults and record contract and obtain agreement before runtime implementation. Review especially scoped exceptions, declared-input freshness limits, and the need to refresh the permanent-spec review after archive.
 
 ## 2. Implementation after agreement
 

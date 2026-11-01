@@ -17,7 +17,7 @@ The [change design](../../openspec/changes/test-quality-and-lifecycle/design.md)
 
 ## Consequences
 
-The [first design trial](../testing/test-quality-trial.md) exercises controlled defects and test maintenance. It supports keeping execution, coverage declarations, and semantic review distinct; it does not establish product enforcement or report compatibility.
+The [design trials](../testing/test-quality-trial.md) exercise controlled defects, test maintenance, and existing report compatibility. Candidate-record checks reinforce the limits of scoped exceptions and declared-input freshness; they do not establish future product enforcement or authenticate retirement approval. The [proposed record contract](../../openspec/changes/test-quality-and-lifecycle/record-contract.md) makes those boundaries concrete for review before implementation.
 
 This extends [Decision 008: Treat evidence as core without overstating what it proves](008-evidence-is-core-and-has-explicit-limits.md). It preserves [Decision 003: Use familiar test types and preserve project definitions](003-project-defined-test-types.md) and [Decision 005: Let capabilities own persistent AC sequences](005-capability-owned-ac-identities.md).
 

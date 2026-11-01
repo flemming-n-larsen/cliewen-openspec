@@ -23,7 +23,7 @@ Deliver these as separate changes with explicit acceptance criteria. The first r
 
 The immediate next task is the proposal in priority 1. Use the trials in priority 2 to refine its design before implementation. Maintain affected guides with every increment; priority 3 adds observed user testing. Optional learnings and Humanizer detection do not block the first release.
 
-Priority 1 is in progress: the [test quality and lifecycle proposal](openspec/changes/test-quality-and-lifecycle/proposal.md) includes draft requirements, design, and tasks. [Decision 017: Separate test coverage, effectiveness, and lifecycle review](docs/decisions/017-test-quality-and-lifecycle.md) is accepted. Trial execution, detailed design acceptance, and runtime implementation are outstanding.
+The [test quality and lifecycle proposal](openspec/changes/test-quality-and-lifecycle/proposal.md) now includes requirements, bounded trial findings, and a [concrete record contract](openspec/changes/test-quality-and-lifecycle/record-contract.md). [Decision 017: Separate test coverage, effectiveness, and lifecycle review](docs/decisions/017-test-quality-and-lifecycle.md) is accepted. The existing checker passed nine compatibility probes; prototype record rules passed 26 checks. Detailed design acceptance and runtime implementation remain outstanding; these trials do not certify future enforcement.
 
 Bug and idea forms and reporting links are already published. Maintain the feedback path alongside this work; documenting maintainer triage remains outstanding.
 

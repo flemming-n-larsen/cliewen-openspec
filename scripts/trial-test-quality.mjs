@@ -21,12 +21,15 @@ const makeTest = (name, body) => `import {test} from 'node:test';\nimport assert
 function run(name, source, tests, expected) {
   fs.writeFileSync(path.join(root, 'count.mjs'), source);
   fs.writeFileSync(path.join(root, 'count.test.mjs'), tests);
-  const run = spawnSync(process.execPath, ['--test', '--test-reporter=tap', 'count.test.mjs'], {cwd: root, encoding: 'utf8'});
-  if (run.error) throw run.error;
-  result.executions.push({name, source, tests, sourceHash: digest(source), testHash: digest(tests), command: [process.execPath, '--test', '--test-reporter=tap', 'count.test.mjs'], exitCode: run.status, stdout: run.stdout, stderr: run.stderr});
-  assert.equal(run.status, expected, `${name}: unexpected test outcome`);
-  fs.writeFileSync(path.join(root, 'count.mjs'), original);
-  assert.equal(digest(fs.readFileSync(path.join(root, 'count.mjs'), 'utf8')), digest(original));
+  try {
+    const run = spawnSync(process.execPath, ['--test', '--test-reporter=tap', 'count.test.mjs'], {cwd: root, encoding: 'utf8', timeout: 30000});
+    if (run.error) throw run.error;
+    result.executions.push({name, source, tests, sourceHash: digest(source), testHash: digest(tests), command: [process.execPath, '--test', '--test-reporter=tap', 'count.test.mjs'], exitCode: run.status, stdout: run.stdout, stderr: run.stderr});
+    assert.equal(run.status, expected, `${name}: unexpected test outcome`);
+  } finally {
+    fs.writeFileSync(path.join(root, 'count.mjs'), original);
+    assert.equal(digest(fs.readFileSync(path.join(root, 'count.mjs'), 'utf8')), digest(original));
+  }
 }
 const positive = makeTest('parses one', "assert.equal(count('1'), 1)");
 const negative = makeTest('rejects trailing characters', "assert.throws(() => count('1x'), /invalid count/)");
