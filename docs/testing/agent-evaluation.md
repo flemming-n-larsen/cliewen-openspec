@@ -58,6 +58,10 @@ The flexible and end-of-change delivery variants, targeted discovery outcomes, a
 
 ## Assess and report
 
+The separate [first-use guide exercise](guide-walkthrough/README.md) runs fresh Codex CLI, Claude Code, and OpenCode sessions, then asks for missing information and a retrospective only after each attempt. [Result 001: Claude first-use walkthrough and retrospective](guide-walkthrough/result-001.md) records the initial findings; [Result 002: Three-agent guide walkthroughs and reviews](guide-walkthrough/result-002.md) records equivalent revised-guide inputs and independent checks for all three. These prepared-example observations are not delivery/discovery/combined release-profile passes.
+
+[Decision 018: Exercise guides with fresh coding-agent sessions](../decisions/018-agent-guide-walkthroughs.md) requires recurring guide checks: one rotating agent for changed journeys during development, and all three representative CLIs for affected journeys at release or after substantial restructuring. All three guide adapters are implemented. Human first-use testing, agent-authored work, and recovery paths remain outside the observed guide coverage.
+
 For 0.2, add fresh-agent delivery and combined cases exercising missing negative coverage, relevant versus setup failures, a reviewed scoped exception, changed behavior, and partial/full criterion retirement. Check that agents preserve active shared assertions and refresh reviews after inspected inputs or archive scope change. `test/quality.test.mjs` supplies deterministic controls; passing those controls does not complete the planned `delivery-quality-and-retirement` or `combined-quality-and-retirement` agent evaluations.
 
 Score planning and final outcomes separately. Check readability, explained references, useful diagrams, scope, preserved project authorities, and the quality of evidence. For delivery, independently test the implementation, review task boundaries and type matching, and inspect actual red/green observations when TDD is configured. For discovery, review sources, experiment limits, uncertainty, proposed status, and the reasoning behind any handoff or no-change outcome.

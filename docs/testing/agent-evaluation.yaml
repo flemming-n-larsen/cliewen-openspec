@@ -51,6 +51,57 @@ profiles:
       tokenLimit: null
       billing: existing subscription; CLI list-equivalent cost is not an invoice
     traceFormat: Claude stream-json with verbose events plus stderr
+  claude-guide-walkthrough:
+    readiness: pinned
+    agent: Claude Code
+    runner: cli
+    model: claude-opus-5-5
+    agentVersion: 2.1.316
+    provider: Anthropic firstParty; existing claude.ai Pro authentication
+    effort: medium
+    permissions: dontAsk with local read/edit/write/shell tools; no extra agents or web tools; no OS isolation
+    context: fresh UUID with safe mode; only the retrospective resumes this trial's persisted session
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: 2
+      tokenLimit: null
+      billing: per phase; existing subscription; reported list-equivalent cost is not an invoice
+    traceFormat: Claude stream-json with verbose events plus stderr
+  codex-guide-walkthrough:
+    readiness: pinned
+    agent: Codex CLI
+    runner: cli
+    model: gpt-6.1-sol
+    agentVersion: 0.166.0
+    provider: openai; existing ChatGPT CLI authentication
+    effort: medium
+    permissions: local shell with approval never; multi_agent disabled; project scope is instructional, not OS isolation
+    context: new ephemeral process; user config and rules ignored; retrospective receives only this trial's saved observations; managed/global instructions may remain
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: null
+      tokenLimit: null
+      billing: existing ChatGPT entitlement; cost and hard token cap unavailable
+    traceFormat: codex exec --json JSONL plus stderr; model identity may not be exposed
+  opencode-guide-walkthrough:
+    readiness: pinned
+    agent: OpenCode
+    runner: cli
+    model: opencode/glm-5.3-flash
+    agentVersion: 2.2.5
+    provider: OpenCode Console/Zen; existing local credentials; only opencode provider allowed
+    effort: high
+    permissions: local tools with V2 permissions/policies; deny other agents, MCP, external plugins, and external directories; no OS isolation
+    context: fresh standalone server/private config per phase; project/Claude config disabled; retrospective receives this trial's saved observations; system/Console settings may remain
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: 0.5
+      tokenLimit: null
+      billing: local reported-cost stop per phase; may overshoot; not a provider-enforced spending cap
+    traceFormat: opencode run --standalone --format json; provider/model#variant
   opencode-primary:
     readiness: pinned
     agent: OpenCode

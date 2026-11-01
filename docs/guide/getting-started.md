@@ -9,7 +9,7 @@ This guide takes a small CSV exporter from a new project to archived OpenSpec sp
 
 The alpha is available on npm: existing projects can install it with `npm install --save-dev cliewen-openspec@0.1.0-alpha.1`. Use this explicit version or `@alpha`, because npm's `latest` tag currently points to a staging placeholder. This worked example builds the development source, currently `0.2.0-alpha.1`, and uses its prepared CSV files. That development version is not published.
 
-Clone the source repository, then run these commands inside it:
+From an empty parent directory, clone the source repository and build the package:
 
 ```sh
 git clone https://github.com/flemming-n-larsen/cliewen-openspec.git
@@ -33,27 +33,32 @@ git init -b main
 npm init -y
 npm install --save-dev @fission-ai/openspec@1.15.0
 npm install --save-dev ../cliewen-openspec/cliewen-openspec-0.2.0-alpha.1.tgz
+node -e "require('node:fs').writeFileSync('.gitignore', 'node_modules/\n')"
 ```
 
-Create `.gitignore` containing `node_modules/` before committing. Initialize OpenSpec without agent integrations for the reproducible example:
+The last command creates `.gitignore` for this new pilot, excluding installed dependencies from commits. Initialize OpenSpec without agent integrations for the reproducible example:
 
 ```sh
 npx --no-install openspec init --tools none --no-animation
-npx --no-install cliewen-openspec init --dry-run
+npx --no-install cliewen-openspec init --default --dry-run
 npx --no-install cliewen-openspec init --default
+git add .
+git commit -m "Install OpenSpec and Cliewen"
 ```
 
 `npx --no-install` runs the locally installed command. OpenSpec creates the change/spec structure. Cliewen's dry run lists proposed writes. Its `init` installs the delivery, discovery, and combined schemas, the DR template, project configuration, a documentation entry point, and an ownership manifest. `--default` sets `schema: cliewen-delivery` in `openspec/config.yaml`; omit it to preserve your current default.
+
+Both Cliewen commands select the same default, so the preview includes that configuration change. The commit records installation separately from the feature you will implement next.
 
 For agent-authored work, select your agent during OpenSpec initialization instead of `--tools none`. See [agent setup](existing-projects.md#coding-agents).
 
 ## 3. Configure acceptance IDs
 
-Add these settings to `.cliewen-openspec/config.yaml`. Keep the other generated settings:
+Edit `.cliewen-openspec/config.yaml`: under the existing `ac:` section, replace `capabilities: {}` with the `csv-export: EXP` mapping shown below. Merge these values into the existing sections; do not append duplicate `ac:` or `testing:` keys. Keep other generated settings:
 
 {{include:docs/examples/csv/config.yaml}}
 
-`csv-export` is the capability name and will also be its specs directory name. `EXP` is a prefix chosen for that capability. The settings explicitly show the default test placement and approach; you can omit them to keep those defaults.
+`csv-export` is the capability name and will also be its specs directory name. `EXP` is a prefix chosen for that capability. The generated file already has `padding: 3`, `placement: per-task`, and `approach: flexible`; leave those defaults in place for this exercise.
 
 Start the change and allocate its six scenario IDs:
 
@@ -86,12 +91,19 @@ node ../cliewen-openspec/scripts/copy-csv-example.mjs implementation
 node --test test/export.test.mjs
 ```
 
-The six tagged tests cover headers, explicit column order, commas, quotation marks, line breaks, and an empty record list. Inspect the [CSV code and tests](csv-example.md) to see exactly what they assert. Copying finished files does not exercise an agent or demonstrate TDD.
+Expect six passing tests and no failures. They cover headers, explicit column order, commas, quotation marks, line breaks, and an empty record list. Inspect the [CSV code and tests](csv-example.md) to see exactly what they assert. Copying finished files does not exercise an agent or demonstrate TDD.
 
-Once the tests pass and you have reviewed the code and assertions, mark the implementation tasks complete. With the prepared example, the last helper mode checks the expected files and marks its task list complete:
+Once the tests pass and you have reviewed the code and assertions, mark the implementation tasks complete. With the prepared example, the last helper mode checks the expected files and marks its task list complete.
+
+Stop and read `export.mjs` and `test/export.test.mjs`. Compare the assertions with the six scenarios in `openspec/changes/add-csv-export/specs/csv-export/spec.md` before running the completion helper.
 
 ```sh
 node ../cliewen-openspec/scripts/copy-csv-example.mjs complete
+```
+
+Commit the reviewed implementation:
+
+```sh
 git add .
 git commit -m "Implement CSV export"
 ```
@@ -100,14 +112,18 @@ The helper is for this known reference example, not a general task validator. It
 
 ## 6. Collect evidence
 
+Collect from a clean, committed tree: `git status --porcelain` should print nothing. Keep any collection logs outside the pilot or in an ignored directory.
+
 ```sh
 node node_modules/cliewen-openspec/adapters/node-test.mjs --change add-csv-export test/export.test.mjs
 npx --no-install cliewen-openspec check --change add-csv-export --json
 ```
 
-The adapter runs every test in the file again and writes an ignored report for the current Git revision, scoped to `add-csv-export`. Failures outside the selected change still block verification. The check should return `"ok": true` and an informational `sufficiency-not-assessed` finding. That finding is expected: you review the assertions; the CLI checks execution and references. If the check fails, use [evidence troubleshooting](../testing/evidence.md#troubleshooting).
+The adapter runs every test in the file again and writes an ignored report for the current Git revision, scoped to `add-csv-export`. Failures outside the selected change still block verification.
 
-The unchanged reference example demonstrates execution evidence. Development source for 0.2 also warns about its missing case tags and quality review records. Those warnings do not block the default review mode. Follow [test quality and lifecycle](../testing/test-quality.md) to add the assessments or disable the individual policies for this exercise. The published 0.1 alpha does not produce these new findings.
+With the development 0.2 package and unchanged reference example, expect exit 0 and `"ok": true` alongside warnings about missing case tags, unmet case minimums, and missing review records. The informational findings `sufficiency-not-assessed` and `test-policy-review-required` remind you to review assertion quality. `ok` means no blocking finding; it does not establish that the tests are sufficient.
+
+These advisory warnings do not prevent continuing this exercise after reviewing the code and assertions. Follow [test quality and lifecycle](../testing/test-quality.md) to add assessments or disable individual policies. The published 0.1 alpha does not produce the new policy findings. If a check fails, use [evidence troubleshooting](../testing/evidence.md#troubleshooting).
 
 ## 7. Archive and refresh evidence
 
@@ -122,5 +138,15 @@ npx --no-install cliewen-openspec check --json
 ```
 
 OpenSpec merges the delta into `openspec/specs/csv-export/spec.md` and moves the change into its archive. Its scenario IDs survive. Archive changes the Git revision, so the previous report becomes stale. The last two commands regenerate evidence and check the permanent specs.
+
+`--yes` skips archive confirmation prompts; it does not replace your review. After archive, omit `--change` because the scenarios now belong to permanent specs. The same advisory quality warnings remain until assessed, now using `.cliewen-openspec/reviews/specs.yaml` for review records.
+
+```mermaid
+flowchart TB
+  A["Commit implementation"] --> B["Collect and check change evidence"]
+  B --> C["Review and archive"]
+  C --> D["Commit archived specs: old report is stale"]
+  D --> E["Recollect and check permanent evidence"]
+```
 
 You now have the implementation, tests, permanent behavior specs, and a fresh evidence report. For the next change, allocate new IDs for new scenarios and preserve IDs for existing behavior.

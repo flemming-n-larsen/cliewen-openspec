@@ -7,6 +7,7 @@ import { JSDOM } from 'jsdom';
 import { parse, stringify } from 'yaml';
 import { defaults } from '../dist/core.js';
 import { pages as mainPages } from '../site/pages.mjs';
+import {expandDocumentation} from './lib/doc-includes.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = path.join(root, 'site-dist');
@@ -16,14 +17,7 @@ const strip = s => s.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
 const pages = mainPages;
 const bySource = new Map(pages.map(p => [p.source, p.output]));
 const md = new MarkdownIt();
-function expand(text) {
-  return text.replace(/\{\{include:([^}]+)\}\}/g, (_, source) => {
-    if (!/^docs\/examples\/csv\/[\w./-]+$/.test(source) || source.includes('..')) throw Error(`Invalid include ${source}`);
-    const content = read(source);
-    if (source.endsWith('.md')) return strip(content).replace(/^# .+\r?\n/, '');
-    return `\n\`\`\`${source.endsWith('.yaml') ? 'yaml' : 'js'}\n${content.trimEnd()}\n\`\`\`\n`;
-  });
-}
+const expand = text => expandDocumentation(text, read);
 
 const config = read('docs/configuration.md').match(/<!-- defaults -->\s*```yaml\r?\n([\s\S]*?)```/);
 if (!config) throw Error('Missing documented defaults');
