@@ -20,3 +20,5 @@ Offer `approach: tdd`, requiring `placement: per-task`. Each implementation task
 Final regression and committed-revision evidence collection remain necessary in either approach. This changes task planning and implementation instructions, not OpenSpec spec syntax. Configuration rejects contradictory settings; the CLI does not enforce historical execution order or prove TDD from a final passing report.
 
 The current source implements this configuration and guidance. The CSV pilot exercised the workflow; one pilot is bounded feedback, not evidence that all agents follow it. See [configuration](../configuration.md#test-driven-development) and [the evidence boundary](008-evidence-is-core-and-has-explicit-limits.md).
+
+[013: Enforce TDD for behavior changes with explicit task exceptions](013-tdd-enforcement-and-task-exceptions.md) extends this decision with per-task exceptions and staged enforcement when TDD is selected. The defaults above remain unchanged.
