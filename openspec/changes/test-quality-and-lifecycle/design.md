@@ -43,7 +43,9 @@ Effectiveness records identify the scenario, cases, inspected assertion, control
 
 Use committed change-local review records and generated ignored execution evidence. Bind review claims to inspected input hashes, avoiding a committed record that must contain its own commit hash. Relevant input changes invalidate review claims; every later commit still requires fresh execution evidence under the current contract.
 
-Finalize exact record fields, identity encoding, diagnostics, and report-version handling after trials and before implementation. Version-1 reports remain usable with these policies off; stricter policies request recollection or missing review records explicitly. Multi-scenario adapter export is deferred; lifecycle review must still preserve shared-test obligations.
+Extend report version 1 with optional `caseId` and `coverage` result fields. The [compatibility trial](../../../docs/testing/test-quality-trial.md#limits-and-remaining-work) confirmed that the existing checker accepts these fields while retaining its execution and identity checks; it rejects version 2. Keep scenario/test-name pairs unique even when case IDs differ. New checks must validate the added fields rather than relying on the old parser's tolerance.
+
+Finalize exact review-record fields, identity encoding, and diagnostics before implementation. Version-1 reports without case metadata remain usable with these policies off; stricter policies request recollection or missing review records explicitly. Multi-scenario adapter export is deferred; lifecycle review must still preserve shared-test obligations.
 
 ### Lifecycle
 

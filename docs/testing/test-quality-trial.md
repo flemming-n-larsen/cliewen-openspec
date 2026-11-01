@@ -24,6 +24,10 @@ The candidate evaluator rejected duplicate case identities even when categories 
 
 ## Limits and remaining work
 
-Candidate policy checks exercise a small experimental model, not the product CLI. Its old-report cases model missing metadata; they do not run the existing report parser or prove migration compatibility. The script does not validate accepted retirement authority, exception records, review freshness, or completeness of impact analysis. Those checks and exact record formats remain outstanding in [the change tasks](../../openspec/changes/test-quality-and-lifecycle/tasks.md).
+A follow-up run of `node scripts/trial-quality-compatibility.mjs` completed nine checks against the actual alpha checker on Windows with Node v24.0.0. The raw record is `.tmp/quality-compatibility-1793547753988.json`. Build the package with `npm run build` before rerunning it.
+
+The current parser accepts an original version-1 report and additive `caseId`/`coverage` fields. It still rejects duplicate scenario/test names even when case IDs differ, failed tests, stale evidence, missing test types, and report version 2. Future configuration keys remain rejected. Evidence opt-out still permits a missing report. This supports extending version 1 additively while retaining existing validation; accepting additional fields does not mean the alpha checks their meaning.
+
+Candidate policy checks in the first script exercise a small experimental model. The follow-up establishes the existing parser's behavior, but future-policy migration is unimplemented. Neither script validates accepted retirement authority, exception records, review freshness, or completeness of impact analysis. Those checks and exact record formats remain outstanding in [the change tasks](../../openspec/changes/test-quality-and-lifecycle/tasks.md).
 
 Distinct identities cannot prove meaningfully distinct cases. The lifecycle experiment demonstrates test behavior after a controlled change; deciding that the requirement may be retired remains a separate review. No independent fresh-agent trial was run.

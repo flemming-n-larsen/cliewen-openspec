@@ -1,7 +1,9 @@
 # Organization logo
 
-Use `github-avatar.svg` for scalable web and documentation artwork. It contains three vector paths with flat dark, white, and green fills. Its shapes were traced from the generated PNG with VTracer; the original texture and color variation were simplified. The SVG was rendered and visually checked.
+The organization logo uses a white C around a separate light-blue document with a green check mark. A dark gap keeps the shapes distinct at small sizes.
 
-Use `github-avatar.jpg` for the GitHub organization avatar. It retains the original 1254 × 1254 dimensions and is 143,042 bytes, below the 1 MB upload limit encountered during setup.
+Use `github-avatar.svg` as the editable source for web and documentation artwork. It is a hand-authored vector image. The rendered design was visually checked at 128 pixels wide.
 
-`github-avatar.png` is the original imagegen output. Its generation prompt is preserved in `github-avatar.prompt.txt`. Keep the raster original when making future variants.
+Use `github-avatar.png` for the GitHub organization avatar. It is 1024 × 1024 pixels and 33,027 bytes, below the 1 MB upload limit. `github-avatar.jpg` is an alternative export at the same dimensions, measuring 47,541 bytes.
+
+Make future edits in the SVG and regenerate the raster exports from it.
