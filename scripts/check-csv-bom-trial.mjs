@@ -24,7 +24,9 @@ const normalize = text => text.replaceAll('\r\n', '\n');
 for (const file of ['test/export.test.mjs', 'openspec/specs/csv-export/spec.md']) {
   const original = git('show', `${baseline.baseline}:${file}`);
   const current = fs.readFileSync(path.join(root, file), 'utf8');
-  checks.push({label: `baseline preserved: ${file}`, passed: original.status === 0 && normalize(current).startsWith(normalize(original.stdout))});
+  const changes = file.startsWith('test/') ? git('diff', '--numstat', baseline.baseline, '--', file) : undefined;
+  const noRemovedLines = changes?.status === 0 && (!changes.stdout.trim() || changes.stdout.trim().split('\t')[1] === '0');
+  checks.push({label: `baseline preserved: ${file}`, passed: original.status === 0 && (changes ? noRemovedLines : normalize(current) === normalize(original.stdout))});
 }
 run('all project tests', process.execPath, ['--test']);
 run('strict change validation', process.execPath, ['node_modules/@fission-ai/openspec/bin/openspec.js', 'validate', 'add-optional-csv-bom', '--type', 'change', '--strict']);
@@ -50,7 +52,7 @@ console.log('Independent opt-in, default, empty-input, escaping, CRLF, Unicode, 
 run('independent behavior assertions', process.execPath, ['--input-type=module', '-e', acceptance]);
 const instructions = schema === 'cliewen-all' ? ['proposal', 'investigation', 'decision', 'specs', 'tasks', 'apply'] : ['proposal', 'specs', 'design', 'tasks', 'apply'];
 for (const name of instructions) {
-  const passed = hasInstruction(root, name, schema, 'add-optional-csv-bom');
+  const passed = hasInstruction(root, name, schema, 'add-optional-csv-bom', {searchProject: schema === 'cliewen-all' && ['specs', 'tasks', 'apply'].includes(name)});
   checks.push({label: `saved ${name} instructions`, passed});
 }
 const passed = checks.every(c => c.passed !== false && (c.exitCode === undefined || c.exitCode === 0));

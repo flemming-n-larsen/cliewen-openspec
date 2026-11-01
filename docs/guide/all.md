@@ -46,13 +46,13 @@ outcome: delivery
 
 For `outcome: delivery`, keep native `skip_specs` absent or false in the change's `.openspec.yaml`. Write the behavior deltas using the decision's chosen approach. Then write small implementation tasks with their concrete tests, types, boundaries, and configured testing order. The defaults remain per-task and flexible; optional TDD is unchanged.
 
-The agent may prepare draft specs or tasks for review while the decision is proposed. Production implementation must wait for human agreement. Once agreed, record `status: accepted` and its source, then request apply instructions:
+The agent may prepare draft specs or tasks for review while the decision is proposed, with new acceptance IDs left unassigned. It must preserve product inputs, capability mappings, and the AC registry until human agreement is recorded. Then set `status: accepted` with its source and allocate IDs through the CLI before delivery. Request apply instructions:
 
 ```sh
 npx --no-install openspec instructions apply --change improve-export --json
 ```
 
-After implementation and a clean input commit, collect evidence for the same change:
+Finish implementation, documentation, task notes, and any PR draft, then commit the inputs and collect evidence for the same change:
 
 ```sh
 node node_modules/cliewen-openspec/adapters/node-test.mjs --change improve-export test/export.test.mjs
@@ -60,6 +60,8 @@ npx --no-install cliewen-openspec check --change improve-export --json
 ```
 
 Cliewen checks the decision fields and accepted status, then runs the ordinary delivery evidence checks. It rejects a delivery outcome with skipped specs. The CLI cannot determine who changed a status field or prevent code edits made outside its commands. Review the approval record and actual implementation.
+
+Any later commit, including documentation-only changes, requires recollection and another check on the final revision. See [evidence collection](../testing/evidence.md). Implementation agreement and a passing check do not authorize archive, push, or opening an external PR; follow the scope actually granted.
 
 ## Finish without product changes
 

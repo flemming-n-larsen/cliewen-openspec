@@ -18,6 +18,10 @@ node node_modules/cliewen-openspec/adapters/node-test.mjs --change add-export te
 cliewen-openspec check --change add-export --json
 ```
 
+Finish README changes, task notes, results, and any PR draft before the final commit. Collect and check on that clean HEAD. A later commit makes the report stale even if it changes only documentation or metadata; collect and check again after that commit. Keep collection logs outside tracked/untracked inputs, such as a project-local ignored directory.
+
+Report the final tested revision and check result in the terminal handoff or an ignored file. A tracked record can describe an earlier tested revision, labeled as historical. Writing the latest revision into that record and committing it creates another revision that needs fresh evidence.
+
 Tests use titles such as `exports rows [EXPORT-001] [Test-type: Unit]`. The reference adapter supports one AC tag and requires exactly one configured test-type tag per mapped test title. It records the declared type, real Node TAP results, and the runner exit code, so failures outside mapped tests also block the check. Reports must be Git-ignored and untracked. The adapter rejects dirty input revisions and changes during execution, and invalidates older evidence when a new run starts. A crash cannot leave an earlier passing report usable.
 
 ```json

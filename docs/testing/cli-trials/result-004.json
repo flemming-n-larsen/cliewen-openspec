@@ -1,0 +1,98 @@
+{
+  "capturedAt": "2026-11-01T09:03:30.975Z",
+  "rawArtifacts": ".tmp/agent-trials/cli-evaluation-004",
+  "releaseReady": false,
+  "cases": [
+    {
+      "schema": "cliewen-delivery",
+      "profile": "opencode-2-2-5",
+      "outcome": "incomplete",
+      "reason": "Execution was interrupted; no endedAt or exit status was recorded. Partial artifacts and traces are retained without a pass/fail grade.",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:26:54.192Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "8912e45ed055374d096252d704c508f3d8888f1d",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-delivery\\project"
+      },
+      "revision": "8912e45ed055374d096252d704c508f3d8888f1d",
+      "workingTreeStatus": "M .cliewen-openspec/ac-registry.json\n?? docs/testing/instructions/design.json\n?? docs/testing/instructions/proposal.json\n?? docs/testing/instructions/specs.json\n?? docs/testing/instructions/tasks.json\n?? openspec/changes/add-optional-csv-bom/.openspec.yaml\n?? openspec/changes/add-optional-csv-bom/design.md\n?? openspec/changes/add-optional-csv-bom/proposal.md\n?? openspec/changes/add-optional-csv-bom/specs/csv-export/spec.md\n?? openspec/changes/add-optional-csv-bom/tasks.md",
+      "cliVersion": "opencode v2.2.5",
+      "requestedModel": "opencode/glm-5.3-flash",
+      "effort": "high",
+      "startedAt": "2026-10-31T23:40:47.760Z",
+      "lastEvent": "step_start",
+      "lastEventTimestamp": 1793490103569,
+      "artifacts": ".tmp/agent-trials/cli-evaluation-004/cliewen-delivery"
+    },
+    {
+      "schema": "cliewen-discovery",
+      "profile": "opencode-2-2-5",
+      "outcome": "incomplete",
+      "reason": "Execution was interrupted; no endedAt or exit status was recorded. Partial artifacts and traces are retained without a pass/fail grade.",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:07.805Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-discovery\\project",
+        "fixture": "csv-streaming-discovery",
+        "preparationBaseline": "2a47879f6be511227ffeaaef331c26ec3df564b6"
+      },
+      "revision": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+      "workingTreeStatus": "?? docs/testing/instructions/apply.json\n?? docs/testing/instructions/decision.json\n?? docs/testing/instructions/investigation.json\n?? docs/testing/instructions/proposal.json\n?? openspec/changes/investigate-csv-streaming/.openspec.yaml\n?? openspec/changes/investigate-csv-streaming/README.md",
+      "cliVersion": "opencode v2.2.5",
+      "requestedModel": "opencode/glm-5.3-flash",
+      "effort": "high",
+      "startedAt": "2026-10-31T23:41:06.821Z",
+      "lastEvent": "step_start",
+      "lastEventTimestamp": 1793490104352,
+      "artifacts": ".tmp/agent-trials/cli-evaluation-004/cliewen-discovery"
+    },
+    {
+      "schema": "cliewen-all",
+      "profile": "opencode-2-2-5",
+      "outcome": "incomplete",
+      "reason": "Execution was interrupted; no endedAt or exit status was recorded. Partial artifacts and traces are retained without a pass/fail grade.",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:21.556Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-all\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "a55694593a6b9a6466ab9df5539e38a8e9b4393a"
+      },
+      "revision": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+      "workingTreeStatus": "?? docs/testing/instructions/decision.json\n?? docs/testing/instructions/investigation.json\n?? docs/testing/instructions/proposal.json\n?? openspec/changes/add-optional-csv-bom/.openspec.yaml",
+      "cliVersion": "opencode v2.2.5",
+      "requestedModel": "opencode/glm-5.3-flash",
+      "effort": "high",
+      "startedAt": "2026-10-31T23:41:17.646Z",
+      "lastEvent": "step_start",
+      "lastEventTimestamp": 1793490102656,
+      "artifacts": ".tmp/agent-trials/cli-evaluation-004/cliewen-all"
+    }
+  ]
+}

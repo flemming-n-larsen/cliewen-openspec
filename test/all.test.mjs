@@ -11,7 +11,7 @@ const project = fileURLToPath(new URL('../', import.meta.url));
 test('packed all workflow closes without delivery and delivers with approval and real evidence', {timeout: 120000}, t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cliewen-all-'));
   t.after(() => fs.rmSync(root, {recursive: true, force: true}));
-  const env = {...process.env, OPENSPEC_TELEMETRY: '0', CI: '1'}; delete env.NODE_TEST_CONTEXT;
+  const env = {...process.env, OPENSPEC_TELEMETRY: '0', CI: '1', npm_config_cache: path.join(root, 'node_modules/.cache/npm')}; delete env.NODE_TEST_CONTEXT;
   const run = (exe, args, expected = 0, cwd = root) => {
     const r = spawnSync(exe, args, {cwd, env, encoding: 'utf8', timeout: 60000});
     assert.equal(r.status, expected, `${args.join(' ')}\n${r.stdout}\n${r.stderr}`); return r.stdout.trim();
@@ -35,6 +35,9 @@ test('packed all workflow closes without delivery and delivers with approval and
   const decision = (name, outcome, status = 'proposed') => write(`openspec/changes/${name}/decision.md`, `---\ntype: decision\nstatus: ${status}\noutcome: ${outcome}\n---\n# Chosen approach\nFixture recommendation. Accepted status simulates human approval for this deterministic test only.\n`);
   const start = name => {
     ospec('new', 'change', name, '--schema', 'cliewen-all');
+    const firstInstructions = JSON.parse(ospec('instructions', 'proposal', '--change', name, '--json'));
+    assert.match(firstInstructions.instruction, /Do not allocate new acceptance IDs or register mappings, even for drafts/);
+    assert.match(firstInstructions.instruction, /do not reset counters or claim the stage passed/);
     const before = cl(['check', '--change', name, '--json'], 1);
     assert.ok(before.findings.some(f => f.code === 'all-decision-required'));
     write(`openspec/changes/${name}/proposal.md`, '# Proposal\n\n## Why\nCallers need an explicit encoding choice.\n\n## What Changes\nInvestigate an optional marker.\n\n## Capabilities\n### New Capabilities\n- export: CSV export\n\n## Impact\nReview formatter behavior.\n');
@@ -61,11 +64,25 @@ test('packed all workflow closes without delivery and delivers with approval and
   assert.deepEqual(fs.readdirSync(path.join(root, 'openspec/specs')).filter(n => n !== '.gitkeep'), []);
   const name = 'deliver-marker'; start(name); decision(name, 'delivery');
   assert.ok(cl(['check', '--change', name, '--json'], 1).findings.some(f => f.code === 'all-decision-unaccepted'));
+  const registryPath = path.join(root, '.cliewen-openspec/ac-registry.json');
+  const registryBeforeReview = fs.existsSync(registryPath) ? fs.readFileSync(registryPath, 'utf8') : null;
+  const configBeforeReview = fs.readFileSync(path.join(root, '.cliewen-openspec/config.yaml'), 'utf8');
+  const pendingSpecs = JSON.parse(ospec('instructions', 'specs', '--change', name, '--json'));
+  const phaseGate = pendingSpecs.instruction.indexOf('Until real human agreement');
+  const allocation = pendingSpecs.instruction.indexOf('Register new capability mappings');
+  assert.ok(phaseGate >= 0 && allocation > phaseGate, 'Combined approval gate must precede shared allocation guidance');
+  assert.match(pendingSpecs.instruction, /leave draft IDs unassigned/);
+  const pendingDecision = JSON.parse(ospec('instructions', 'decision', '--change', name, '--json'));
+  assert.match(pendingDecision.instruction, /Implementation approval does not authorize archive/);
+  assert.match(pendingDecision.instruction, /Check documented defaults, allowed inputs, and examples/);
+  assert.equal(fs.existsSync(registryPath) ? fs.readFileSync(registryPath, 'utf8') : null, registryBeforeReview);
+  assert.equal(fs.readFileSync(path.join(root, '.cliewen-openspec/config.yaml'), 'utf8'), configBeforeReview);
   write('.cliewen-openspec/config.yaml', 'features:\n  evidence: false\n');
   assert.ok(cl(['check', '--change', name, '--json'], 1).findings.some(f => f.code === 'all-decision-unaccepted'));
+  decision(name, 'delivery', 'accepted');
   write('.cliewen-openspec/config.yaml', 'ac:\n  capabilities:\n    export: EXP\n');
   assert.equal(run(process.execPath, [cli, 'ac', 'next', '--capability', 'export']), 'EXP-001');
-  decision(name, 'delivery', 'accepted'); metadata(name, true);
+  metadata(name, true);
   assert.ok(cl(['check', '--change', name, '--json'], 1).findings.some(f => f.code === 'all-outcome-conflict'));
   metadata(name, false);
   write(`openspec/changes/${name}/specs/export/spec.md`, '# Export\n\n## Purpose\nLet callers request a UTF-8 encoding marker.\n\n## ADDED Requirements\n\n### Requirement: Optional marker\nThe function SHALL add a marker only when requested.\n\n#### Scenario: Request a marker [EXP-001]\nTest-type: Unit\n- **WHEN** the marker is requested\n- **THEN** output starts with U+FEFF\n');
@@ -77,6 +94,7 @@ test('packed all workflow closes without delivery and delivers with approval and
   fs.writeFileSync(tasksPath, completedTasks.replace('[x]', '[ ]'));
   const apply = JSON.parse(ospec('instructions', 'apply', '--change', name, '--json'));
   assert.match(apply.instruction, /production implementation requires status: accepted/);
+  assert.ok(apply.instruction.indexOf('read decision.md first') < apply.instruction.indexOf('Implement tasks'), 'Outcome gate precedes shared implementation guidance');
   fs.writeFileSync(tasksPath, completedTasks);
   assert.equal(JSON.parse(ospec('status', '--change', name, '--json')).isComplete, true);
   assert.equal(fs.existsSync(path.join(root, `openspec/changes/${name}/design.md`)), false);
@@ -86,6 +104,19 @@ test('packed all workflow closes without delivery and delivers with approval and
   run('git', ['add', '.']); run('git', ['commit', '-m', 'Combined workflow fixture']);
   const adapter = 'node_modules/cliewen-openspec/adapters/node-test.mjs';
   run(process.execPath, [adapter, '--change', name, 'test/export.test.mjs']);
+  assert.equal(cl(['check', '--change', name, '--json']).ok, true);
+  const testedRevision = JSON.parse(fs.readFileSync(path.join(root, '.cliewen-openspec/evidence.json'), 'utf8')).revision;
+  const productBeforeNotes = fs.readFileSync(path.join(root, 'export.mjs'), 'utf8');
+  const testsBeforeNotes = fs.readFileSync(path.join(root, 'test/export.test.mjs'), 'utf8');
+  write('README.md', '# Optional CSV marker\n\nUse csv(true) for a leading U+FEFF; the default has no marker.\n');
+  write(`openspec/changes/${name}/tasks.md`, completedTasks + '\nFinal assertion review recorded.\n');
+  run('git', ['add', '.']); run('git', ['commit', '-m', 'Record final documentation and task notes']);
+  assert.equal(fs.readFileSync(path.join(root, 'export.mjs'), 'utf8'), productBeforeNotes);
+  assert.equal(fs.readFileSync(path.join(root, 'test/export.test.mjs'), 'utf8'), testsBeforeNotes);
+  assert.notEqual(run('git', ['rev-parse', 'HEAD']), testedRevision);
+  assert.ok(cl(['check', '--change', name, '--json'], 1).findings.some(f => f.code === 'stale-evidence'), 'A documentation-only commit invalidates earlier evidence');
+  run(process.execPath, [adapter, '--change', name, 'test/export.test.mjs']);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, '.cliewen-openspec/evidence.json'), 'utf8')).revision, run('git', ['rev-parse', 'HEAD']));
   assert.equal(cl(['check', '--change', name, '--json']).ok, true);
   ospec('archive', name, '--yes');
   run('git', ['add', '.']); run('git', ['commit', '-m', 'Archive delivered behavior']);

@@ -8,4 +8,4 @@
 
 ## Workflow follow-up
 
-<!-- Delivery: collect revision-bound evidence before archive. No delivery: preserve skip_specs: true and review the recommendation before authorized archive --skip-specs. -->
+<!-- Delivery: finish authored files and commit, then collect and check on clean final HEAD; repeat after any later commit. Archive needs its own authorization. No delivery: preserve skip_specs: true and review the recommendation before authorized archive --skip-specs. -->

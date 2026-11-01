@@ -9,12 +9,17 @@ function jsonText(file) {
 }
 
 // Grade the response identity, not a filename the task never prescribed.
-export function hasInstruction(root, artifact, schema, change) {
-  const folder = path.join(root, 'docs/testing/instructions');
+export function hasInstruction(root, artifact, schema, change, {searchProject = false} = {}) {
+  const folder = searchProject ? root : path.join(root, 'docs/testing/instructions');
   if (!fs.existsSync(folder)) return false;
-  return fs.readdirSync(folder).filter(name => name.endsWith('.json')).some(name => {
+  const files = directory => fs.readdirSync(directory, {withFileTypes: true}).flatMap(entry => {
+    const file = path.join(directory, entry.name);
+    if (entry.isDirectory()) return ['node_modules', '.git'].includes(entry.name) ? [] : files(file);
+    return entry.isFile() && entry.name.toLowerCase().endsWith('.json') ? [file] : [];
+  });
+  return files(folder).some(file => {
     try {
-      const saved = JSON.parse(jsonText(path.join(folder, name)));
+      const saved = JSON.parse(jsonText(file));
       return saved.schemaName === schema && saved.changeName === change && typeof saved.instruction === 'string' && !!saved.instruction.trim()
         && (saved.artifactId === artifact || (artifact === 'apply' && saved.contextFiles && !saved.artifactId));
     } catch { return false; }

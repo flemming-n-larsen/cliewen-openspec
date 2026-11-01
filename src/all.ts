@@ -4,6 +4,7 @@ import {template, instruction, routing} from './schema-source.js';
 export function allFiles(): Record<string, string> {
   const base = 'openspec/schemas/cliewen-all/';
   const testing = instruction('base/instructions/testing-approach.md');
+  const approval = instruction('all/instructions/approval.md');
   const artifacts = [
     {id: 'proposal', generates: 'proposal.md', description: 'Question, intent, and limits', template: 'proposal.md', requires: []},
     {id: 'investigation', generates: 'investigation.md', description: 'Alternatives and observed evidence', template: 'investigation.md', requires: ['proposal']},
@@ -14,11 +15,11 @@ export function allFiles(): Record<string, string> {
     const shared = artifact.id === 'investigation' ? instruction('discovery/instructions/investigation.md')
       : artifact.id === 'specs' ? instruction('delivery/instructions/specs.md')
       : artifact.id === 'tasks' ? instruction('delivery/instructions/tasks.md').replace('${testingApproach}', testing) : '';
-    return {...artifact, instruction: [routing, shared, instruction(`all/instructions/${artifact.id}.md`)].filter(Boolean).join(' ')};
+    return {...artifact, instruction: [routing, approval, instruction(`all/instructions/${artifact.id}.md`), shared].filter(Boolean).join(' ')};
   });
   return {
     [base + 'schema.yaml']: stringify({name: 'cliewen-all', version: 1, description: 'Investigation through delivery or explicit no-delivery closure in one change', artifacts,
-      apply: {requires: ['tasks'], tracks: 'tasks.md', instruction: [routing, instruction('delivery/instructions/apply.md').replace('${testingApproach}', testing), instruction('all/instructions/apply.md')].join(' ')}}),
+      apply: {requires: ['tasks'], tracks: 'tasks.md', instruction: [routing, approval, instruction('all/instructions/apply.md'), instruction('delivery/instructions/apply.md').replace('${testingApproach}', testing)].join(' ')}}),
     [base + 'templates/proposal.md']: template('all/templates/proposal.md'),
     [base + 'templates/investigation.md']: template('discovery/templates/investigation.md'),
     [base + 'templates/decision.md']: template('all/templates/decision.md'),

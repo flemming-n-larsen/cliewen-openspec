@@ -1,0 +1,282 @@
+{
+  "capturedAt": "2026-10-31T23:07:28.825Z",
+  "suitePreparedAt": "2026-10-31T22:58:48.2152982Z",
+  "harnessRevision": "8a8d193f7e60cbe4fd3a4da12ce66ce75c9bdcb1",
+  "retryOf": "docs/testing/cli-trials/result-001.md",
+  "change": "Clarified project-local temporary helpers; original package, baseline, profile, and scenario prompts preserved",
+  "platform": "win32",
+  "node": "v24.0.0",
+  "rawArtifacts": ".tmp/agent-trials/cli-evaluation-002",
+  "releaseReady": false,
+  "cases": [
+    {
+      "schema": "cliewen-delivery",
+      "profile": "claude-code-primary",
+      "scenario": "csv-bom-tdd",
+      "outcome": "pass",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:26:54.192Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "8912e45ed055374d096252d704c508f3d8888f1d",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-delivery\\project"
+      },
+      "revision": "912d1b6986af441826d54af16e7b3b87689b727c",
+      "independentChecks": {
+        "passed": true,
+        "revision": "912d1b6986af441826d54af16e7b3b87689b727c"
+      },
+      "additionalBoundaryChecks": {
+        "passed": true,
+        "assertions": 8,
+        "cases": [
+          "strict opt-in",
+          "existing U+FEFF preserved in header and values",
+          "empty records",
+          "exact UTF-8 bytes"
+        ]
+      },
+      "manualReview": {
+        "outcome": "pass",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "reviewedAt": "2026-10-31T23:07:28.3796755Z",
+        "setup": "Fresh clone of the original per-schema baseline and package; pinned Claude Code 2.1.316, claude-opus-5-5, medium effort; no earlier solution supplied",
+        "scope": "Reviewed tool actions stayed inside the project; no shared system temporary helpers observed. This is trace review, not operating-system isolation.",
+        "instructions": "Required artifact/apply responses saved and correct identities verified by the independent checker",
+        "identity": "EXP-001 through EXP-006 and their test bodies preserved; EXP-007 through EXP-009 allocated through the CLI",
+        "tdd": "Raw trace shows an intended missing-BOM assertion failure before implementation; already-passing regression/boundary tests are reported without invented red phases",
+        "assertions": "Exact output and bytes, defaults, opt-in, empty records, escaping and Unicode independently checked; eight additional strict-opt-in/existing-U+FEFF boundary assertions passed",
+        "evidence": "Independent checker passed on clean final HEAD with change-scoped revision-bound evidence and exact Unit type mapping",
+        "writing": "Problem, default, behavior, scope, validation and limitations explained in artifacts, README and local PR description; no spreadsheet compatibility claim; diagrams reasonably omitted for this small change",
+        "limitations": [
+          "One retry per affected schema; does not establish reliability",
+          "Agent-authored tests leave non-boolean option values outside the specified scope; evaluator boundary checks covered actual strict opt-in behavior",
+          "Shell/editing escape corrections and early precommit evidence failures were recorded separately from genuine red/green observations"
+        ]
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "2.1.316 (Claude Code)",
+          "requestedModel": "claude-opus-5-5",
+          "effort": "medium",
+          "provider": "Anthropic firstParty; existing claude.ai Pro authentication",
+          "startedAt": "2026-10-31T22:58:52.591Z",
+          "endedAt": "2026-10-31T23:02:33.347Z",
+          "durationSeconds": 220.756,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [
+            "claude-opus-5-5"
+          ],
+          "reportedCostUSD": 1.23987,
+          "usage": {
+            "input_tokens": 64,
+            "cache_creation_input_tokens": 58305,
+            "cache_read_input_tokens": 1478070,
+            "output_tokens": 23878,
+            "output_tokens_details": {
+              "thinking_tokens": 2457
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 58305,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1373,
+                "cache_read_input_tokens": 69163,
+                "cache_creation_input_tokens": 1987,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 1987
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "fallback_credit": null
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-002/cliewen-delivery/artifacts/cli/claude-code-primary"
+    },
+    {
+      "schema": "cliewen-all",
+      "profile": "claude-code-primary",
+      "scenario": "combined-investigation-and-delivery",
+      "outcome": "pass",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:21.556Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-all\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "a55694593a6b9a6466ab9df5539e38a8e9b4393a"
+      },
+      "revision": "ee077d73790620c59442262d97786716ece0baf2",
+      "independentChecks": {
+        "passed": true,
+        "revision": "ee077d73790620c59442262d97786716ece0baf2"
+      },
+      "additionalBoundaryChecks": {
+        "passed": true,
+        "assertions": 8,
+        "cases": [
+          "strict opt-in",
+          "existing U+FEFF preserved in header and values",
+          "empty records",
+          "exact UTF-8 bytes"
+        ]
+      },
+      "manualReview": {
+        "outcome": "pass",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "reviewedAt": "2026-10-31T23:07:28.3966807Z",
+        "setup": "Fresh clone of the original per-schema baseline and package; pinned Claude Code 2.1.316, claude-opus-5-5, medium effort; no earlier solution supplied",
+        "scope": "Reviewed tool actions stayed inside the project; no shared system temporary helpers observed. This is trace review, not operating-system isolation.",
+        "instructions": "Required artifact/apply responses saved and correct identities verified by the independent checker",
+        "identity": "EXP-001 through EXP-006 and their test bodies preserved; EXP-007 through EXP-009 allocated through the CLI",
+        "tdd": "Raw trace shows an intended missing-BOM assertion failure before implementation; already-passing regression/boundary tests are reported without invented red phases",
+        "assertions": "Exact output and bytes, defaults, opt-in, empty records, escaping and Unicode independently checked; eight additional strict-opt-in/existing-U+FEFF boundary assertions passed",
+        "evidence": "Independent checker passed on clean final HEAD with change-scoped revision-bound evidence and exact Unit type mapping",
+        "writing": "Problem, default, behavior, scope, validation and limitations explained in artifacts, README and local PR description; no spreadsheet compatibility claim; diagrams reasonably omitted for this small change",
+        "limitations": [
+          "One retry per affected schema; does not establish reliability",
+          "Agent-authored tests leave non-boolean option values outside the specified scope; evaluator boundary checks covered actual strict opt-in behavior",
+          "Shell/editing escape corrections and early precommit evidence failures were recorded separately from genuine red/green observations"
+        ],
+        "approval": "Review-stage checker passed while the decision was proposed and baseline product inputs unchanged; continuation reused the same earlier bounded owner authorization as round 001, recorded without a fresh human review claim",
+        "probes": "Investigation and mutation probes plus commit-message helpers stayed under project-local ignored .probe; initial probe source retained separately"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "2.1.316 (Claude Code)",
+          "requestedModel": "claude-opus-5-5",
+          "effort": "medium",
+          "provider": "Anthropic firstParty; existing claude.ai Pro authentication",
+          "startedAt": "2026-10-31T22:59:03.427Z",
+          "endedAt": "2026-10-31T23:01:00.312Z",
+          "durationSeconds": 116.884,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [
+            "claude-opus-5-5"
+          ],
+          "reportedCostUSD": 0.5950672,
+          "usage": {
+            "input_tokens": 24,
+            "cache_creation_input_tokens": 34052,
+            "cache_read_input_tokens": 401176,
+            "output_tokens": 12116,
+            "output_tokens_details": {
+              "thinking_tokens": 1003
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 34052,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1535,
+                "cache_read_input_tokens": 47258,
+                "cache_creation_input_tokens": 606,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 606
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "fallback_credit": null
+          }
+        },
+        {
+          "phase": "approved-continuation",
+          "cliVersion": "2.1.316 (Claude Code)",
+          "requestedModel": "claude-opus-5-5",
+          "effort": "medium",
+          "provider": "Anthropic firstParty; existing claude.ai Pro authentication",
+          "startedAt": "2026-10-31T23:01:38.142Z",
+          "endedAt": "2026-10-31T23:06:28.312Z",
+          "durationSeconds": 290.169,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [
+            "claude-opus-5-5"
+          ],
+          "reportedCostUSD": 1.5977640000000002,
+          "usage": {
+            "input_tokens": 76,
+            "cache_creation_input_tokens": 70620,
+            "cache_read_input_tokens": 2113300,
+            "output_tokens": 30492,
+            "output_tokens_details": {
+              "thinking_tokens": 5446
+            },
+            "server_tool_use": {
+              "web_search_requests": 0,
+              "web_fetch_requests": 0
+            },
+            "service_tier": "standard",
+            "cache_creation": {
+              "ephemeral_1h_input_tokens": 70620,
+              "ephemeral_5m_input_tokens": 0
+            },
+            "inference_geo": "global",
+            "iterations": [
+              {
+                "input_tokens": 2,
+                "output_tokens": 1243,
+                "cache_read_input_tokens": 83591,
+                "cache_creation_input_tokens": 841,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 841
+                },
+                "type": "message"
+              }
+            ],
+            "speed": "standard",
+            "fallback_credit": null
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-002/cliewen-all/artifacts/cli/claude-code-primary"
+    }
+  ]
+}

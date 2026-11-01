@@ -1,0 +1,80 @@
+{
+  "capturedAt": "2026-11-01T09:34:32.258Z",
+  "rawArtifacts": ".tmp/agent-trials/cli-evaluation-006",
+  "releaseReady": false,
+  "schema": "cliewen-all",
+  "profile": "opencode-2-2-5",
+  "outcome": "task-failure",
+  "baseline": {
+    "preparedAt": "2026-11-01T09:14:50.294Z",
+    "sourceRevision": "8a8d193f7e60cbe4fd3a4da12ce66ce75c9bdcb1",
+    "sourceStatus": "M CHANGELOG.md\n M docs/guide/all.md\n M docs/guide/discovery.md\n M docs/testing/agent-evaluation.md\n M docs/testing/agent-evaluation.yaml\n M docs/testing/cli-evaluation.md\n M docs/testing/evidence.md\n M schemas/all/instructions/apply.md\n M schemas/all/instructions/decision.md\n M schemas/all/instructions/tasks.md\n M schemas/all/templates/decision.md\n M schemas/all/templates/tasks.md\n M schemas/base/instructions/writing.md\n M schemas/delivery/instructions/apply.md\n M schemas/delivery/templates/tasks.md\n M schemas/discovery/instructions/investigation.md\n M scripts/check-csv-all-review.mjs\n M scripts/lib/trial-instructions.mjs\n M scripts/run-cli-trial.mjs\n M src/all.ts\n M test/all.test.mjs\n M test/cli-runner.test.mjs\n M test/discovery.test.mjs\n M test/docs.test.mjs\n M test/trial-instructions.test.mjs\n M test/workflow.test.mjs\n?? docs/testing/cli-trials/result-002.json\n?? docs/testing/cli-trials/result-002.md\n?? docs/testing/cli-trials/result-003.json\n?? docs/testing/cli-trials/result-003.md\n?? docs/testing/cli-trials/result-004.json\n?? docs/testing/cli-trials/result-004.md\n?? schemas/all/instructions/approval.md",
+    "baseline": "1d862f8ecd1fa8c807ac739bae66be4cab6b89e2",
+    "package": {
+      "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+      "sha256": "6277d7bb80706049c5d287d69a51d13b6517fc0f1dc78640865304d3712f496e"
+    },
+    "node": "v24.0.0",
+    "npm": "11.21.0",
+    "openspec": "1.15.0",
+    "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-csv-all-1793524480945\\project",
+    "fixture": "csv-bom-combined",
+    "preparationBaseline": "594766d02f39191cd90aacc46c899e1fdc222f33"
+  },
+  "revision": "d61bdf0f2ec9f6025b0efba8d4f72e12748aa006",
+  "reviewStage": {
+    "passed": true,
+    "revision": "54c5639dc516892a86280b42f37e81100b83d470"
+  },
+  "independentChecks": {
+    "passed": true,
+    "file": "recheck-source-preservation/independent-checks.json"
+  },
+  "manualReview": {
+    "outcome": "task-failure",
+    "reviewer": "Coordinating agent; no fresh human implementation review",
+    "targetedFindings": {
+      "approvalBoundary": "pass: proposed stage preserves registry/mappings/product inputs; raw actions show no allocation or counter reset",
+      "approvalProvenance": "pass: existing bounded owner authorization accurately relayed; no new human review claimed",
+      "evidenceFreshness": "pass: scoped evidence and successful final check match final HEAD",
+      "supportedBehavior": "pass",
+      "archiveScope": "pass: no archive, push or external PR"
+    },
+    "remainingFailure": "Configured TDD was not followed: new behavior was implemented after an already-green characterization test, before its opt-in tests. The only red was a mistaken quoting expectation, not missing behavior.",
+    "evaluatorCorrections": [
+      "Leading test comments do not change the original six test bodies; baseline comparison now allows additions but rejects removed baseline lines.",
+      "The combined continuation required apply JSON to be saved but did not prescribe its directory. The valid project-local .probe/apply-instructions.json is accepted; the initial failing check remains retained."
+    ],
+    "scope": "Reviewed tool actions stay project-local; no OS isolation is claimed"
+  },
+  "phases": [
+    {
+      "phase": "initial",
+      "cliVersion": "opencode v2.2.5",
+      "requestedModel": "opencode/glm-5.3-flash",
+      "effort": "high",
+      "startedAt": "2026-11-01T09:15:44.028Z",
+      "endedAt": "2026-11-01T09:20:31.746Z",
+      "durationSeconds": 287.717,
+      "exitCode": 0,
+      "eventFailure": false,
+      "stopReason": null,
+      "reportedCostUSD": 0.04352196000000001,
+      "observedModels": []
+    },
+    {
+      "phase": "approved-continuation",
+      "cliVersion": "opencode v2.2.5",
+      "requestedModel": "opencode/glm-5.3-flash",
+      "effort": "high",
+      "startedAt": "2026-11-01T09:21:41.740Z",
+      "endedAt": "2026-11-01T09:28:18.779Z",
+      "durationSeconds": 397.038,
+      "exitCode": 0,
+      "eventFailure": false,
+      "stopReason": null,
+      "reportedCostUSD": 0.09331726999999998,
+      "observedModels": []
+    }
+  ]
+}

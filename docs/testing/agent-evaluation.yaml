@@ -70,6 +70,49 @@ profiles:
       tokenLimit: null
       billing: local reported-cost stop; not a provider-enforced hard spending cap
     traceFormat: OpenCode --format json events plus stderr
+  opencode-1-19-5:
+    readiness: pinned
+    supersedes: opencode-primary
+    agent: OpenCode
+    runner: cli
+    model: opencode/glm-5.3-flash
+    agentVersion: 1.19.5
+    provider: OpenCode Zen pay-as-you-go; refreshed local credentials; one enabled provider
+    effort: high
+    permissions: local tools allowed; external_directory, task, question, webfetch
+      and websearch denied; no OS isolation
+    context: fresh run; pure mode, disabled external skills/Claude context and
+      configured MCP servers; other native global rules may remain
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: 0.5
+      tokenLimit: null
+      billing: local reported-cost stop; not a provider-enforced hard spending cap
+    traceFormat: OpenCode --format json events plus stderr
+
+  opencode-2-2-5:
+    readiness: pinned
+    supersedes: opencode-1-19-5
+    agent: OpenCode
+    runner: cli
+    model: opencode/glm-5.3-flash
+    agentVersion: 2.2.5
+    provider: OpenCode Console/Zen; existing local credentials; provider.use allows only opencode
+    effort: high
+    permissions: V2 ordered rules and hard policies allow local tools; deny
+      external_directory, subagent, question, skill, webfetch and websearch;
+      deny MCP and external plugins; no OS isolation
+    context: fresh standalone server and private config directory per phase;
+      project config and Claude skill discovery disabled; AGENTS read explicitly;
+      system and Console configuration may remain
+    budgets:
+      wallTimeSeconds: 600
+      outputBytes: 67108864
+      reportedCostUSD: 0.5
+      tokenLimit: null
+      billing: local reported-cost stop; not a provider-enforced hard spending cap
+    traceFormat: OpenCode run --standalone --format json; model variant via provider/model#high
 
 scenarios:
   csv-bom-tdd:
@@ -83,6 +126,10 @@ scenarios:
     observedResults:
       - docs/testing/csv-bom-trial/result-001.md
       - docs/testing/cli-trials/result-001.md
+      - docs/testing/cli-trials/result-002.md
+      - docs/testing/cli-trials/result-003.md
+      - docs/testing/cli-trials/result-004.md
+      - docs/testing/cli-trials/result-005.md
   csv-bom-flexible:
     schema: cliewen-delivery
     readiness: planned
@@ -101,6 +148,9 @@ scenarios:
     observedResults:
       - docs/testing/csv-discovery-trial/result-001.md
       - docs/testing/cli-trials/result-001.md
+      - docs/testing/cli-trials/result-003.md
+      - docs/testing/cli-trials/result-004.md
+      - docs/testing/cli-trials/result-005.md
   discovery-no-change:
     schema: cliewen-discovery
     readiness: planned
@@ -118,6 +168,11 @@ scenarios:
       - docs/testing/csv-all-trial/result-001.md
       - docs/testing/csv-all-trial/result-002.md
       - docs/testing/cli-trials/result-001.md
+      - docs/testing/cli-trials/result-002.md
+      - docs/testing/cli-trials/result-003.md
+      - docs/testing/cli-trials/result-004.md
+      - docs/testing/cli-trials/result-005.md
+      - docs/testing/cli-trials/result-006.md
   combined-no-delivery:
     schema: cliewen-all
     readiness: planned
@@ -128,14 +183,14 @@ schemas:
     developmentProfile: codex-cli-primary
     developmentScenario: csv-bom-tdd
     releaseVariantProfile: codex-cli-primary
-    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-primary ]
+    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-2-2-5 ]
     releaseScenarios: [ csv-bom-tdd, csv-bom-flexible, csv-bom-final-tests ]
   cliewen-discovery:
     status: implemented
     developmentProfile: codex-cli-primary
     developmentScenario: csv-streaming-investigation
     releaseVariantProfile: codex-cli-primary
-    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-primary ]
+    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-2-2-5 ]
     releaseScenarios:
       [
         csv-streaming-investigation,
@@ -147,5 +202,5 @@ schemas:
     developmentProfile: codex-cli-primary
     developmentScenario: combined-investigation-and-delivery
     releaseVariantProfile: codex-cli-primary
-    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-primary ]
+    releaseProfiles: [ codex-cli-primary, claude-code-primary, opencode-2-2-5 ]
     releaseScenarios: [ combined-investigation-and-delivery, combined-no-delivery ]

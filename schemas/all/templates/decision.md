@@ -15,6 +15,6 @@ outcome: further-investigation
 
 ## Approval and remaining uncertainty
 
-<!-- Record actual human agreement before accepted status; do not invent approval. -->
+<!-- Record actual human agreement and its scope before accepted status. Until then preserve the AC registry/mappings and leave draft IDs unassigned. Implementation approval does not authorize archive, push, or an external PR. -->
 
 ## Durable record and follow-up

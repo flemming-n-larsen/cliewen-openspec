@@ -44,27 +44,48 @@ if (profileId === 'codex-cli-primary') {
   exe = process.env.CLIEWEN_CLAUDE_CLI ?? path.join(home, '.local/bin', process.platform === 'win32' ? 'claude.exe' : 'claude');
   args = ['-p', prompt, '--model', profile.model, '--effort', profile.effort, '--output-format', 'stream-json', '--verbose', '--safe-mode', '--no-session-persistence', '--permission-mode', 'dontAsk', '--allowedTools', 'Read,Edit,Write,Bash,PowerShell,Glob,Grep', '--disallowedTools', 'Agent,Task,WebFetch,WebSearch', '--max-budget-usd', String(profile.budgets.reportedCostUSD)];
   versionArgs = ['--version'];
-} else if (profileId === 'opencode-primary') {
-  exe = process.env.CLIEWEN_OPENCODE_CLI ?? (npmGlobal ? path.join(npmGlobal, 'opencode-ai/bin/opencode.exe') : 'opencode');
-  args = ['run', '--pure', '--format', 'json', '--model', profile.model, '--variant', profile.effort, prompt];
+} else if (profile.agent === 'OpenCode' && profile.runner === 'cli') {
+  const v2 = profile.agentVersion.startsWith('2.');
+  const cli = process.env.CLIEWEN_OPENCODE_CLI ?? (npmGlobal ? path.join(npmGlobal, v2 ? '@opencode/cli/bin/opencode.exe' : 'opencode-ai/bin/opencode.exe') : 'opencode');
+  if (/\.(?:mjs|cjs|js)$/i.test(cli)) { exe = process.execPath; prefix = [cli]; } else exe = cli;
   versionArgs = ['--version'];
-  const globalConfig = path.join(home, '.config/opencode/opencode.json');
-  const global = fs.existsSync(globalConfig) ? JSON.parse(fs.readFileSync(globalConfig, 'utf8')) : {};
-  env.OPENCODE_CONFIG_CONTENT = JSON.stringify({model: profile.model, small_model: profile.model, enabled_providers: ['opencode'], permission: {'*': 'allow', external_directory: 'deny', webfetch: 'deny', websearch: 'deny', task: 'deny', question: 'deny'}, mcp: Object.fromEntries(Object.keys(global.mcp ?? {}).map(name => [name, {enabled: false}]))});
-  env.OPENCODE_DISABLE_AUTOUPDATE = 'true'; env.OPENCODE_DISABLE_LSP_DOWNLOAD = 'true';
-  env.OPENCODE_DISABLE_CLAUDE_CODE = 'true'; env.OPENCODE_DISABLE_EXTERNAL_SKILLS = 'true';
-  env.OPENCODE_DISABLE_MODELS_FETCH = 'true'; env.OPENCODE_DISABLE_DEFAULT_PLUGINS = 'true';
+  if (v2) {
+    args = ['run', '--standalone', '--format', 'json', '--model', `${profile.model}#${profile.effort}`, prompt];
+    const denied = ['external_directory', 'subagent', 'question', 'skill', 'webfetch', 'websearch'];
+    const config = {model: profile.model,
+      permissions: [{action: '*', resource: '*', effect: 'allow'}, ...denied.map(action => ({action, resource: '*', effect: 'deny'}))],
+      policies: [{action: 'provider.use', resource: '*', effect: 'deny'}, {action: 'provider.use', resource: 'opencode', effect: 'allow'},
+        ...['mcp.use', 'skill.use'].map(action => ({action, resource: '*', effect: 'deny'})),
+        {action: 'plugin.use', resource: '*', effect: 'deny'}, {action: 'plugin.use', resource: 'opencode.*', effect: 'allow'},
+        ...denied.map(action => ({action: 'tool.use', resource: `${action}:*`, effect: 'deny'}))],
+      plugins: ['-*', 'opencode.*']};
+    env.OPENCODE_CONFIG_DIR = path.join(dir, 'config');
+    fs.mkdirSync(env.OPENCODE_CONFIG_DIR);
+    env.OPENCODE_CONFIG_CONTENT = JSON.stringify(config);
+    env.OPENCODE_CONFIG_PROJECT_DISABLE = 'true';
+    env.OPENCODE_DISABLE_CLAUDE_CODE = 'true';
+    env.OPENCODE_DISABLE_MODELS_FETCH = 'true';
+    env.OPENCODE_DISABLE_FILEWATCHER = 'true';
+  } else {
+    args = ['run', '--pure', '--format', 'json', '--model', profile.model, '--variant', profile.effort, prompt];
+    const globalConfig = path.join(home, '.config/opencode/opencode.json');
+    const global = fs.existsSync(globalConfig) ? JSON.parse(fs.readFileSync(globalConfig, 'utf8')) : {};
+    env.OPENCODE_CONFIG_CONTENT = JSON.stringify({model: profile.model, small_model: profile.model, enabled_providers: ['opencode'], permission: {'*': 'allow', external_directory: 'deny', webfetch: 'deny', websearch: 'deny', task: 'deny', question: 'deny'}, mcp: Object.fromEntries(Object.keys(global.mcp ?? {}).map(name => [name, {enabled: false}]))});
+    env.OPENCODE_DISABLE_AUTOUPDATE = 'true'; env.OPENCODE_DISABLE_LSP_DOWNLOAD = 'true';
+    env.OPENCODE_DISABLE_CLAUDE_CODE = 'true'; env.OPENCODE_DISABLE_EXTERNAL_SKILLS = 'true';
+    env.OPENCODE_DISABLE_MODELS_FETCH = 'true'; env.OPENCODE_DISABLE_DEFAULT_PLUGINS = 'true';
+  }
 } else throw Error('Profile has no CLI adapter');
 const version = spawnSync(exe, [...prefix, ...versionArgs], {encoding: 'utf8', timeout: 15000, windowsHide: true});
 const versionText = version.stdout?.trim();
-if (version.status !== 0 || versionText?.match(/\b\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?\b/)?.[0] !== profile.agentVersion) {
+if (version.status !== 0 || versionText?.match(/\bv?(\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?)\b/)?.[1] !== profile.agentVersion) {
   fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify({profileId, schema, phase, profile, cliVersion: versionText ?? null, failure: 'version-preflight', evaluation: 'infrastructure-failure'}, null, 2) + '\n');
   throw Error(`CLI version differs from pinned ${profile.agentVersion}: ${versionText ?? version.error?.message}`);
 }
 const startedAt = new Date().toISOString();
 const started = Date.now();
-const controlledKeys = ['OPENCODE_CONFIG_CONTENT', 'OPENCODE_DISABLE_AUTOUPDATE', 'OPENCODE_DISABLE_LSP_DOWNLOAD', 'OPENCODE_DISABLE_CLAUDE_CODE', 'OPENCODE_DISABLE_EXTERNAL_SKILLS', 'OPENCODE_DISABLE_MODELS_FETCH', 'OPENCODE_DISABLE_DEFAULT_PLUGINS'];
-const metadata = {schema, profileId, phase, project: trial.project, baseline: trial.baseline, profile, exe, args: [...prefix, ...args], cliVersion: versionText, startedAt, promptFile: 'prompt.txt', environmentControls: profileId === 'opencode-primary' ? Object.fromEntries(controlledKeys.map(key => [key, env[key]])) : {NO_COLOR: '1', OPENSPEC_TELEMETRY: '0', CI: '1'}};
+const controlledKeys = ['OPENCODE_CONFIG_CONTENT', 'OPENCODE_CONFIG_DIR', 'OPENCODE_CONFIG_PROJECT_DISABLE', 'OPENCODE_DISABLE_FILEWATCHER', 'OPENCODE_DISABLE_AUTOUPDATE', 'OPENCODE_DISABLE_LSP_DOWNLOAD', 'OPENCODE_DISABLE_CLAUDE_CODE', 'OPENCODE_DISABLE_EXTERNAL_SKILLS', 'OPENCODE_DISABLE_MODELS_FETCH', 'OPENCODE_DISABLE_DEFAULT_PLUGINS'];
+const metadata = {schema, profileId, phase, project: trial.project, baseline: trial.baseline, profile, exe, args: [...prefix, ...args], cliVersion: versionText, startedAt, promptFile: 'prompt.txt', environmentControls: profile.agent === 'OpenCode' ? Object.fromEntries(controlledKeys.filter(key => env[key] !== undefined).map(key => [key, env[key]])) : {NO_COLOR: '1', OPENSPEC_TELEMETRY: '0', CI: '1'}};
 fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify(metadata, null, 2) + '\n');
 const stdout = fs.createWriteStream(path.join(dir, 'events.jsonl'), {flags: 'wx'});
 const stderr = fs.createWriteStream(path.join(dir, 'stderr.txt'), {flags: 'wx'});

@@ -19,4 +19,13 @@ test('instruction checks use JSON identity and support Windows encodings without
   assert.equal(hasInstruction(root, 'apply', response.schemaName, response.changeName), true);
   fs.writeFileSync(path.join(folder, 'invalid.json'), 'not JSON');
   assert.equal(hasInstruction(root, 'tasks', response.schemaName, response.changeName), false);
+  const nested = path.join(folder, response.changeName);
+  fs.mkdirSync(nested);
+  fs.writeFileSync(path.join(nested, 'task-response.JSON'), JSON.stringify({...response, artifactId: 'tasks'}));
+  assert.equal(hasInstruction(root, 'tasks', response.schemaName, response.changeName), true);
+  assert.equal(hasInstruction(root, 'tasks', 'cliewen-delivery', response.changeName), false);
+  const scratch = path.join(root, '.probe'); fs.mkdirSync(scratch);
+  fs.writeFileSync(path.join(scratch, 'apply-response.json'), JSON.stringify({...apply, schemaName: 'cliewen-all', changeName: 'combined-change'}));
+  assert.equal(hasInstruction(root, 'apply', 'cliewen-all', 'combined-change'), false);
+  assert.equal(hasInstruction(root, 'apply', 'cliewen-all', 'combined-change', {searchProject: true}), true);
 });

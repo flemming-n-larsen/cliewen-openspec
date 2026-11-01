@@ -12,7 +12,7 @@ const openspec = path.join(project, 'node_modules/@fission-ai/openspec/bin/opens
 test('packed discovery supports no-change closure and a separate delivery handoff', {timeout: 120000}, t => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'cliewen-discovery-'));
   t.after(() => fs.rmSync(root, {recursive: true, force: true}));
-  const env = {...process.env, OPENSPEC_TELEMETRY: '0', CI: '1'}; delete env.NODE_TEST_CONTEXT;
+  const env = {...process.env, OPENSPEC_TELEMETRY: '0', CI: '1', npm_config_cache: path.join(root, 'node_modules/.cache/npm')}; delete env.NODE_TEST_CONTEXT;
   function run(exe, args, cwd = root) {
     const r = spawnSync(exe, args, {cwd, env, encoding: 'utf8', timeout: 60000});
     assert.equal(r.status, 0, `${args.join(' ')}\n${r.stdout}\n${r.stderr}`); return r.stdout.trim();
@@ -43,6 +43,11 @@ test('packed discovery supports no-change closure and a separate delivery handof
       const instructions = JSON.parse(ospec('instructions', artifact, '--change', change, '--json'));
       assert.match(instructions.instruction, /For all text/);
       assert.match(instructions.instruction, /Mermaid/);
+      if (artifact === 'investigation') {
+        assert.match(instructions.instruction, /verify that samples were taken during the operation/);
+        assert.match(instructions.instruction, /Distinguish peak memory from retained memory/);
+        assert.match(instructions.instruction, /report that quantity as unmeasured/);
+      }
       write(base + `${artifact}.md`, content);
     }
     assert.equal(status().isComplete, true);

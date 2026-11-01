@@ -13,7 +13,7 @@ test('packed installation → OpenSpec change → real test evidence → archive
   const root=fs.mkdtempSync(path.join(os.tmpdir(),'cliewen-workflow-'));
   t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
   function run(executable,args,expected=0,cwd=root) {
-    const env={...process.env,OPENSPEC_TELEMETRY:'0',CI:'1'}; delete env.NODE_TEST_CONTEXT;
+    const env={...process.env,OPENSPEC_TELEMETRY:'0',CI:'1',npm_config_cache:path.join(root,'node_modules/.cache/npm')}; delete env.NODE_TEST_CONTEXT;
     const r=spawnSync(executable,args,{cwd,encoding:'utf8',env,timeout:60000});
     assert.equal(r.status,expected, `${executable} ${args.join(' ')}\n${r.stdout}\n${r.stderr}\n${r.error??''}`); return r.stdout.trim();
   }

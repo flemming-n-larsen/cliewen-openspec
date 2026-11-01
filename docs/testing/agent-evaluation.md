@@ -9,11 +9,11 @@ Every shipped schema needs deterministic regression coverage and a reviewed agen
 
 | Schema | Development trial | Observed coverage | Still needed before release |
 |---|---|---|---|
-| cliewen-delivery | Optional CSV BOM with per-task TDD | Codex CLI passes; Claude product checks pass with a project-boundary failure; OpenCode authentication blocked | Retry failed/blocked cases; flexible and end-of-change variants; repeated runs |
-| cliewen-discovery | Investigate CSV streaming | Codex CLI and Claude pass; OpenCode authentication blocked | OpenCode trial; targeted no-change and handoff cases; repeated runs |
-| cliewen-all | One CSV investigation through delivery with an explicit human review stage | Codex CLI passes through delivery; Claude product checks pass with a project-boundary failure; OpenCode authentication blocked | Retry failed/blocked cases; no-delivery agent coverage; repeated runs |
+| cliewen-delivery | Optional CSV BOM with per-task TDD | Codex CLI and Claude have passing observations; OpenCode 2.2.5 passes the instruction regression | Flexible and end-of-change variants; repeated current-candidate runs |
+| cliewen-discovery | Investigate CSV streaming | Codex CLI and Claude have passing observations; OpenCode 2.2.5 passes with a writing note | Targeted no-change and handoff cases; repeated current-candidate runs |
+| cliewen-all | One CSV investigation through delivery with an explicit human review stage | Codex CLI and Claude have passing observations; OpenCode 2.2.5 now respects the approval boundary and final evidence, but fails configured TDD order | Resolve/retest the TDD finding; no-delivery agent coverage; repeated current-candidate runs |
 
-The [first CLI round](cli-trials/result-001.md) records findings and limitations. Earlier collaboration observations remain in the scenario reports referenced by the manifest.
+The [first CLI round](cli-trials/result-001.md) and [Claude retries](cli-trials/result-002.md) retain earlier observations. [OpenCode 1.19.5](cli-trials/result-003.md) exposed content and evidence failures; the [first V2 runs](cli-trials/result-004.md) were interrupted. The [instruction regressions](cli-trials/result-005.md) and [combined retry](cli-trials/result-006.md) record improvements and the remaining TDD failure. Earlier passes do not certify every later instruction candidate.
 
 The common base is checked through every consuming schema, not as a separate user workflow. Existing deterministic tests also cover discovery ending without implementation and creating a separate delivery change. They do not substitute for the missing agent trials.
 
@@ -21,7 +21,7 @@ The common base is checked through every consuming schema, not as a separate use
 
 Use one named profile per schema for routine development, and hold that profile constant while comparing instruction changes. The current reference is `codex-cli-primary`, which passed the primary scenario for each schema. The earlier `codex-collaboration-observed` profile remains a historical reference: it used the inherited `gpt-6.1-sol` session model without exposed agent version, effort, routing, or full instruction isolation.
 
-The release plan pins Codex CLI 0.166.0 with `gpt-6.1-sol` at medium effort, Claude Code 2.1.316 with `claude-opus-5-5` at medium effort, and OpenCode 1.18.34 with Zen `opencode/glm-5.3-flash` at high effort. The manifest records provider, access, context, budgets, and trace settings. The runner saves those settings with each attempt and refuses version mismatches. A pinned profile still needs successful, reviewed trials.
+The release plan pins Codex CLI 0.166.0 with `gpt-6.1-sol` at medium effort, Claude Code 2.1.316 with `claude-opus-5-5` at medium effort, and OpenCode 2.2.5 with `opencode/glm-5.3-flash` at high effort. OpenCode's `opencode-2-2-5` profile uses native V2 controls; the older 1.18.34 and 1.19.5 profiles and their results remain unchanged. The manifest records provider, access, context, budgets, and trace settings. The runner saves those settings with each attempt and refuses version mismatches. A pinned profile still needs successful, reviewed trials.
 
 Choose models already available to maintainers, then compare changes against that baseline. Do not run a full product of agents, models, and efforts. A different model or effort gets a new profile identity and a separate result. Explicit trial commands can consume existing subscription allowances or incur usage charges. Provider purchases and Harbor integration remain outside this implementation.
 

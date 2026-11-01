@@ -1,0 +1,165 @@
+{
+  "capturedAt": "2026-11-01T09:18:24.564Z",
+  "rawArtifacts": ".tmp/agent-trials/cli-evaluation-005",
+  "releaseReady": false,
+  "initialDiscoveryInfrastructureFailure": {
+    "outcome": "infrastructure-failure",
+    "reason": "Standalone server exited before reporting readiness",
+    "durationSeconds": 0.715,
+    "exitCode": 1,
+    "reportedCostUSD": 0,
+    "artifacts": ".tmp/agent-trials/cli-evaluation-005/cliewen-discovery/artifacts/cli/opencode-2-2-5/initial"
+  },
+  "cases": [
+    {
+      "schema": "cliewen-delivery",
+      "profile": "opencode-2-2-5",
+      "scenario": "csv-bom-tdd",
+      "outcome": "pass",
+      "baseline": {
+        "preparedAt": "2026-11-01T09:04:04.378Z",
+        "sourceRevision": "8a8d193f7e60cbe4fd3a4da12ce66ce75c9bdcb1",
+        "sourceStatus": "M CHANGELOG.md\n M docs/guide/all.md\n M docs/guide/discovery.md\n M docs/testing/agent-evaluation.md\n M docs/testing/agent-evaluation.yaml\n M docs/testing/cli-evaluation.md\n M docs/testing/evidence.md\n M schemas/all/instructions/apply.md\n M schemas/all/instructions/decision.md\n M schemas/all/instructions/specs.md\n M schemas/all/instructions/tasks.md\n M schemas/all/templates/decision.md\n M schemas/all/templates/tasks.md\n M schemas/base/instructions/writing.md\n M schemas/delivery/instructions/apply.md\n M schemas/delivery/templates/tasks.md\n M schemas/discovery/instructions/investigation.md\n M scripts/run-cli-trial.mjs\n M src/all.ts\n M test/all.test.mjs\n M test/cli-runner.test.mjs\n M test/discovery.test.mjs\n M test/docs.test.mjs\n M test/workflow.test.mjs\n?? docs/testing/cli-trials/result-002.json\n?? docs/testing/cli-trials/result-002.md\n?? docs/testing/cli-trials/result-003.json\n?? docs/testing/cli-trials/result-003.md\n?? docs/testing/cli-trials/result-004.json\n?? docs/testing/cli-trials/result-004.md",
+        "baseline": "26cb1abf46cf45cd663951f6027d4ea0aae06ca6",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "744fc9775ccb1ad1dfb01da095662ff5ca3966ef312c3f45c78bedc681044004"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793523837218\\cliewen-delivery\\project"
+      },
+      "revision": "4175dca3e9cdbce1f544a9568f24b38bcec7407b",
+      "checks": {
+        "file": "recheck-instruction-layout/independent-checks.json",
+        "passed": true,
+        "revision": "4175dca3e9cdbce1f544a9568f24b38bcec7407b"
+      },
+      "manualReview": {
+        "outcome": "pass",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "findings": [
+          "README examples and defaults match inspected implementation; no universal non-true-value promise remains.",
+          "Final scoped evidence matches clean HEAD; behavioral assertions and actual red/green history reviewed."
+        ],
+        "scope": "Tool-action review found project-local activity; no OS isolation is claimed"
+      },
+      "phase": {
+        "cliVersion": "opencode v2.2.5",
+        "requestedModel": "opencode/glm-5.3-flash",
+        "effort": "high",
+        "startedAt": "2026-11-01T09:05:13.959Z",
+        "endedAt": "2026-11-01T09:11:28.477Z",
+        "durationSeconds": 374.517,
+        "exitCode": 0,
+        "eventFailure": false,
+        "stopReason": null,
+        "reportedCostUSD": 0.08671548,
+        "observedModels": []
+      },
+      "artifacts": ".tmp/agent-trials/cli-evaluation-005/cliewen-delivery/artifacts/cli/opencode-2-2-5"
+    },
+    {
+      "schema": "cliewen-all",
+      "profile": "opencode-2-2-5",
+      "scenario": "combined-investigation-and-delivery",
+      "outcome": "task-failure",
+      "baseline": {
+        "preparedAt": "2026-11-01T09:04:31.576Z",
+        "sourceRevision": "8a8d193f7e60cbe4fd3a4da12ce66ce75c9bdcb1",
+        "sourceStatus": "M CHANGELOG.md\n M docs/guide/all.md\n M docs/guide/discovery.md\n M docs/testing/agent-evaluation.md\n M docs/testing/agent-evaluation.yaml\n M docs/testing/cli-evaluation.md\n M docs/testing/evidence.md\n M schemas/all/instructions/apply.md\n M schemas/all/instructions/decision.md\n M schemas/all/instructions/specs.md\n M schemas/all/instructions/tasks.md\n M schemas/all/templates/decision.md\n M schemas/all/templates/tasks.md\n M schemas/base/instructions/writing.md\n M schemas/delivery/instructions/apply.md\n M schemas/delivery/templates/tasks.md\n M schemas/discovery/instructions/investigation.md\n M scripts/run-cli-trial.mjs\n M src/all.ts\n M test/all.test.mjs\n M test/cli-runner.test.mjs\n M test/discovery.test.mjs\n M test/docs.test.mjs\n M test/workflow.test.mjs\n?? docs/testing/cli-trials/result-002.json\n?? docs/testing/cli-trials/result-002.md\n?? docs/testing/cli-trials/result-003.json\n?? docs/testing/cli-trials/result-003.md\n?? docs/testing/cli-trials/result-004.json\n?? docs/testing/cli-trials/result-004.md",
+        "baseline": "a7ddd78912707ca2d46c4c72db62fd0a02bea157",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "744fc9775ccb1ad1dfb01da095662ff5ca3966ef312c3f45c78bedc681044004"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793523837218\\cliewen-all\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "0cffccaeeffadc5a723b126e72c51fb4b114e630"
+      },
+      "revision": "b0a5874fb284c4fc72deea25557886d6408bd449",
+      "checks": {
+        "file": "review-stage-checks.json",
+        "passed": true,
+        "revision": "b0a5874fb284c4fc72deea25557886d6408bd449"
+      },
+      "manualReview": {
+        "outcome": "task-failure",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "findings": [
+          "Allocated EXP-007 while decision remained proposed, then edited highWater from 7 back to 6. Final snapshot preservation does not establish compliance with allocation history."
+        ],
+        "scope": "Tool-action review found project-local activity; no OS isolation is claimed"
+      },
+      "phase": {
+        "cliVersion": "opencode v2.2.5",
+        "requestedModel": "opencode/glm-5.3-flash",
+        "effort": "high",
+        "startedAt": "2026-11-01T09:05:13.925Z",
+        "endedAt": "2026-11-01T09:08:48.774Z",
+        "durationSeconds": 214.848,
+        "exitCode": 0,
+        "eventFailure": false,
+        "stopReason": null,
+        "reportedCostUSD": 0.032352650000000004,
+        "observedModels": []
+      },
+      "artifacts": ".tmp/agent-trials/cli-evaluation-005/cliewen-all/artifacts/cli/opencode-2-2-5"
+    },
+    {
+      "schema": "cliewen-discovery",
+      "profile": "opencode-2-2-5",
+      "scenario": "csv-streaming-investigation",
+      "outcome": "pass",
+      "baseline": {
+        "preparedAt": "2026-11-01T09:04:18.115Z",
+        "sourceRevision": "8a8d193f7e60cbe4fd3a4da12ce66ce75c9bdcb1",
+        "sourceStatus": "M CHANGELOG.md\n M docs/guide/all.md\n M docs/guide/discovery.md\n M docs/testing/agent-evaluation.md\n M docs/testing/agent-evaluation.yaml\n M docs/testing/cli-evaluation.md\n M docs/testing/evidence.md\n M schemas/all/instructions/apply.md\n M schemas/all/instructions/decision.md\n M schemas/all/instructions/specs.md\n M schemas/all/instructions/tasks.md\n M schemas/all/templates/decision.md\n M schemas/all/templates/tasks.md\n M schemas/base/instructions/writing.md\n M schemas/delivery/instructions/apply.md\n M schemas/delivery/templates/tasks.md\n M schemas/discovery/instructions/investigation.md\n M scripts/run-cli-trial.mjs\n M src/all.ts\n M test/all.test.mjs\n M test/cli-runner.test.mjs\n M test/discovery.test.mjs\n M test/docs.test.mjs\n M test/workflow.test.mjs\n?? docs/testing/cli-trials/result-002.json\n?? docs/testing/cli-trials/result-002.md\n?? docs/testing/cli-trials/result-003.json\n?? docs/testing/cli-trials/result-003.md\n?? docs/testing/cli-trials/result-004.json\n?? docs/testing/cli-trials/result-004.md",
+        "baseline": "e8ad81f38d290ca68b27794a4789d39bcc7bbfc2",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "744fc9775ccb1ad1dfb01da095662ff5ca3966ef312c3f45c78bedc681044004"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793523837218\\cliewen-discovery\\project",
+        "fixture": "csv-streaming-discovery",
+        "preparationBaseline": "e6ea8b14b0d9cc914508ba583e2db99a9917e272"
+      },
+      "revision": "cbde9c955da58716ad7847b0a5fa24510ca67d9e",
+      "checks": {
+        "file": "independent-checks.json",
+        "passed": true,
+        "revision": "cbde9c955da58716ad7847b0a5fa24510ca67d9e"
+      },
+      "manualReview": {
+        "outcome": "pass",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "findings": [
+          "Peak heap is explicitly unmeasured, retained/checkpoint observations are distinguished, and additive API compatibility is considered.",
+          "Nonblocking writing finding: the claim that the synthetic case is below any plausible memory-pressure regime is unsupported by a stated workload budget."
+        ],
+        "scope": "Tool-action review found project-local activity; no OS isolation is claimed"
+      },
+      "phase": {
+        "cliVersion": "opencode v2.2.5",
+        "requestedModel": "opencode/glm-5.3-flash",
+        "effort": "high",
+        "startedAt": "2026-11-01T09:06:21.171Z",
+        "endedAt": "2026-11-01T09:08:09.295Z",
+        "durationSeconds": 108.123,
+        "exitCode": 0,
+        "eventFailure": false,
+        "stopReason": null,
+        "reportedCostUSD": 0.027142549999999998,
+        "observedModels": []
+      },
+      "artifacts": ".tmp/agent-trials/cli-evaluation-005/cliewen-discovery/artifacts/cli/opencode-2-2-5-attempt-2"
+    }
+  ]
+}

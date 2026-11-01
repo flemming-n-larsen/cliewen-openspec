@@ -9,8 +9,8 @@
 
 ## 2. Final verification
 
-- [ ] 2.1 Run the regression suite and collect evidence for the committed revision; review assertion quality. This supplements each task's tests.
+- [ ] 2.1 Finish documentation and result notes, commit project inputs, then collect evidence when enabled and run check on clean final HEAD; review assertion quality. Recollect and check again after any later commit. This supplements each task's tests.
 
 ## Workflow follow-up
 
-- Review evidence and archive after project requirements are satisfied.
+- Review evidence; archive only when authorized after project requirements are satisfied.

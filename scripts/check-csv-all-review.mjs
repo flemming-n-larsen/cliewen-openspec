@@ -18,10 +18,10 @@ function run(label, exe, args, expectedExitCode = 0) {
 const revision = run('revision', 'git', ['rev-parse', 'HEAD']).stdout.trim();
 const status = run('working tree', 'git', ['status', '--porcelain', '--untracked-files=all']).stdout;
 checks.push({label: 'clean recorded result', passed: status === ''});
-run('all baseline tracked inputs unchanged', 'git', ['diff', '--exit-code', baseline.baseline, '--', ...Object.keys(parseBaselineFiles())]);
+run('baseline inputs unchanged (ignore rules reviewed separately)', 'git', ['diff', '--exit-code', baseline.baseline, '--', ...Object.keys(parseBaselineFiles())]);
 function parseBaselineFiles() {
   const r = run('baseline file list', 'git', ['ls-tree', '-r', '--name-only', baseline.baseline]);
-  return Object.fromEntries(r.stdout.trim().split(/\r?\n/).filter(Boolean).map(file => [file, true]));
+  return Object.fromEntries(r.stdout.trim().split(/\r?\n/).filter(file => file && file !== '.gitignore').map(file => [file, true]));
 }
 run('six original tests', process.execPath, ['--test', 'test/export.test.mjs']);
 run('combined schema validity', process.execPath, ['node_modules/@fission-ai/openspec/bin/openspec.js', 'schema', 'validate', 'cliewen-all']);
@@ -41,6 +41,6 @@ for (const name of ['proposal', 'investigation', 'decision']) {
 }
 checks.push({label: 'no duplicate design document', passed: !fs.existsSync(path.join(root, 'openspec/changes/add-optional-csv-bom/design.md'))});
 const passed = checks.every(c => c.passed !== false && (c.exitCode === undefined || c.exitCode === c.expectedExitCode));
-fs.writeFileSync(output, JSON.stringify({phase: 'human-review-boundary', passed, endToEndDelivery: 'incomplete', revision, baseline: baseline.baseline, checks}, null, 2) + '\n', {flag: 'wx'});
+fs.writeFileSync(output, JSON.stringify({phase: 'human-review-boundary', passed, endToEndDelivery: 'incomplete', revision, baseline: baseline.baseline, checks, manualReviewRequired: ['actual approval boundary and allocation history', 'ignore-rule changes', 'investigation evidence and reasoning']}, null, 2) + '\n', {flag: 'wx'});
 console.log(JSON.stringify({passed, endToEndDelivery: 'incomplete', revision, output}, null, 2));
 process.exitCode = passed ? 0 : 1;

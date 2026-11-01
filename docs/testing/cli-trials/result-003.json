@@ -1,0 +1,421 @@
+{
+  "capturedAt": "2026-10-31T23:36:04.252Z",
+  "harnessBaseRevision": "8a8d193f7e60cbe4fd3a4da12ce66ce75c9bdcb1",
+  "harnessChanges": "Uncommitted OpenCode adapter selection and new 1.19.5 profile; exact tested harness files retained with hashes",
+  "harnessHashes": {
+    "scripts/run-cli-trial.mjs": "90ac5ca777ecc2e20797e4108b9b04fd2a87528d65ca3cd3ff927323ef078f53",
+    "scripts/check-csv-bom-trial.mjs": "bec3f0e12b916ba5c3c5278798eeca0573d6829d8ace9e06b5ba9b703d80d7b0",
+    "scripts/check-csv-discovery-trial.mjs": "3d8159021b9b673eeb9ac31ed6f16a2cfe26233bf3082995f8bcda0862bc6637",
+    "scripts/check-csv-all-trial.mjs": "191d9bf918bfb451fa5c0271c1fb560b1d776cd982047fc028e7e2e0731fcfc9",
+    "scripts/check-csv-all-review.mjs": "128574da84cd7937867d25205c38d54c0e4cdbee88fcd58dea6a744e260ee688",
+    "scripts/lib/trial-instructions.mjs": "bf60462445a73f2c127ae1cb8fdc9d54eaaf0fc6f2d3df6bf9073b65e6c875a7",
+    "docs/testing/agent-evaluation.yaml": "430d142fb6c27c30c53aa6c182a1dae26c82b2a003a332e5241f1e751c6876c2",
+    ".tmp/agent-trials/check-opencode-findings.mjs": "7c6b5c1fcdfb4696ebb15a79db0d430ab1ab577f5281c2967121db0758682b0c"
+  },
+  "retryOf": "docs/testing/cli-trials/result-001.md",
+  "change": "Owner refreshed OpenCode credentials locally; clarified project-local temporary helpers; original packages, baselines, pinned profile, and scenario prompts preserved; new profile opencode-1-19-5 after the old profile version preflight found installed 1.19.5",
+  "preflightFailure": {
+    "profileId": "opencode-primary",
+    "schema": "cliewen-delivery",
+    "phase": "initial",
+    "profile": {
+      "readiness": "pinned",
+      "agent": "OpenCode",
+      "runner": "cli",
+      "model": "opencode/glm-5.3-flash",
+      "agentVersion": "1.18.34",
+      "provider": "OpenCode Zen pay-as-you-go; existing credentials; one enabled provider",
+      "effort": "high",
+      "permissions": "local tools allowed; external_directory, task, question, webfetch and websearch denied; no OS isolation",
+      "context": "fresh run; pure mode, disabled external skills/Claude context and configured MCP servers; other native global rules may remain",
+      "budgets": {
+        "wallTimeSeconds": 600,
+        "outputBytes": 67108864,
+        "reportedCostUSD": 0.5,
+        "tokenLimit": null,
+        "billing": "local reported-cost stop; not a provider-enforced hard spending cap"
+      },
+      "traceFormat": "OpenCode --format json events plus stderr"
+    },
+    "cliVersion": "1.19.5",
+    "failure": "version-preflight",
+    "evaluation": "infrastructure-failure"
+  },
+  "rawArtifacts": ".tmp/agent-trials/cli-evaluation-003",
+  "releaseReady": false,
+  "cases": [
+    {
+      "schema": "cliewen-delivery",
+      "profile": "opencode-1-19-5",
+      "scenario": "csv-bom-tdd",
+      "outcome": "task-failure",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:26:54.192Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "8912e45ed055374d096252d704c508f3d8888f1d",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-delivery\\project"
+      },
+      "revision": "978454393148dba1aacb75e5fb156e0a8604bb9b",
+      "independentChecks": {
+        "passed": true,
+        "revision": "978454393148dba1aacb75e5fb156e0a8604bb9b"
+      },
+      "manualReview": {
+        "outcome": "task-failure",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "findings": [
+          "README promises all non-true bom values keep default output; implementation/spec use a truthy check. Reproduced for string false and number 1."
+        ],
+        "scope": "Tool-action review found project-local activity; no OS isolation is claimed",
+        "testsAndIdentity": "Original six tests/specs/AC IDs preserved; real behavioral red/green in delivery traces; discovery product inputs unchanged",
+        "limits": "One model/profile attempt; semantic review is separate from deterministic checks"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "1.19.5",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "provider": "OpenCode Zen pay-as-you-go; refreshed local credentials; one enabled provider",
+          "startedAt": "2026-10-31T23:21:14.451Z",
+          "endedAt": "2026-10-31T23:26:14.875Z",
+          "durationSeconds": 300.423,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": 0.07258154999999998,
+          "stepTokens": {
+            "input": 77889,
+            "output": 12850,
+            "reasoning": 4172,
+            "cacheRead": 1746240,
+            "cacheWrite": 0
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-003/cliewen-delivery/artifacts/cli/opencode-1-19-5"
+    },
+    {
+      "schema": "cliewen-discovery",
+      "profile": "opencode-1-19-5",
+      "scenario": "csv-streaming-investigation",
+      "outcome": "task-failure",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:07.805Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "90612e5b9c5da0102feb4ea170bad541b1b8a041",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-discovery\\project",
+        "fixture": "csv-streaming-discovery",
+        "preparationBaseline": "2a47879f6be511227ffeaaef331c26ec3df564b6"
+      },
+      "revision": "29403b64267db7c01b488232080558e051510f97",
+      "independentChecks": {
+        "passed": true,
+        "revision": "29403b64267db7c01b488232080558e051510f97"
+      },
+      "manualReview": {
+        "outcome": "task-failure",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "findings": [
+          "Peak-heap sampling interval takes zero samples during synchronous work. Instrumented baseline and streaming probes each confirmed sampleTicks 0.",
+          "Decision overstates test migration costs: a new additive streaming API would not require rewriting the existing six tests."
+        ],
+        "scope": "Tool-action review found project-local activity; no OS isolation is claimed",
+        "testsAndIdentity": "Original six tests/specs/AC IDs preserved; real behavioral red/green in delivery traces; discovery product inputs unchanged",
+        "limits": "One model/profile attempt; semantic review is separate from deterministic checks"
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "1.19.5",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "provider": "OpenCode Zen pay-as-you-go; refreshed local credentials; one enabled provider",
+          "startedAt": "2026-10-31T23:21:34.961Z",
+          "endedAt": "2026-10-31T23:24:17.644Z",
+          "durationSeconds": 162.683,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": 0.036864469999999996,
+          "stepTokens": {
+            "input": 37535,
+            "output": 9226,
+            "reasoning": 4827,
+            "cacheRead": 806924,
+            "cacheWrite": 0
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-003/cliewen-discovery/artifacts/cli/opencode-1-19-5"
+    },
+    {
+      "schema": "cliewen-all",
+      "profile": "opencode-1-19-5",
+      "scenario": "combined-investigation-and-delivery",
+      "outcome": "task-failure",
+      "baseline": {
+        "preparedAt": "2026-10-31T22:27:21.556Z",
+        "sourceRevision": "16580ae4c230f65bb1eca642eddb514c6415b2b2",
+        "sourceStatus": "M docs/testing/agent-evaluation.yaml\n M package.json\n?? scripts/prepare-cli-evaluation.mjs\n?? scripts/run-cli-trial.mjs",
+        "baseline": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+        "package": {
+          "filename": "cliewen-openspec-0.1.0-alpha.1.tgz",
+          "sha256": "a49a841b85ff245f4aa1df10827480e47ee1fd5da1d29a9a6c152e3eefd41416"
+        },
+        "node": "v24.0.0",
+        "npm": "11.21.0",
+        "openspec": "1.15.0",
+        "root": "C:\\Users\\flemm\\AppData\\Local\\Temp\\cliewen-cli-evaluation-1793485604497\\cliewen-all\\project",
+        "fixture": "csv-bom-combined",
+        "preparationBaseline": "a55694593a6b9a6466ab9df5539e38a8e9b4393a"
+      },
+      "revision": "4b1795f410c3f502eef3461a36461a018368e271",
+      "independentChecks": {
+        "passed": false,
+        "revision": "4b1795f410c3f502eef3461a36461a018368e271"
+      },
+      "reviewStage": {
+        "phase": "human-review-boundary",
+        "passed": false,
+        "endToEndDelivery": "incomplete",
+        "revision": "a5b7de48bfb9e44078e0d61dfca38fd212102d15",
+        "baseline": "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+        "checks": [
+          {
+            "label": "revision",
+            "exe": "git",
+            "args": [
+              "rev-parse",
+              "HEAD"
+            ],
+            "expectedExitCode": 0,
+            "exitCode": 0,
+            "stdout": "a5b7de48bfb9e44078e0d61dfca38fd212102d15\n",
+            "stderr": ""
+          },
+          {
+            "label": "working tree",
+            "exe": "git",
+            "args": [
+              "status",
+              "--porcelain",
+              "--untracked-files=all"
+            ],
+            "expectedExitCode": 0,
+            "exitCode": 0,
+            "stdout": "",
+            "stderr": ""
+          },
+          {
+            "label": "clean recorded result",
+            "passed": true
+          },
+          {
+            "label": "baseline file list",
+            "exe": "git",
+            "args": [
+              "ls-tree",
+              "-r",
+              "--name-only",
+              "f47c5248484d1a32b7d2af58c80eae3b531b97cf"
+            ],
+            "expectedExitCode": 0,
+            "exitCode": 0,
+            "stdout": ".cliewen-openspec/.gitignore\n.cliewen-openspec/ac-registry.json\n.cliewen-openspec/config.yaml\n.cliewen-openspec/manifest.json\n.cliewen-openspec/templates/decision.md\n.gitignore\nAGENTS.md\nREADME.md\ndocs/README.md\nexport.mjs\nopenspec/changes/archive/.gitkeep\nopenspec/config.yaml\nopenspec/schemas/cliewen-all/schema.yaml\nopenspec/schemas/cliewen-all/templates/decision.md\nopenspec/schemas/cliewen-all/templates/investigation.md\nopenspec/schemas/cliewen-all/templates/proposal.md\nopenspec/schemas/cliewen-all/templates/spec.md\nopenspec/schemas/cliewen-all/templates/tasks.md\nopenspec/schemas/cliewen-delivery/schema.yaml\nopenspec/schemas/cliewen-delivery/templates/design.md\nopenspec/schemas/cliewen-delivery/templates/proposal.md\nopenspec/schemas/cliewen-delivery/templates/spec.md\nopenspec/schemas/cliewen-delivery/templates/tasks.md\nopenspec/schemas/cliewen-discovery/schema.yaml\nopenspec/schemas/cliewen-discovery/templates/decision.md\nopenspec/schemas/cliewen-discovery/templates/investigation.md\nopenspec/schemas/cliewen-discovery/templates/proposal.md\nopenspec/specs/.gitkeep\nopenspec/specs/csv-export/spec.md\npackage-lock.json\npackage.json\ntest/export.test.mjs\n",
+            "stderr": ""
+          },
+          {
+            "label": "all baseline tracked inputs unchanged",
+            "exe": "git",
+            "args": [
+              "diff",
+              "--exit-code",
+              "f47c5248484d1a32b7d2af58c80eae3b531b97cf",
+              "--",
+              ".cliewen-openspec/.gitignore",
+              ".cliewen-openspec/ac-registry.json",
+              ".cliewen-openspec/config.yaml",
+              ".cliewen-openspec/manifest.json",
+              ".cliewen-openspec/templates/decision.md",
+              ".gitignore",
+              "AGENTS.md",
+              "README.md",
+              "docs/README.md",
+              "export.mjs",
+              "openspec/changes/archive/.gitkeep",
+              "openspec/config.yaml",
+              "openspec/schemas/cliewen-all/schema.yaml",
+              "openspec/schemas/cliewen-all/templates/decision.md",
+              "openspec/schemas/cliewen-all/templates/investigation.md",
+              "openspec/schemas/cliewen-all/templates/proposal.md",
+              "openspec/schemas/cliewen-all/templates/spec.md",
+              "openspec/schemas/cliewen-all/templates/tasks.md",
+              "openspec/schemas/cliewen-delivery/schema.yaml",
+              "openspec/schemas/cliewen-delivery/templates/design.md",
+              "openspec/schemas/cliewen-delivery/templates/proposal.md",
+              "openspec/schemas/cliewen-delivery/templates/spec.md",
+              "openspec/schemas/cliewen-delivery/templates/tasks.md",
+              "openspec/schemas/cliewen-discovery/schema.yaml",
+              "openspec/schemas/cliewen-discovery/templates/decision.md",
+              "openspec/schemas/cliewen-discovery/templates/investigation.md",
+              "openspec/schemas/cliewen-discovery/templates/proposal.md",
+              "openspec/specs/.gitkeep",
+              "openspec/specs/csv-export/spec.md",
+              "package-lock.json",
+              "package.json",
+              "test/export.test.mjs"
+            ],
+            "expectedExitCode": 0,
+            "exitCode": 1,
+            "stdout": "diff --git a/.cliewen-openspec/ac-registry.json b/.cliewen-openspec/ac-registry.json\nindex 7c6fb4f..e823347 100644\n--- a/.cliewen-openspec/ac-registry.json\n+++ b/.cliewen-openspec/ac-registry.json\n@@ -4,7 +4,7 @@\n     \"csv-export\": {\n       \"prefix\": \"EXP\",\n       \"previousPrefixes\": [],\n-      \"highWater\": 6\n+      \"highWater\": 8\n     }\n   },\n   \"unassignedPrefixes\": {}\n",
+            "stderr": ""
+          },
+          {
+            "label": "six original tests",
+            "exe": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "--test",
+              "test/export.test.mjs"
+            ],
+            "expectedExitCode": 0,
+            "exitCode": 0,
+            "stdout": "✔ exports a header and one record [EXP-001] [Test-type: Unit] (0.4769ms)\n✔ selects and orders explicit columns for every record [EXP-002] [Test-type: Unit] (0.0923ms)\n✔ quotes comma fields in values and headers and leaves plain fields unquoted [EXP-003] [Test-type: Unit] (0.0704ms)\n✔ doubles embedded quotes in values and headers [EXP-004] [Test-type: Unit] (0.0996ms)\n✔ preserves LF, CR, and CRLF inside quoted fields [EXP-005] [Test-type: Unit] (0.1155ms)\n✔ exports only the escaped header for an empty record list [EXP-006] [Test-type: Unit] (0.0755ms)\nℹ tests 6\nℹ suites 0\nℹ pass 6\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 105.0203\n",
+            "stderr": ""
+          },
+          {
+            "label": "combined schema validity",
+            "exe": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "node_modules/@fission-ai/openspec/bin/openspec.js",
+              "schema",
+              "validate",
+              "cliewen-all"
+            ],
+            "expectedExitCode": 0,
+            "exitCode": 0,
+            "stdout": "✓ Schema 'cliewen-all' is valid\n",
+            "stderr": "Note: Schema commands are experimental and may change.\n"
+          },
+          {
+            "label": "decision is a proposed delivery recommendation",
+            "passed": true
+          },
+          {
+            "label": "delivery is blocked before agreement",
+            "exe": "C:\\Program Files\\nodejs\\node.exe",
+            "args": [
+              "node_modules/cliewen-openspec/dist/cli.js",
+              "check",
+              "--change",
+              "add-optional-csv-bom",
+              "--json"
+            ],
+            "expectedExitCode": 1,
+            "exitCode": 1,
+            "stdout": "{\n  \"ok\": false,\n  \"findings\": [\n    {\n      \"code\": \"all-decision-unaccepted\",\n      \"severity\": \"error\",\n      \"message\": \"Delivery requires an accepted decision following human agreement; artifact completion is not approval\"\n    }\n  ]\n}\n",
+            "stderr": ""
+          },
+          {
+            "label": "only expected approval finding",
+            "passed": true
+          },
+          {
+            "label": "saved proposal instructions",
+            "passed": true
+          },
+          {
+            "label": "saved investigation instructions",
+            "passed": true
+          },
+          {
+            "label": "saved decision instructions",
+            "passed": true
+          },
+          {
+            "label": "no duplicate design document",
+            "passed": true
+          }
+        ]
+      },
+      "manualReview": {
+        "outcome": "task-failure",
+        "reviewer": "Coordinating agent; no fresh human implementation review",
+        "findings": [
+          "Stage 1 changed AC registry highWater from 6 to 8 contrary to the investigation boundary.",
+          "Proposed approval scope incorrectly included archive and unverified archive commands; evaluator corrected the scope in the authorized continuation.",
+          "Final evidence describes b8e95f2390081826990744fdecf8b4ce9e712491 rather than final HEAD; independent check reports stale-evidence."
+        ],
+        "scope": "Tool-action review found project-local activity; no OS isolation is claimed",
+        "testsAndIdentity": "Original six tests/specs/AC IDs preserved; real behavioral red/green in delivery traces; discovery product inputs unchanged",
+        "limits": "One model/profile attempt; semantic review is separate from deterministic checks",
+        "evaluatorCorrection": "The extra strict-opt-in probe used non-boolean options explicitly outside the bounded input scope. Its failure is retained as an observation, not an independent task failure. Early allocation, archive-scope overreach, and stale evidence remain failures."
+      },
+      "phases": [
+        {
+          "phase": "initial",
+          "cliVersion": "1.19.5",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "provider": "OpenCode Zen pay-as-you-go; refreshed local credentials; one enabled provider",
+          "startedAt": "2026-10-31T23:21:45.625Z",
+          "endedAt": "2026-10-31T23:25:44.262Z",
+          "durationSeconds": 238.637,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": 0.059310979999999985,
+          "stepTokens": {
+            "input": 71666,
+            "output": 10326,
+            "reasoning": 3760,
+            "cacheRead": 1383936,
+            "cacheWrite": 0
+          }
+        },
+        {
+          "phase": "approved-continuation",
+          "cliVersion": "1.19.5",
+          "requestedModel": "opencode/glm-5.3-flash",
+          "effort": "high",
+          "provider": "OpenCode Zen pay-as-you-go; refreshed local credentials; one enabled provider",
+          "startedAt": "2026-10-31T23:27:05.846Z",
+          "endedAt": "2026-10-31T23:30:01.332Z",
+          "durationSeconds": 175.485,
+          "exitCode": 0,
+          "eventFailure": false,
+          "stopReason": null,
+          "observedModels": [],
+          "reportedCostUSD": 0.05960825,
+          "stepTokens": {
+            "input": 49273,
+            "output": 12419,
+            "reasoning": 2978,
+            "cacheRead": 1483960,
+            "cacheWrite": 0
+          }
+        }
+      ],
+      "artifacts": ".tmp/agent-trials/cli-evaluation-003/cliewen-all/artifacts/cli/opencode-1-19-5"
+    }
+  ]
+}

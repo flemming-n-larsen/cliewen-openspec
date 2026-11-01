@@ -29,6 +29,8 @@ flowchart TD
 
 The proposal states the question, scope, decision criteria, and investigation limits. The investigation compares alternatives and separates facts, hypotheses, actual results, and uncertainty. Experiments are optional. When one is run, record the command or method, inputs or revision, outcome, and limitations. If an experiment was not run, say so.
 
+Check that the method measures what the conclusion claims. For example, a timer cannot sample peak heap while synchronous JavaScript blocks the event loop. Verify that observations occurred during the measured work; memory retained after garbage collection is a different quantity from maximum memory during execution. If a measurement is invalid, label that quantity unmeasured and revise conclusions that depended on it.
+
 The decision explains the recommendation and links to its evidence. It starts with `status: proposed`; only human agreement permits acceptance. It identifies a delivery handoff, no change, or further investigation. For no change, explain why and what would reopen the question.
 
 The schema requires these three artifacts in order. OpenSpec's instructions command returns the template and guidance; the agent writes the files. After the preceding file exists, request the next step with:

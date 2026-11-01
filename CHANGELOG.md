@@ -43,6 +43,9 @@ Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is unde
 
 ### Fixed
 
+- Combined-schema guidance puts the approval boundary before shared allocation and implementation instructions, preserving the registry for proposed decisions and leaving draft IDs unassigned. Shared guidance calls for evidence on final HEAD, checking documentation claims against behavior, and validating experiment methods. These content reviews remain agent guidance rather than semantic CLI enforcement.
+- Packed-workflow tests use separate npm caches to avoid Windows cache-lock collisions during parallel package tests.
+- Evaluation checkers accept nested instruction-response directories and project-local combined apply responses, and distinguish added test comments from removed baseline assertions. Retained OpenCode trials show improved approval/final-evidence behavior; the combined TDD-order finding remains unresolved.
 - Repository path validation now rejects Windows drive-relative paths that could escape the project root.
 - Installation comparisons and hashes tolerate Git converting LF line endings to CRLF during checkout.
 
