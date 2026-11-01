@@ -2,7 +2,7 @@
 
 Status: under development. This replaces the earlier configuration-only design.
 
-Implemented alpha: delivery, discovery, and combined bundles, `init`, `update` and `uninstall` for supported alpha manifests, capability-owned AC allocation and prefix changes, `check`, transaction recovery, configurable per-task testing with optional TDD, and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. The local CSV pilot also exercised five observed red-to-green cycles and an already-passing boundary case; automated multi-agent evaluation remains planned. See [current evidence contract and limits](docs/testing/evidence.md). General version/config migrations, additional integrations, and structural project-document validators remain future work. The source now includes a navigable documentation site and a deterministic replay of its CSV guide; the Pages workflow builds and checks that site before deploying pushed main commits.
+Implemented alpha: delivery, discovery, and combined bundles, `init`, `update` and `uninstall` for supported alpha manifests, capability-owned AC allocation and prefix changes, `check`, transaction recovery, configurable per-task testing with optional TDD, and the Node test reference adapter. The packed-installation test exercises a real OpenSpec 1.15.0 change through archive, including evidence failure cases. CSV pilots and native CLI trials provide reviewed observations; repeated release coverage and execution-history enforcement remain pending under [the evaluation plan](docs/testing/agent-evaluation.md) and [013: Enforce TDD for behavior changes with explicit task exceptions](docs/decisions/013-tdd-enforcement-and-task-exceptions.md). See [current evidence contract and limits](docs/testing/evidence.md). General version/config migrations, additional integrations, and structural project-document validators remain future work. The source now includes a navigable documentation site and a deterministic replay of its CSV guide; the Pages workflow builds and checks that site before deploying pushed main commits.
 
 ## Product and schemas
 
@@ -17,6 +17,8 @@ Deliver a small OpenSpec schema collection with a shared base, compatible with I
 Build standalone schema bundles from shared definitions and templates. OpenSpec does not compose schemas at runtime. Version and test the base and schemas together. Preserve existing schema selection unless explicitly changed. OpenSpec continues to own behavioral specs, implementation tasks, synchronization and archive.
 
 The combined bundle uses proposal → investigation → decision → specs → tasks. Decision also owns the chosen design. Its frontmatter declares delivery, no-change, or further-investigation and proposed/accepted status. Delivery requires human agreement before implementation; the checker validates accepted status but cannot prove who approved it. No-delivery outcomes require native skip_specs: true and no Markdown product deltas, with tasks limited to real closure work. This preserves a fixed graph without artificial product requirements.
+
+The durable contract is [015: Keep combined investigation and delivery behind explicit agreement](docs/decisions/015-combined-workflow-and-approval-boundaries.md), including unassigned draft IDs and the separate archive authorization.
 
 ## Shared base
 
@@ -62,10 +64,12 @@ Record owned files and exact configuration entries with hashes in `.cliewen-open
 
 Updates replace only unmodified owned content; local modifications conflict unless already identical to the update. Uninstall preserves authored documents. Shipped templates/skills are owned; documents written from templates belong to the project. Never overwrite OpenSpec-generated skills, specs or custom schemas. Normal package operations never commit, push or change repository protections.
 
+[014: Own generated resources and recover failed installation changes](docs/decisions/014-installer-ownership-and-recoverable-lifecycle.md) records the ownership, recovery, and default-preservation contract for adopting projects.
+
 ## Delivery milestones
 
 1. Establish the public repository, plan, mapping, README, MIT license, and Pages landing page. Initial bootstrap complete.
-2. Exercise installation → delivery change → AC identity → test reference → execution evidence → review → archive. The deterministic workflow test is implemented and the local CSV/TDD pilot has run; automated agent-profile regressions remain pending.
+2. Exercise installation → delivery change → AC identity → test reference → execution evidence → review → archive. Deterministic workflow tests, local CSV pilots, and native CLI trials are implemented; repeated release-profile coverage remains incomplete.
 3. Publish and maintain the user documentation site alongside alpha development. The initial guide, configuration/CLI references, CSV replay, and site checks are implemented in source; deployment follows a push to main. Do not wait for discovery/all or an npm release. A real fresh-user walkthrough remains useful alongside deterministic and browser checks.
 4. Complete future version/config migrations, optional planning/review, reusable CI, and agent evaluation. Extend and verify the user guides with each shipped capability.
 5. Publish npm through a separate release action after a tarball passes installation tests and a fresh user can complete the documented quick start against that exact package.

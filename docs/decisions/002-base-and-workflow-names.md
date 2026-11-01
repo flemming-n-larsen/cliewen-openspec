@@ -30,3 +30,5 @@ Retain the selectable schema names:
 Do not publish or describe `cliewen-base` as a separately selectable OpenSpec schema. Bundles remain standalone because OpenSpec does not compose them at runtime. A future minimal selectable workflow would require a separate product decision.
 
 The current alpha shares source-loading and writing guidance across delivery and discovery. The shared base is internal, not a separate package or selectable schema. The combined all workflow is also implemented as a standalone bundle using those shared sources.
+
+[016: Serve user projects with a clear boundary for maintainer tooling](016-user-projects-and-maintainer-tooling.md) defines the separate boundary between the installed product and tools used to develop Cliewen itself.

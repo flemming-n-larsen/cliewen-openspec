@@ -20,3 +20,5 @@ Read the project's naming and allocation rules before creating records. Preserve
 Brownfield support needs explicit adapters or reference-only use where a separate method owns decisions and identities. Full naming, lifecycle, and ledger adaptation remain planned; the alpha supplies preservation guidance rather than claiming those integrations exist.
 
 The owner explicitly authorized changing this repository's first two decision filenames to three digits. That local exception grants no general permission to rename existing documents. See [new-project defaults](007-durable-documents-and-general-decision-records.md).
+
+[014: Own generated resources and recover failed installation changes](014-installer-ownership-and-recoverable-lifecycle.md) defines the installer's limited ownership of generated resources and its preservation of authored project data during updates and removal.

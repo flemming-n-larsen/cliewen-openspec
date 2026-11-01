@@ -15,6 +15,8 @@ Keep deterministic package tests separate from agent evaluations. Maintain share
 
 Use a small set of representative profiles for Claude Code, Codex CLI, and OpenCode rather than a full Cartesian product. Run focused evaluations during development and broaden coverage for schema changes and releases. Repeat release trials and report the full outcomes rather than selecting only a successful attempt. Technical failures and task failures remain distinct. Compare model or effort changes against an existing baseline while holding other dimensions fixed.
 
+Give a changed CLI version, model, provider, or effort a distinct profile identity and retain earlier attempts. State whether each budget is a hard limit or a local stop based on delayed usage reports; a local reported-cost stop is not a provider spending guarantee.
+
 Evaluate planning artifacts and implementation separately. Check artifact properties rather than exact prose. Use independent acceptance tests for the resulting implementation. TDD evaluation requires observed test executions and relevant file changes, not only the agent's completion narrative or a final green report.
 
 Try Harbor as the first runner candidate because it has integrations for the three agents. Start the provider trial with OpenCode Zen/pay-as-you-go, a named model, fixed settings, and a low explicit spending limit. Measure actual cost and duration per scenario before considering an OpenCode Go subscription. Add OpenRouter if broader model selection or provider controls become necessary; a regression profile using it must constrain provider routing and disable fallbacks.
@@ -23,7 +25,11 @@ Try Harbor as the first runner candidate because it has integrations for the thr
 
 Harbor is evaluation infrastructure for maintainers, not a dependency for schema users. Its adoption remains conditional on a practical trial of the environment, authentication, supported settings, and available execution traces. The first scenario family is CSV export with per-task/flexible, per-task/TDD, and end-of-change/flexible configurations.
 
-The CSV pilots now have isolated starters, reviewed collaboration-agent trials, and independent checks. The [schema-wide evaluation plan](../testing/agent-evaluation.md) defines coverage and release gates; its manifest is checked in CI. CLI profiles remain unconfigured, and a Harbor-backed runner and automatic multi-provider execution are not implemented. No account purchase, credit top-up, or paid provider trial is recorded by this decision. Credentials belong outside fixtures and committed results. Prices and model catalogs remain external operational details rather than a pinned part of the methodology.
+The native CLI harness now prepares fresh CSV baseline projects, pins profiles, captures raw traces and exposed usage, and supports an explicit agreement stage for the combined workflow. It has run Codex CLI, Claude Code, and OpenCode trials with independent checks and reviewed findings, including pay-as-you-go OpenCode calls. Current CLI profiles do not provide operating-system isolation; their inherited context and access limits are recorded explicitly. These tools test Cliewen's guidance for maintainers; adopting projects do not need the harness, its agent accounts, or Harbor to use the schemas.
+
+The [schema-wide evaluation plan](../testing/agent-evaluation.md) and [profile manifest](../testing/agent-evaluation.yaml) are authoritative for current versions, models, budgets, coverage, and reports. Repeated release coverage remains incomplete, including the combined TDD-order finding. The [latest combined trial](../testing/cli-trials/result-006.md) records that limit. A Harbor-backed runner and automatic multi-provider execution remain unimplemented; the practical Harbor trial is still pending.
+
+Trials used existing account access; no account purchase or credit top-up is recorded. Credentials belong outside fixtures and committed results. Prices and model catalogs remain external operational details rather than fixed methodology requirements. Reported or list-equivalent costs must not be presented as subscription invoices.
 
 ## References
 

@@ -23,4 +23,6 @@ Use embedded Mermaid diagrams when they clarify the explanation. Maintain diagra
 
 Frontmatter and common locations support discovery without requiring every facility on every change. Feature flags control availability and guidance; they do not delete project content or redefine the selected schema graph. This extends [the shared-base decision](001-shared-base-and-schemas.md).
 
-The alpha includes documentation guidance, a DR template, configurable docs root, and feature flags. Structural metadata checks, Mermaid parsing/render checks, and generalized decision allocation remain planned. The naming convention is guidance, not an implemented allocator.
+For projects that install Cliewen, the alpha supplies documentation guidance, a DR template, a configurable docs root, and feature flags. Structural metadata and Mermaid validators for those projects, and generalized decision allocation, remain planned. The naming convention is guidance, not an implemented allocator.
+
+This repository's documentation build parses its own Mermaid examples, and browser checks verify their rendering under [010: Publish user documentation on GitHub Pages during development](010-publish-user-documentation-early.md) and [011: Prefer Mermaid for diagrams and plain text for file trees](011-mermaid-and-plain-text-diagrams.md). Those maintainer checks do not validate an adopting project's documents.

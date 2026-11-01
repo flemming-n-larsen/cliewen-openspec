@@ -21,7 +21,7 @@ Maintain one authoritative representation of each diagram. Do not routinely dupl
 
 Keep `features.mermaid: true` as the default. Disabling it removes Mermaid-specific guidance; plain-text examples remain available without an additional setting or renderer.
 
-The delivery schema provides diagram guidance during design and implementation. This is advisory: the alpha does not validate diagrams in a consumer project's documents. Our own documentation build parses shipped Mermaid examples and browser checks verify rendering.
+The shared guidance reaches delivery, discovery, and combined workflows. It is advisory: the alpha does not validate diagrams in an adopting project's documents. Our own documentation build parses shipped Mermaid examples and browser checks verify rendering; those checks are maintainer tooling, not a validator installed in user projects.
 
 ## Related records
 

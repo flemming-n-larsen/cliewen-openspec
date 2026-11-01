@@ -17,6 +17,8 @@ Lead change descriptions with the problem, resulting behavior, and practical imp
 
 Keep the main explanation brief, state each fact once, and link to supporting detail. Remove filler and repetition while preserving requirements, acceptance criteria, important exceptions, and required artifact sections. Preserve machine-readable syntax and exact identifiers. Include relevant validation and limitations in pull-request descriptions. Review clarity and brevity before finishing; do not impose fixed word limits.
 
+Check documented defaults, allowed inputs, and examples against the implementation and accepted requirements of the project being changed. Exercise the examples and boundary values covered by a claim. Correct contradictions before finishing; describe unspecified or unverified behavior as such instead of promising an outcome. Measurement claims follow [008: Treat evidence as core without overstating what it proves](008-evidence-is-core-and-has-explicit-limits.md).
+
 Apply [011: Prefer Mermaid for diagrams and plain text for file trees](011-mermaid-and-plain-text-diagrams.md) across the same scope, including pull-request descriptions. Use diagrams when they improve understanding and plain text where it suits the content or rendering environment better.
 
 ## Consequences
