@@ -1,6 +1,6 @@
 # Cliewen for OpenSpec: product and implementation plan
 
-Status: alpha under development. The roadmap below proposes the next increments; proposed configuration is not available in the current CLI. Existing accepted decisions remain authoritative until explicitly superseded.
+Status: alpha under development. The priority order below is approved; feature designs and proposed configuration remain unimplemented unless explicitly described otherwise. Existing accepted decisions remain authoritative until explicitly superseded.
 
 ## Product direction
 
@@ -12,13 +12,22 @@ Keep adoption proportional to the change. Projects should be able to enable stro
 
 | Order | Increment | Completion evidence |
 |---|---|---|
-| 1 | Test coverage policy and test lifecycle | Configurable checks and reviewed trials catch missing cases, ineffective assertions, stale tests, and invalid retirement without forcing duplicate tests |
-| 2 | Optional project learnings and writing skills | Agents retrieve relevant lessons; stale lessons are retired; documentation remains usable with Humanizer absent or disabled |
-| 3 | Refine the user guide alongside each increment | A fresh developer completes installation, a delivery change, evidence collection, and archive using the exact documented package |
-| 4 | Open the feedback path | Short issue forms for bugs and ideas, visible links, and a documented maintainer triage process |
-| 5 | Release, transition, and upstream introduction | Release acceptance below passes, migration guidance is reviewed, and a concise demonstration supports a community catalog request |
+| 1 | Scope an OpenSpec change for test quality and lifecycle | A reviewed proposal distinguishes coverage, assertion effectiveness, and test maintenance, and defines configuration, defaults, exceptions, and acceptance criteria |
+| 2 | Trial the design, then implement the smallest useful solution | Cases cover a missing negative test, ineffective assertions, changed behavior, and a retired criterion; findings establish which checks can be automated and which require review |
+| 3 | Observe a fresh user completing the guide | A new user completes installation, a delivery change, evidence collection, and archive using the exact documented package; observed obstacles lead to clearer explanations, diagrams, and troubleshooting |
+| 4 | Complete release validation | Outstanding required agent trials and compatibility checks pass for a bounded first release; limitations are documented |
+| 5 | Add optional project learnings and Humanizer detection | Agents retrieve relevant lessons and retire stale guidance; Humanizer can be detected and installation suggested, with baseline writing guidance available when absent or disabled |
+| 6 | Prepare the Cliewen transition and OpenSpec introduction | A capability and migration review identifies what existing users would lose; a verified release, guide, and reproducible example support outreach |
 
 Deliver these as separate changes with explicit acceptance criteria. The first release has a bounded, verified scope; unresolved roadmap items remain labeled as planned. General migrations and additional integrations keep their existing acceptance requirements below.
+
+The immediate next task is the proposal in priority 1. Use the trials in priority 2 to refine its design before implementation. Maintain affected guides with every increment; priority 3 adds observed user testing. Optional learnings and Humanizer detection do not block the first release.
+
+Priority 1 is in progress: the [test quality and lifecycle proposal](openspec/changes/test-quality-and-lifecycle/proposal.md) includes draft requirements, design, and tasks. [Decision 017: Separate test coverage, effectiveness, and lifecycle review](docs/decisions/017-test-quality-and-lifecycle.md) is accepted. Trial execution, detailed design acceptance, and runtime implementation are outstanding.
+
+Bug and idea forms and reporting links are already published. Maintain the feedback path alongside this work; documenting maintainer triage remains outstanding.
+
+The [staged alpha package review](docs/testing/staged-alpha-001.md) records two passing installation workflows against the downloaded `0.1.0-alpha.1` tarball and 57 passing local regression tests. The owner approved publication on November 1, 2026; the public alpha matches the reviewed checksum. Remaining release evaluations are still outstanding.
 
 ### Test quality and lifecycle
 
@@ -170,7 +179,7 @@ All content uses US English and shows implemented, experimental, and planned fun
 
 Make the guide useful at two depths: a short route to the first verified change and linked explanations for readers customizing the workflow. Show expected output and recovery beside commands. Explain what each command changes, which defaults apply, and which actions need review. Include worked examples of a missing negative case, an ineffective assertion, changed behavior, and a retired criterion as those facilities ship. Use Humanizer for guide prose and verify commands after editing. Observe a fresh developer using the guide and record where they get stuck; visual polish alone does not establish usability.
 
-Build and check the site in pull-request CI before deployment, including local links and anchors and supported Mermaid examples. Exercise documented commands against the packed alpha in a clean fixture, including the current lack of an npm release, and check the published site's paths after deployment. A fresh user must be able to complete the quick start without reading this conversation. An implementation is not complete until affected instructions, configuration reference, examples, and limitations are updated.
+Build and check the site in pull-request CI before deployment, including local links and anchors and supported Mermaid examples. Exercise documented commands against the packed alpha in a clean fixture and verify installation of the explicit published npm version. Check the published site's paths after deployment. A fresh user must be able to complete the quick start without reading this conversation. An implementation is not complete until affected instructions, configuration reference, examples, and limitations are updated.
 
 ## Acceptance
 

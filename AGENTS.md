@@ -10,4 +10,6 @@ Adapt these rules to the format. Code comments explain intent, constraints, or s
 
 Preserve existing document filenames and paths. Never rename, move, or renumber existing documents to normalize titles, categories, prefixes, or numeric padding; external systems may link to their exact paths. Apply naming conventions to new files only and edit existing content and metadata in place.
 
+Write `CHANGELOG.md` for projects adopting Cliewen. Describe user-visible behavior, practical impact, compatibility, and relevant limitations in plain language. Keep internal development history and trial details in maintainer documentation; link to user guides for technical detail. See [Decision 016: Serve user projects with a clear boundary for maintainer tooling](docs/decisions/016-user-projects-and-maintainer-tooling.md).
+
 Use the Humanizer skill whenever writing or revising user guides. Write for developers who have not read the project conversation: explain what each command changes, show defaults and configuration examples, and distinguish working features from planned ones. Keep commands and examples executable.

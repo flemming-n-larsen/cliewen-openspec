@@ -19,6 +19,8 @@ Keep maintainer agent trials, regression fixtures, and documentation-site build 
 
 Documentation and command examples must identify the project in which a command runs, the files it changes, and the configuration that applies. Distinguish shipped features from internal checks and planned functionality. Preserve user-owned resources under [014: Own generated resources and recover failed installation changes](014-installer-ownership-and-recoverable-lifecycle.md).
 
+Write `CHANGELOG.md` for projects adopting Cliewen: explain available behavior, practical impact, compatibility, and relevant limitations in plain language. Keep internal development history, evaluation machinery, and trial details in maintainer documentation. Link to user guidance for commands and technical detail instead of repeating it in release notes.
+
 Maintainer tests provide evidence about Cliewen's behavior in the tested fixtures. Validation of an adopting project's behavior requires that project's own specs, tests, and evidence under [008: Treat evidence as core without overstating what it proves](008-evidence-is-core-and-has-explicit-limits.md).
 
 ## Consequences and implementation status

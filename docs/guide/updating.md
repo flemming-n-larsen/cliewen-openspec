@@ -7,14 +7,14 @@ Installing a new Cliewen npm package updates the CLI, but an existing project ke
 
 ## Install, preview, and apply
 
-Build the new tarball in the source checkout with `npm pack`. In the consuming project, install that file and preview the schema update:
+In your project, install the published alpha and preview the schema update:
 
 ```sh
-npm install --save-dev /path/to/cliewen-openspec-0.1.0-alpha.1.tgz
+npm install --save-dev cliewen-openspec@0.1.0-alpha.1
 npx --no-install cliewen-openspec update --dry-run --json
 ```
 
-Replace `/path/to/` with the tarball's location. There is no npm release yet. The npm install changes package metadata and dependencies as usual; the Cliewen update command is a separate operation on installed resources.
+The explicit version selects the published alpha; `@alpha` selects the current alpha tag. Avoid an unqualified installation while `latest` points to npm's staging placeholder. For a local build, run `npm pack` in the source checkout and install the resulting tarball instead. The npm install changes package metadata and dependencies as usual; the Cliewen update command is a separate operation on installed resources.
 
 Review the preview's `writes` and `deletes` lists. `writes` includes templates/schema files to create or replace and the ownership manifest when it changes. `deletes` contains only retired installer-owned files. A dry run applies no writes, deletions, or interrupted-transaction recovery.
 

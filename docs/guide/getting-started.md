@@ -7,6 +7,8 @@ This guide takes a small CSV exporter from a new project to archived OpenSpec sp
 
 ## 1. Build the alpha package
 
+The alpha is available on npm: existing projects can install it with `npm install --save-dev cliewen-openspec@0.1.0-alpha.1`. Use this explicit version or `@alpha`, because npm's `latest` tag currently points to a staging placeholder. This worked example uses a source checkout for its prepared CSV files and a local package build.
+
 Clone the source repository, then run these commands inside it:
 
 ```sh
@@ -17,7 +19,7 @@ npm test
 npm pack
 ```
 
-The result is `cliewen-openspec-0.1.0-alpha.1.tgz`. The commands below assume that the clone and pilot are sibling directories. There is no published npm package to fetch for this alpha.
+The result is `cliewen-openspec-0.1.0-alpha.1.tgz`. The commands below assume that the clone and pilot are sibling directories. To use the published package instead, replace the tarball argument in the install command with `cliewen-openspec@0.1.0-alpha.1`; keep the checkout for the example helper and files.
 
 ## 2. Create the pilot
 

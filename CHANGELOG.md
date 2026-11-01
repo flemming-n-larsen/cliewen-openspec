@@ -1,59 +1,55 @@
 # Changelog
 
-Notable changes to Cliewen for OpenSpec are documented here. Version 0.1 is under development; the current package version is `0.1.0-alpha.1` and has not been published to npm.
+Changes that matter to projects using Cliewen for OpenSpec.
 
-## 0.1 — Unreleased
+## 0.1.0-alpha.1 (2026-11-01)
 
-### Added
+The first public alpha is available on npm as `cliewen-openspec@0.1.0-alpha.1`, with the `alpha` tag. The full 0.1 release is still under development. Follow the [installation guide](docs/guide/getting-started.md) to try it.
 
-- TDD task metadata, `tdd start`/`tdd run`, and blocking delivery completion checks against recorded commands and file hashes. Flexible remains the default. Characterization, refactoring, and other verification methods require task reasons; failure causes and assertion quality still need review. Local history does not restrict writes or provide tamper-proof execution records.
+### OpenSpec workflows
 
-- Pinned CLI evaluation profiles and an explicit runner for Codex CLI, Claude Code, and OpenCode. Preparation clones matching per-schema baselines; runs preserve raw events, settings, timing, exposed usage, and staged approval continuations. CI tests use fake CLIs and make no model calls.
+Choose from three schemas, which define the documents and instructions for a change:
 
-- `uninstall` with preview, owned-file/hash conflict checks, rollback, and preserved project data. Active changes referencing removed schemas block removal; a removed OpenSpec default requires explicit `--default-schema` validated through the public OpenSpec CLI. The npm package and authored files remain.
+- `cliewen-delivery` takes an understood change through a proposal, behavior specifications, design, implementation tasks, and verification.
+- `cliewen-discovery` helps investigate a question and recommend what to do next. The recommendation can be to make no change.
+- `cliewen-all` combines investigation and delivery. It calls for human agreement before implementation and also supports ending an investigation without changing the product.
 
-- `update` refreshes owned schema files/templates from supported alpha manifests, with dry-run, unowned/local-edit conflict checks, retired-file cleanup, rollback, and preserved project configuration, selected default, registry, and authored files. Other manifest versions and config/registry migrations remain unsupported.
+All three include guidance for maintaining documentation, recording durable decisions, writing clearly, and using diagrams where helpful. OpenSpec manages the change files and incorporates completed changes into the project's specifications when they are archived.
 
-- The `cliewen-all` schema combines investigation and delivery in one change, using the decision as its design source. Native `skip_specs` supports no-change/further-investigation closure without fake product requirements. Combined checks validate outcome consistency and accepted decision status before delivery evidence.
+### Installation and project settings
 
-- A schema-wide agent evaluation plan and coverage manifest, distinguishing observed collaboration trials from unconfigured CLI release profiles. `npm run eval:check` and CI check coverage of installed schemas without starting agents or claiming release readiness.
+- `init` installs the schemas and supporting resources. Preview changes before writing files, and keep your existing default schema unless you explicitly select a replacement.
+- `update` refreshes resources installed by Cliewen. It preserves project settings and authored documents, and stops if local edits conflict with the update. Updates support recognized alpha installations; general version migrations are not available yet.
+- `uninstall` removes unchanged resources installed by Cliewen while preserving project documents and data. Resolve active changes using those schemas first, and select a replacement if removing the default schema. Removing the npm package is a separate step.
+- Installation commands support previews and recovery after interrupted writes. Path checks keep managed files inside the project, and file comparisons tolerate Windows line-ending conversion.
+- Project settings let you choose the documentation directory, test workflow, and evidence report location. You can turn individual facilities on or off without deleting authored documents.
 
-- A CSV streaming discovery trial starter, bounded investigation prompt, review criteria, and independent checks for unchanged product inputs and proposed recommendations. Run `npm run trial:discovery` to prepare a fresh baseline.
+See the [configuration reference](docs/configuration.md) and [CLI guide](docs/guide/cli.md) for defaults and commands.
 
-- The `cliewen-discovery` schema with proposal, investigation, and decision artifacts. It supports no-change outcomes and separate delivery handoff, shares writing/diagram guidance, and keeps investigation findings distinct from product evidence. Init installs both schemas while preserving the default unless delivery is explicitly selected.
+### Acceptance criteria and tests
 
-- `--change NAME` on the Node test adapter scopes evidence results while running all supplied tests and preserving failures across the full run. Reports declare the change scope; `check` rejects mismatched scope and requires a runner exit code for scoped reports. Collection without the flag remains supported.
+- Give behavior scenarios stable acceptance criterion IDs so specifications, tests, and results can refer to the same requirement. Choose a prefix for each capability, such as `EXP-001` for an export feature. Allocate IDs and rename prefixes without reusing reserved numbers or losing historical references.
+- Use the default Unit, Integration, and E2E test types, or define your own. Checks require the type declared by a scenario to match its test results.
+- Test each implementation task as you go, or configure testing at the end of a change. The default allows tests before or after code.
+- Optionally select test-driven development (TDD). The `tdd start` and `tdd run` commands record test commands, outcomes, and snapshots of declared files. Completion checks reject missing, stale, or inconsistent records. Tasks using another verification method need a reason.
 
-- A fresh-context CSV BOM trial starter with an isolated six-scenario baseline, packed-package hash, Git bundle, reference prompt, and review criteria. Run `npm run trial:prepare` from a source checkout to prepare a trial.
+### Test results before archive
 
-- Configurable test types with Unit, Integration, and E2E defaults. The Node adapter exports explicit test-type tags, and evidence checks reject missing, unknown, or mismatched scenario/result types. Existing reports without types must be regenerated from explicitly tagged tests.
+The Node test adapter runs tagged tests and records which scenarios they cover, whether they passed, and the Git revision tested. You can collect results for one change while retaining the exit status of the entire test run, so failures elsewhere in that run remain visible.
 
-- A VitePress user guide on GitHub Pages with local search, a light/dark appearance switch, and embedded Mermaid. It covers the first delivery change, defaults, supported configuration fields, CLI commands, evidence troubleshooting, and existing-project conventions. The build checks local links, anchors, configuration defaults, and Mermaid syntax; browser checks cover search, appearance, rendering, and navigation. A packed-installation test replays the guide's CSV consumer commands through archive and refreshed evidence.
-- Optional TDD guidance in task planning and implementation through `testing.approach: tdd`. The default is `flexible`; TDD requires per-task testing and instructs agents to observe the expected test failure before implementation, reach green, and refactor.
-- The `cliewen-delivery` schema with proposal, specs, design, and tasks artifacts.
-- Shared guidance for living documentation, Decision Records, embedded Mermaid diagrams, optional planning, review, and behavioral evidence.
-- Project configuration with feature flags, a configurable documentation root, and evidence report location.
-- The `init` command with dry-run previews, explicit default-schema selection, installation hashes, conflict detection, and recoverable file writes.
-- Capability-specific AC prefixes and configurable number padding, backed by a committed allocation registry.
-- The `ac next --capability NAME` and `ac rename-prefix CAPABILITY PREFIX` commands. Prefix changes preserve the capability's numeric sequence, existing IDs, and reserved historical prefixes.
-- Validation of AC registry/config mismatches and migration of legacy alpha prefix counters without discarding reserved numbers.
-- Configurable test placement, defaulting to testing and fixing each implementation task before continuing. Final regression testing and evidence collection remain part of the workflow.
-- A reference Node test adapter that records tagged test results, runner exit status, and the tested Git revision.
-- Evidence checks for scenario linkage, missing and duplicate references, failed or skipped tests, pending/manual results, stale revisions, and dirty working trees.
-- Windows and Linux CI, a packed-installation workflow test through OpenSpec archiving, configuration documentation, and a CSV pilot reference prompt.
-- A public documentation site on GitHub Pages and an MIT license.
+Before archive, `check` reports missing or duplicate references, mismatched test types, failed or skipped tests, pending work, and manual verification. It also checks that results belong to the current committed revision and that the working tree is clean. A later commit requires fresh results, including when only documentation changed.
 
-### Fixed
+See the [evidence guide](docs/testing/evidence.md) for collection commands and help resolving findings.
 
-- Combined-schema guidance puts the approval boundary before shared allocation and implementation instructions, preserving the registry for proposed decisions and leaving draft IDs unassigned. Shared guidance calls for evidence on final HEAD, checking documentation claims against behavior, and validating experiment methods. These content reviews remain agent guidance rather than semantic CLI enforcement.
-- Packed-workflow tests use separate npm caches to avoid Windows cache-lock collisions during parallel package tests.
-- Evaluation checkers accept nested instruction-response directories and project-local combined apply responses, and distinguish added test comments from removed baseline assertions. Retained OpenCode trials show improved approval/final-evidence behavior; the combined TDD-order finding remains unresolved.
-- Repository path validation now rejects Windows drive-relative paths that could escape the project root.
-- Installation comparisons and hashes tolerate Git converting LF line endings to CRLF during checkout.
+### Guide and examples
+
+The [user guide](docs/guide/index.md) covers installation, schema selection, existing projects, configuration, and troubleshooting. A worked CSV example takes a change through implementation, test results, and archive. The documentation site includes search, light and dark appearance, and diagrams.
 
 ### Current limitations
 
-- Full CLI-profile and repeated release evaluation remain pending. General manifest-version and config/registry migrations are not implemented. The combined agent pilot completed delivery after human agreement.
-- Documentation metadata and Mermaid validators are not implemented. Test placement is agent guidance rather than CLI-enforced execution ordering.
-- AC allocation supports sequential work; parallel branches require collision resolution.
-- Evidence linkage and execution results do not establish assertion quality. Reviewed sufficiency still requires human judgment.
+- Passing checks establish test execution, references, and revision freshness. You still need to review whether the assertions prove the intended behavior. Configurable case coverage and test lifecycle checks are not implemented.
+- TDD records check the declared command and file history. They cannot prove why a test failed, prevent every code write, or authenticate the recorded history. Ordinary task-by-task testing remains agent guidance.
+- Discovery findings and combined-workflow approval fields require review. A recorded status cannot prove that a person approved the change.
+- Documentation and diagram guidance does not validate your project's document metadata or diagram syntax.
+- Acceptance ID allocation supports sequential work. Parallel branches may allocate the same number and need conflict resolution.
+- Release validation across the supported coding agents is still incomplete. Treat the package as an alpha; review its output before relying on it.

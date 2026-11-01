@@ -5,8 +5,11 @@ type: index
 
 These accepted records capture choices confirmed in the project conversation. Acceptance describes the intended design, not implementation or release status; each record states relevant limits. Existing accepted records retain their reasoning. Detailed commands live in [configuration](../configuration.md) and [the evidence contract](../testing/evidence.md).
 
+## Accepted decisions
+
 | Record | Decision | Current scope |
 |---|---|---|
+| [Decision 017: Separate test coverage, effectiveness, and lifecycle review](017-test-quality-and-lifecycle.md) | Independent coverage, effectiveness, and lifecycle policies | Accepted direction; detailed defaults, record contracts, trials, and implementation remain pending in the [test quality and lifecycle change](../../openspec/changes/test-quality-and-lifecycle/proposal.md) |
 | [001](001-shared-base-and-schemas.md) | A small schema collection shares a common base | Delivery, discovery, and all implemented; full release evaluation incomplete |
 | [002](002-base-and-workflow-names.md) | Base names the internal foundation, not a selectable workflow | Naming and product boundary |
 | [003](003-project-defined-test-types.md) | Default to Unit/Integration/E2E and allow a project-defined replacement | Configuration, Node export, and exact scenario/evidence type checks implemented; task boundaries reviewed |

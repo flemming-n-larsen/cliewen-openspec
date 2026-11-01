@@ -30,7 +30,7 @@ If something fails or the guide is unclear, [report a bug](https://github.com/fl
 | Documentation and Mermaid | Guidance for maintaining explanations and embedded diagrams |
 | Recovery | Restore files from an interrupted installer transaction |
 
-The package has no npm release yet. Build and install a local tarball. The deterministic workflow test uses OpenSpec 1.15.0; package CI exercises Node 22 and 24 on Windows and Linux.
+The published alpha is `0.1.0-alpha.1`. Install it in your project with `npm install --save-dev cliewen-openspec@0.1.0-alpha.1`. Use an explicit version or `@alpha`; npm's `latest` tag currently points to a staging placeholder. The deterministic workflow test uses OpenSpec 1.15.0; package CI exercises Node 22 and 24 on Windows and Linux.
 
 ## Defaults
 
