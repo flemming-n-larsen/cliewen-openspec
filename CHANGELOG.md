@@ -2,6 +2,12 @@
 
 Changes that matter to projects using Cliewen for OpenSpec.
 
+## 0.2 (unreleased)
+
+- Independently configurable checks for positive/negative case coverage, assertion-effectiveness reviews, and test maintenance when requirements change or are retired. The default warns about missing assessments; projects can disable individual policies or make them blocking.
+- Case IDs and coverage categories in Node test reports, plus scoped exceptions and review records tied to inspected file contents. Passing record checks still require review of assertion meaning and approval claims. See [test quality and lifecycle](docs/testing/test-quality.md) for development-source usage and limitations.
+- Development package version `0.2.0-alpha.1`; it is not published. Updating an installation from `0.1.0-alpha.1` preserves authored resources and configuration. Other historical versions remain unsupported.
+
 ## 0.1.0-alpha.1 (2026-11-01)
 
 The first public alpha is available on npm as `cliewen-openspec@0.1.0-alpha.1`, with the `alpha` tag. The full 0.1 release is still under development. Follow the [installation guide](docs/guide/getting-started.md) to try it.

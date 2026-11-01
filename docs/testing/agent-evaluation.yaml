@@ -178,6 +178,12 @@ scenarios:
   combined-no-delivery:
     schema: cliewen-all
     readiness: planned
+  delivery-quality-and-retirement:
+    schema: cliewen-delivery
+    readiness: planned
+  combined-quality-and-retirement:
+    schema: cliewen-all
+    readiness: planned
 
 schemas:
   cliewen-delivery:

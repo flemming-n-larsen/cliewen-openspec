@@ -3,6 +3,8 @@ type: testing
 ---
 # Evidence alpha contract
 
+The published 0.1 alpha provides the execution checks below. Development source for `0.2.0-alpha.1` additionally implements [test quality and lifecycle checks](test-quality.md), using optional case metadata in the same version-1 report. Its policies default to advisory review. Case counts and reviewed statuses do not establish semantic correctness.
+
 The alpha supports `init`, `update`, `uninstall`, `ac next`, `ac rename-prefix`, `check`, and `recover`, and installs `cliewen-delivery`, `cliewen-discovery`, and `cliewen-all`. Package CI exercises OpenSpec 1.15.0 on Windows and Linux. Existing-registry adapters, structural checks for your project's documentation and Mermaid, and independent review tooling remain planned.
 
 Initialize OpenSpec first. Install the published alpha with `npm install --save-dev cliewen-openspec@0.1.0-alpha.1`, or use a locally built tarball. Run `cliewen-openspec init --default` to explicitly select delivery; omit `--default` to preserve the existing schema. `--root PATH` supports an explicit target, and `init --dry-run` makes no changes.

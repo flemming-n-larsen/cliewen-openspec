@@ -7,6 +7,7 @@ export const pages = [
   { source: 'docs/guide/all.md', output: 'all.html', title: 'Investigate and deliver', group: 'Using Cliewen' },
   { source: 'docs/configuration.md', output: 'configuration.html', title: 'Configuration', group: 'Using Cliewen' },
   { source: 'docs/testing/evidence.md', output: 'evidence.html', title: 'Evidence and troubleshooting', group: 'Using Cliewen' },
+  { source: 'docs/testing/test-quality.md', output: 'test-quality.html', title: 'Test quality and lifecycle', group: 'Using Cliewen' },
   { source: 'docs/guide/cli.md', output: 'cli.html', title: 'Command reference', group: 'Using Cliewen' },
   { source: 'docs/guide/updating.md', output: 'updating.html', title: 'Update an installation', group: 'Using Cliewen' },
   { source: 'docs/guide/uninstalling.md', output: 'uninstalling.html', title: 'Remove an installation', group: 'Using Cliewen' },

@@ -1,6 +1,6 @@
-# Proposed test review records
+# Test review record contract
 
-This is the implementation contract for review, not a supported alpha format. [The design](design.md) owns policy defaults and rationale. Trial scripts exercise selected rules; they are not the product checker.
+This contract is implemented in the unreleased `0.2.0-alpha.1` source. The published 0.1 alpha does not implement it. [The design](design.md) owns rationale; [the user reference](../../../docs/testing/test-quality.md) describes usage and current limits. Trial scripts remain experiments, separate from product checks.
 
 ## Execution results
 
@@ -55,9 +55,9 @@ Each entry contains `scenario`, `change` (`unchanged`, `modified`, or `retired`)
 
 Retired entries additionally require `retirement: {status: accepted, source: PATH}`. The source is a nonempty repository document present in the inputs, with the accepted change and reason. Recorded acceptance remains a declaration, not authenticated approval.
 
-Compare baseline scenarios with the effective target specs (permanent specs with the selected change's deltas applied, or current permanent specs). Every modified or removed criterion requires a disposition. New scenarios follow coverage and effectiveness rules. For implementation-only changes, record affected unchanged criteria; reviewers assess the completeness of that impact analysis.
+Compare baseline scenarios and their parent requirement text with the effective target specs (permanent specs with the selected change's added/modified/removed requirement blocks applied, or current permanent specs). Every modified or removed criterion requires a disposition. Requirement renames currently produce an unresolved finding. New scenarios follow coverage and effectiveness rules. For implementation-only delivery changes, native `skip_specs: true` selects permanent scenarios; record affected unchanged criteria, and review the completeness of impact analysis.
 
-A removed criterion without explicit accepted retirement is unresolved. Removing a shared test with nonempty `remainingScenarios` is invalid; retain, split, or remap its active obligations first. For remapping, replacements must exist in target specs and have execution evidence; semantic equivalence still requires review. Completely removed test files use `null` in inputs and must exist at the baseline. IDs stay reserved in the current registry; the checker never deletes tests or recycles IDs.
+A removed criterion without explicit accepted retirement is unresolved. Removing a shared test with nonempty `remainingScenarios` is invalid; retain, split, or remap its active obligations first. Remapped and in-scope remaining obligations need passing execution evidence. Retained obligations outside the command's scope need review, full-suite verification, and permanent evidence; a scoped report does not prove their execution individually. Completely removed test files use `null` in inputs and must exist at the baseline. IDs stay reserved in the current registry; the checker never deletes tests or recycles IDs.
 
 ### Exceptions
 

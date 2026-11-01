@@ -104,9 +104,9 @@ test('testing approach defaults remain compatible and conflicting TDD placement 
   const cfg = path.join(root, '.cliewen-openspec/config.yaml');
   assert.equal(config(root).testing.approach, 'flexible');
   fs.writeFileSync(cfg, 'testing:\n  approach: tdd\n');
-  assert.deepEqual(config(root).testing, {placement: 'per-task', approach: 'tdd', types: defaults().testing.types});
+  assert.deepEqual(config(root).testing, {...defaults().testing, approach: 'tdd'});
   fs.writeFileSync(cfg, 'testing:\n  placement: end-of-change\n');
-  assert.deepEqual(config(root).testing, {placement: 'end-of-change', approach: 'flexible', types: defaults().testing.types});
+  assert.deepEqual(config(root).testing, {...defaults().testing, placement: 'end-of-change'});
   fs.writeFileSync(cfg, 'testing:\n  placement: end-of-change\n  approach: tdd\n');
   assert.throws(() => config(root), /tdd requires.*per-task/);
   const cli = fileURLToPath(new URL('../dist/cli.js', import.meta.url));

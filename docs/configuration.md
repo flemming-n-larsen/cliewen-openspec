@@ -5,6 +5,8 @@ type: reference
 
 Cliewen reads project settings from `.cliewen-openspec/config.yaml`.
 
+This reference describes the development source for `0.2.0-alpha.1`. The published `0.1.0-alpha.1` does not accept the `quality` or `lifecycle` settings below. Use that package's bundled reference when working with the published alpha.
+
 ## Full defaults
 
 This is the complete configuration written by `init`. Omitted fields use these values; unknown settings and invalid values fail validation. Changes apply when the next operation reads the config. They do not rewrite existing proposals or task lists.
@@ -27,6 +29,17 @@ ac:
 testing:
   placement: per-task
   approach: flexible
+  quality:
+    coverage:
+      mode: review
+      minimumCases:
+        positive: 1
+        negative: 1
+        boundary: 0
+    effectiveness:
+      mode: review
+  lifecycle:
+    mode: review
   types:
     Unit:
       description: Isolated behavior without external dependencies
@@ -35,6 +48,25 @@ testing:
     E2E:
       description: Complete user or system workflow
 ```
+
+## Test quality and lifecycle
+
+Each of `testing.quality.coverage.mode`, `testing.quality.effectiveness.mode`, and `testing.lifecycle.mode` accepts `off`, `review`, or `enforce`. The default is `review`: incomplete assessments produce warnings. `enforce` makes missing or invalid records blocking and requires `features.evidence: true`. `off` disables that policy's checks and guidance. Evidence opt-out leaves review guidance available but reports that execution-backed assessment is unavailable.
+
+Coverage counts distinct passed cases by scenario and category. Configure nonnegative safe-integer minima under `testing.quality.coverage.minimumCases`; omitted categories retain their defaults. One positive and one negative case are required by default, with relevant boundary cases assessed during review. A reviewed exception can waive a category minimum for a particular scenario.
+
+For example, to enforce coverage while leaving other policies advisory:
+
+```yaml
+testing:
+  quality:
+    coverage:
+      mode: enforce
+      minimumCases:
+        positive: 2
+```
+
+This requires two positive and one negative case per scenario. It does not count retries or prove cases are meaningfully different. See [test quality and lifecycle](testing/test-quality.md) for tagging tests, writing review records, and handling exceptions.
 
 ## Documentation and features
 
@@ -262,4 +294,4 @@ Existing filenames and paths are stable public addresses: never rename, move, or
 
 ## Existing alpha installations
 
-Install the new package, then use [update](guide/updating.md) to preview and refresh owned schema files and templates. Current support covers existing 0.1.0-alpha.1 manifests, including earlier builds. Configuration, registry, authored artifacts, and document paths are preserved. Adding config settings alone does not replace installed instructions. Other manifest versions and config/registry migrations are not supported automatically.
+Install the new package, then use [update](guide/updating.md) to preview and refresh owned schema files and templates. Development source accepts `0.2.0-alpha.1` and `0.1.0-alpha.1` manifests; the published 0.1 package accepts its own manifests only. Configuration, registry, authored artifacts, and document paths are preserved. Adding config settings alone does not replace installed instructions. Other manifest versions and general config/registry migrations are not supported automatically.

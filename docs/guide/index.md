@@ -42,6 +42,8 @@ The [configuration reference](../configuration.md) lists every accepted setting 
 
 ## What is still planned?
 
+The development source for `0.2.0-alpha.1` adds configurable [test quality and lifecycle checks](../testing/test-quality.md). They are not available in the published 0.1 package. General release evaluation remains incomplete.
+
 All three planned schemas are implemented in source. `cliewen-base` names the shared internal foundation and is not a selectable schema. Release-profile agent evaluation remains pending.
 
 The alpha supports configurable test types and checks declared scenario types against evidence. Existing-registry adapters, general version/config migrations, and structural checks for your project's documentation and Mermaid diagrams remain planned.

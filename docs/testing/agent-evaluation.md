@@ -58,6 +58,8 @@ The flexible and end-of-change delivery variants, targeted discovery outcomes, a
 
 ## Assess and report
 
+For 0.2, add fresh-agent delivery and combined cases exercising missing negative coverage, relevant versus setup failures, a reviewed scoped exception, changed behavior, and partial/full criterion retirement. Check that agents preserve active shared assertions and refresh reviews after inspected inputs or archive scope change. `test/quality.test.mjs` supplies deterministic controls; passing those controls does not complete the planned `delivery-quality-and-retirement` or `combined-quality-and-retirement` agent evaluations.
+
 Score planning and final outcomes separately. Check readability, explained references, useful diagrams, scope, preserved project authorities, and the quality of evidence. For delivery, independently test the implementation, review task boundaries and type matching, and inspect actual red/green observations when TDD is configured. For discovery, review sources, experiment limits, uncertainty, proposed status, and the reasoning behind any handoff or no-change outcome.
 
 For the combined schema, also check that the recommendation leads into one coherent delivery plan, shared explanations are linked rather than duplicated, accepted decisions are not invented, and investigation findings do not count as product test evidence. Its no-delivery branch must use native skip_specs and genuine closure checks without fake product specs or implementation tasks.

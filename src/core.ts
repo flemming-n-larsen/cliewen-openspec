@@ -10,12 +10,13 @@ import { discoveryFiles } from './discovery.js';
 import { allFiles } from './all.js';
 import { validateRegistry } from './ac.js';
 import { checkTdd } from './tdd.js';
+import { qualityDefaults, configureQuality, checkQuality, type QualitySettings } from './quality.js';
 export { nextId, renamePrefix, capabilityForPrefix } from './ac.js';
 
-export const version = '0.1.0-alpha.1';
+export const version = '0.2.0-alpha.1';
 const state = '.cliewen-openspec';
 const features = ['documentation', 'decisions', 'mermaid', 'planning', 'review', 'evidence'];
-export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string }; ac: { capabilities: Record<string, string>; padding: number }; testing: { placement: 'per-task' | 'end-of-change'; approach: 'flexible' | 'tdd'; types: Record<string, { description: string }> } };
+export type Config = { docsRoot: string; features: Record<string, boolean>; evidence: { report: string }; ac: { capabilities: Record<string, string>; padding: number }; testing: QualitySettings & { placement: 'per-task' | 'end-of-change'; approach: 'flexible' | 'tdd'; types: Record<string, { description: string }> } };
 export type Finding = { code: string; severity: 'error' | 'warning' | 'info'; message: string };
 export function local(root: string, relative: string): string {
   if (!relative || path.isAbsolute(relative) || path.win32.parse(relative).root || relative.split(/[\\/]/).includes('..')) throw Error(`Unsafe repository path: ${relative}`);
@@ -37,7 +38,7 @@ const normalize = (s: string) => s.replace(/\r\n/g, '\n');
 const hash = (s: string) => createHash('sha256').update(normalize(s)).digest('hex');
 const read = (p: string) => fs.readFileSync(p, 'utf8');
 export function defaults(): Config {
-  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' }, ac: { capabilities: {}, padding: 3 }, testing: { placement: 'per-task', approach: 'flexible', types: {
+  return { docsRoot: 'docs', features: Object.fromEntries(features.map(f => [f, true])), evidence: { report: '.cliewen-openspec/evidence.json' }, ac: { capabilities: {}, padding: 3 }, testing: { ...qualityDefaults(), placement: 'per-task', approach: 'flexible', types: {
     Unit: { description: 'Isolated behavior without external dependencies' },
     Integration: { description: 'Interaction between components or dependencies' },
     E2E: { description: 'Complete user or system workflow' }
@@ -69,7 +70,8 @@ export function config(root: string): Config {
     }
   }
   if (raw.testing !== undefined) {
-    keys(raw.testing, ['placement', 'approach', 'types'], 'testing');
+    keys(raw.testing, ['placement', 'approach', 'types', 'quality', 'lifecycle'], 'testing');
+    configureQuality(c.testing, raw.testing);
     if (raw.testing.types !== undefined) {
       const types = raw.testing.types;
       if (!types || typeof types !== 'object' || Array.isArray(types) || !Object.keys(types).length) throw Error('testing.types must be a nonempty name-to-description mapping');
@@ -100,6 +102,7 @@ export function config(root: string): Config {
     if (typeof raw.evidence.report !== 'string') throw Error('evidence.report must be a string');
     c.evidence.report = raw.evidence.report;
   }
+  if (!c.features.evidence && [c.testing.quality.coverage.mode, c.testing.quality.effectiveness.mode, c.testing.lifecycle.mode].includes('enforce')) throw Error('Test policy enforcement requires features.evidence: true; enable evidence or use review/off mode.');
   local(root, c.docsRoot); local(root, c.evidence.report); return c;
 }
 type Journal = { files: Record<string, string | null> };
@@ -148,7 +151,7 @@ function ownedManifest(root: string, operation: 'update' | 'uninstall'): Manifes
     : 'No Cliewen installation manifest; no files removed. Uninstall requires recorded ownership.');
   const previous = JSON.parse(read(mp));
   keys(previous, ['version', 'files'], 'manifest');
-  if (previous.version !== version) throw Error(`Unsupported installed version: ${previous.version}; ${operation} currently supports ${version} manifests only`);
+  if (![version, '0.1.0-alpha.1'].includes(previous.version)) throw Error(`Unsupported installed version: ${previous.version}; ${operation} supports ${version} and 0.1.0-alpha.1 manifests only`);
   if (!previous.files || typeof previous.files !== 'object' || Array.isArray(previous.files) || !Object.keys(previous.files).length) throw Error('Manifest files must be a nonempty ownership mapping');
   for (const [file, digest] of Object.entries(previous.files)) {
     local(root, file);
@@ -323,7 +326,12 @@ export function markdowns(dir: string): string[] {
 }
 export function scenarios(root: string, change?: string): { id: string; title: string; file: string; testTypes: string[] }[] {
   if (change && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(change)) throw Error('Change must be a kebab-case name');
-  const folder = change ? local(root, `openspec/changes/${change}/specs`) : local(root, 'openspec/specs');
+  let folder = change ? local(root, `openspec/changes/${change}/specs`) : local(root, 'openspec/specs');
+  const metadata = change ? local(root, `openspec/changes/${change}/.openspec.yaml`) : undefined;
+  if (metadata && fs.existsSync(metadata) && parse(read(metadata))?.skip_specs === true) {
+    if (markdowns(folder).length) throw Error('skip_specs changes must not contain product spec deltas');
+    folder = local(root, 'openspec/specs');
+  }
   if (change && !fs.existsSync(folder)) throw Error(`Change specs do not exist: ${change}`);
   const out: { id: string; title: string; file: string; testTypes: string[] }[] = [];
   for (const file of markdowns(folder)) {
@@ -384,7 +392,11 @@ export function check(root: string, change?: string, failPending = false): Findi
     }
   }
   if (c.testing.approach === 'tdd') findings.push(...checkTdd(root, change));
-  if (!c.features.evidence) { add('evidence-disabled', 'Evidence was explicitly disabled', 'info'); return findings; }
+  if (!c.features.evidence) {
+    add('evidence-disabled', 'Evidence was explicitly disabled', 'info');
+    if ([c.testing.quality.coverage.mode, c.testing.quality.effectiveness.mode, c.testing.lifecycle.mode].includes('review')) add('quality-evidence-unavailable', 'Test policy review remains advisory: enable evidence for execution-backed assessment.', 'warning');
+    return findings;
+  }
   const specs = scenarios(root, change); const ids = new Set<string>();
   for (const s of specs) { if (!s.id) add('missing-ac-id', `${s.file}: ${s.title}`); else if (ids.has(s.id)) add('duplicate-ac-id', s.id); else ids.add(s.id); }
   for (const s of specs) {
@@ -423,6 +435,7 @@ export function check(root: string, change?: string, failPending = false): Findi
     if (r.outcome === 'manual') add('manual-verification', `${key}: ${r.reason ?? 'No review result recorded'}`, 'warning');
   }
   for (const id of ids) if (!seen.has(id)) add('missing-evidence', id);
+  findings.push(...checkQuality(root, c, specs, report, change, local));
   add('sufficiency-not-assessed', 'Execution and linkage do not prove assertion quality; review the assertions against the scenarios.', 'info');
   return findings;
 }

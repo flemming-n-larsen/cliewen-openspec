@@ -7,7 +7,7 @@ This guide takes a small CSV exporter from a new project to archived OpenSpec sp
 
 ## 1. Build the alpha package
 
-The alpha is available on npm: existing projects can install it with `npm install --save-dev cliewen-openspec@0.1.0-alpha.1`. Use this explicit version or `@alpha`, because npm's `latest` tag currently points to a staging placeholder. This worked example uses a source checkout for its prepared CSV files and a local package build.
+The alpha is available on npm: existing projects can install it with `npm install --save-dev cliewen-openspec@0.1.0-alpha.1`. Use this explicit version or `@alpha`, because npm's `latest` tag currently points to a staging placeholder. This worked example builds the development source, currently `0.2.0-alpha.1`, and uses its prepared CSV files. That development version is not published.
 
 Clone the source repository, then run these commands inside it:
 
@@ -19,7 +19,7 @@ npm test
 npm pack
 ```
 
-The result is `cliewen-openspec-0.1.0-alpha.1.tgz`. The commands below assume that the clone and pilot are sibling directories. To use the published package instead, replace the tarball argument in the install command with `cliewen-openspec@0.1.0-alpha.1`; keep the checkout for the example helper and files.
+The result is `cliewen-openspec-0.2.0-alpha.1.tgz`. The commands below assume that the clone and pilot are sibling directories. To use the published package instead, replace the tarball argument in the install command with `cliewen-openspec@0.1.0-alpha.1`; keep the checkout for the example helper and files.
 
 ## 2. Create the pilot
 
@@ -32,7 +32,7 @@ cd cliewen-pilot
 git init -b main
 npm init -y
 npm install --save-dev @fission-ai/openspec@1.15.0
-npm install --save-dev ../cliewen-openspec/cliewen-openspec-0.1.0-alpha.1.tgz
+npm install --save-dev ../cliewen-openspec/cliewen-openspec-0.2.0-alpha.1.tgz
 ```
 
 Create `.gitignore` containing `node_modules/` before committing. Initialize OpenSpec without agent integrations for the reproducible example:
@@ -106,6 +106,8 @@ npx --no-install cliewen-openspec check --change add-csv-export --json
 ```
 
 The adapter runs every test in the file again and writes an ignored report for the current Git revision, scoped to `add-csv-export`. Failures outside the selected change still block verification. The check should return `"ok": true` and an informational `sufficiency-not-assessed` finding. That finding is expected: you review the assertions; the CLI checks execution and references. If the check fails, use [evidence troubleshooting](../testing/evidence.md#troubleshooting).
+
+The unchanged reference example demonstrates execution evidence. Development source for 0.2 also warns about its missing case tags and quality review records. Those warnings do not block the default review mode. Follow [test quality and lifecycle](../testing/test-quality.md) to add the assessments or disable the individual policies for this exercise. The published 0.1 alpha does not produce these new findings.
 
 ## 7. Archive and refresh evidence
 

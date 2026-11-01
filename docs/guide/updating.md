@@ -36,7 +36,9 @@ The existing `.cliewen-openspec/manifest.json` records the hashes of files insta
 
 There is no force option. Review a conflict and retain useful custom instructions in a project-owned location before deliberately restoring an installer-owned file. Do not delete the manifest, registry, or authored artifacts to bypass ownership checks. Custom schemas outside Cliewen's owned paths are preserved.
 
-The command validates manifest ownership paths/hashes and current project config/registry before changing resources. A missing manifest requires `init`; update will not reconstruct ownership from filenames. The current alpha supports existing `0.1.0-alpha.1` manifests, including earlier builds with fewer schemas. Other manifest versions are rejected until a migration is explicitly supported. Config and registry format migrations are not part of this command.
+The command validates manifest ownership paths/hashes and current project config/registry before changing resources. A missing manifest requires `init`; update will not reconstruct ownership from filenames. Development source for `0.2.0-alpha.1` accepts its own manifests and those from `0.1.0-alpha.1`, including earlier builds with fewer schemas. The published 0.1 package supports its own manifests only. Other versions and general configuration/registry migrations remain unsupported. New omitted policy settings use their defaults without rewriting existing configuration.
+
+On the development version, the new test-quality policies default to `review`, so existing projects may see additional warnings. They become blocking only when you select `enforce`. See [policy configuration](../configuration.md#test-quality-and-lifecycle) to adopt or disable each independently.
 
 ## Recovery and verification
 

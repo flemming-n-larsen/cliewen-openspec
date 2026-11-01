@@ -1,6 +1,6 @@
 {
   "name": "cliewen-openspec",
-  "version": "0.1.0-alpha.1",
+  "version": "0.2.0-alpha.1",
   "description": "OpenSpec workflows with durable decisions and behavioral evidence",
   "type": "module",
   "license": "MIT",
@@ -24,6 +24,7 @@
     "LICENSE",
     "docs/configuration.md",
     "docs/testing/evidence.md",
+    "docs/testing/test-quality.md",
     "docs/testing/pilot-prompt.md"
   ],
   "scripts": {

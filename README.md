@@ -4,6 +4,8 @@ Durable decisions, living documentation, and evidence for OpenSpec.
 
 **Published alpha: `0.1.0-alpha.1`.** Installs `cliewen-delivery`, `cliewen-discovery`, and `cliewen-all`, allocates acceptance IDs, and checks real delivery test evidence through OpenSpec archiving. Discovery supports investigation and recommendation without required production implementation.
 
+The source checkout is developing `0.2.0-alpha.1`, which adds [test quality and lifecycle checks](docs/testing/test-quality.md). That version is not published. Install the explicit 0.1 version below to use the reviewed public alpha.
+
 ## Schema collection
 
 - **cliewen-delivery** — recommended workflow for understood changes.

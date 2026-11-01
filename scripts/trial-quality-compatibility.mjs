@@ -46,8 +46,8 @@ try {
   assert.throws(() => check(root), /Invalid evidence report/);
   observe('version 2 rejected by current parser', () => true);
   write('.cliewen-openspec/config.yaml', 'testing:\n  quality:\n    coverage:\n      mode: off\n');
-  assert.throws(() => config(root), /Unknown testing key/);
-  observe('future policy keys rejected by current configuration parser', () => true);
+  assert.equal(config(root).testing.quality.coverage.mode, 'off');
+  observe('development parser accepts policy opt-out configuration', () => true);
   write('.cliewen-openspec/config.yaml', 'features:\n  evidence: false\n');
   git('add', '.'); git('commit', '-m', 'Disable evidence for opt-out check');
   fs.unlinkSync(path.join(root, '.cliewen-openspec/evidence.json'));

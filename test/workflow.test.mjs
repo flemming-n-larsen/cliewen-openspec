@@ -32,12 +32,13 @@ test('packed installation → OpenSpec change → real test evidence → archive
   ospec('init','--tools','none','--no-animation');
   const cli=path.join(root,'node_modules/cliewen-openspec/dist/cli.js');
   const cl=(args,expected=0)=>run(process.execPath,[cli,...args],expected);
-  assert.match(run(process.execPath,[npm,'exec','--no','--','cliewen-openspec','--version']),/0\.1\.0-alpha\.1/);
+  assert.equal(run(process.execPath,[npm,'exec','--no','--','cliewen-openspec','--version']), JSON.parse(fs.readFileSync(path.join(project, 'package.json'), 'utf8')).version);
   cl(['init','--default']); assert.deepEqual(JSON.parse(cl(['init'])).writes,[]);
   const ownedTemplate = 'openspec/schemas/cliewen-delivery/templates/tasks.md';
   const installedTemplate = fs.readFileSync(path.join(root, ownedTemplate), 'utf8');
   const manifestPath = path.join(root, '.cliewen-openspec/manifest.json');
   const oldManifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+  oldManifest.version = '0.1.0-alpha.1';
   const olderTemplate = '# Earlier owned task template\n';
   write(ownedTemplate, olderTemplate);
   oldManifest.files[ownedTemplate] = createHash('sha256').update(olderTemplate).digest('hex');
