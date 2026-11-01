@@ -11,6 +11,8 @@ The current alpha provides three workflows. `cliewen-delivery` takes an understo
 
 Use the search button to find commands, configuration fields, and guide sections. The appearance switch selects the site's light or dark colors; the default follows your system preference.
 
+If something fails or the guide is unclear, [report a bug](https://github.com/flemming-n-larsen/cliewen-openspec/issues/new?template=bug_report.yml) with the command or page and what you expected. You can also [suggest an improvement](https://github.com/flemming-n-larsen/cliewen-openspec/issues/new?template=idea.yml) by describing your use case and desired outcome.
+
 ## What works today?
 
 | Feature | What you can use |

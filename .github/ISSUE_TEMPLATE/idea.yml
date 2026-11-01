@@ -1,0 +1,32 @@
+name: Idea or improvement
+description: Suggest a workflow, documentation, or product improvement.
+title: "[Idea] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A concrete use case is enough; you do not need a design or patch. Search existing issues if possible and link related proposals.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: Describe who encounters the problem and where the current workflow or guide gets in the way.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: What would a useful outcome look like?
+      description: Give an example of what should become possible or easier.
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested approach or alternatives
+      description: Optional implementation ideas, workarounds, and tradeoffs. Mention whether this should be configurable.
+  - type: textarea
+    id: context
+    attributes:
+      label: Related examples or context
+      description: Optional links, affected schemas, or relevant versions. Remove private project content.

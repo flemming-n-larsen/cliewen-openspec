@@ -1,0 +1,51 @@
+name: Bug report
+description: Report a CLI, schema, integration, or documentation problem.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Search existing issues first if possible. Share only the configuration and logs needed to explain the problem; remove credentials and private project content.
+        For a documentation problem, include the page URL or file path. Unknown version details are fine.
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How can we reproduce it?
+      description: Include the command or page, relevant settings, and the steps that lead to the problem. A small example helps.
+      placeholder: |
+        1. Start with ...
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should happen, or what should the documentation explain?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead? Include the error message or confusing passage.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Versions and environment
+      description: Include what you know. For documentation-only reports, a page URL and browser are enough.
+      placeholder: |
+        cliewen-openspec version or commit:
+        OpenSpec version:
+        OS and shell:
+        Node.js version:
+        Coding agent and version (if relevant):
+        Schema and installation method:
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs or supporting example
+      description: Optional sanitized output, screenshots, or a small public reproduction. Include a workaround if you found one.

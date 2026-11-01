@@ -95,6 +95,10 @@ For actual agent trials, use the [CLI evaluation guide](docs/testing/cli-evaluat
 
 Build the documentation with `npm run docs:build` and preview it with `npm run docs:serve`. For browser checks, install Chromium with `npx playwright install chromium`, then run `npm run docs:check`. Documentation tooling uses Node 22.12+ (Node 22 or 24 recommended). See [documentation development](docs/guide/development.md).
 
+## Feedback
+
+[Report a bug](https://github.com/flemming-n-larsen/cliewen-openspec/issues/new?template=bug_report.yml) or [suggest an improvement](https://github.com/flemming-n-larsen/cliewen-openspec/issues/new?template=idea.yml). Documentation problems and workflow ideas are welcome. A small example helps us understand the problem; a proposed implementation is optional.
+
 ## License
 
 [MIT](LICENSE).
